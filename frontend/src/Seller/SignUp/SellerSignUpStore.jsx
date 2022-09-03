@@ -1,5 +1,5 @@
 import Grid from "@mui/material/Grid";
-import SignUpTextField from "./components/SignUpTextField";
+import SignUpTextField from "../components/SignUpTextField";
 import SellerSignUp from "./SellerSignUp";
 
 const SellerSignUpStore = () => {
