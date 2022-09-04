@@ -1,35 +1,37 @@
-import Button from "@mui/material/Button";
-import CssBaseline from "@mui/material/CssBaseline";
-import Link from "@mui/material/Link";
-import Paper from "@mui/material/Paper";
-import Box from "@mui/material/Box";
-import Grid from "@mui/material/Grid";
-import Typography from "@mui/material/Typography";
+import { useState } from "react";
+import { Redirect } from "react-router-dom";
+
+import {
+  CssBaseline,
+  Link,
+  Box,
+  Grid,
+  Typography,
+} from "@mui/material";
 
 import SignUpTextField from "../components/SignUpTextField";
-import { Redirect } from "react-router-dom";
-import { useState } from "react";
+import {SignUpButton, LoginButton} from "../components/SignUpButton";
 
 export default function SignInSide() {
   const [loginAction, setLoginAction] = useState(false);
-  const [signupAction, setSignupAction] = useState(false);
+  const [storeName, setStoreName] = useState("");
 
   let email = "";
   let password = "";
 
   const handleSubmit = (event) => {
     event.preventDefault();
+    if (!(password.length > 6 && email)) {
+      return;
+    }
     console.log(event);
     console.log({
       email,
       password,
     });
-    setLoginAction(true);
-  };
 
-  const handleSignup = (event) => {
-    event.preventDefault();
-    setSignupAction(true);
+    setStoreName(email); // TODO: Get store name from server
+    setLoginAction(true);
   };
 
   const handleEmailField = (event) => {
@@ -42,19 +44,18 @@ export default function SignInSide() {
 
   return (
     <Grid container component="main" sx={{ height: "100vh" }}>
-      {loginAction && <Redirect to="/:storeName/dashboard" />}
-      {signupAction && <Redirect to="/signup" />}
+      {loginAction && <Redirect to={`/${storeName}/adm/dashboard`} />}
       <CssBaseline />
 
-      <Grid item xs={12} sm={8} md={3} component={Paper} square>
+      <Grid item xs={12} sm={8} md={3}>
         <Box
           sx={{
-            my: 8,
+            height: "100vh",
             mx: 4,
-            marginTop: 5,
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
+            justifyContent: "center",
           }}
         >
           <Typography
@@ -81,6 +82,7 @@ export default function SignInSide() {
             type="email"
             autoComplete="email"
           />
+
           <SignUpTextField
             onChange={handlePasswordField}
             label="Password"
@@ -88,42 +90,13 @@ export default function SignInSide() {
             type="password"
           />
 
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            onClick={handleSubmit}
-            sx={{
-              mt: 3,
-              mb: 2,
-              height: "48px",
-              borderRadius: "10px",
-              backgroundColor: "#EB445A",
-              "&:hover": {
-                backgroundColor: "#631740",
-              },
-            }}
-          >
+          <LoginButton onClick={handleSubmit} buttoncolor="#EB445A">
             Login
-          </Button>
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            onClick={handleSignup}
-            sx={{
-              mt: 3,
-              mb: 2,
-              height: "48px",
-              borderRadius: "10px",
-              backgroundColor: "#11445A",
-              "&:hover": {
-                backgroundColor: "#631740",
-              },
-            }}
-          >
+          </LoginButton>
+          <SignUpButton to="/signup" buttoncolor="#11445A">
             Cadastre-se
-          </Button>
+          </SignUpButton>
+
           <Grid container>
             <Grid item xs>
               <Link href="/forgotpassword" variant="body2">
@@ -172,4 +145,41 @@ function Copyright(props) {
       {"."}
     </Typography>
   );
+}
+
+{
+  /* <RouteLink to="/:lojaName">
+<Button
+  fullWidth
+  variant="contained"
+  sx={{
+    mt: 3,
+    mb: 2,
+    height: "48px",
+    borderRadius: "10px",
+    backgroundColor: "#EB445A",
+    "&:hover": {
+      backgroundColor: "#631740",
+    },
+  }}
+>
+  RouteLink
+</Button>
+</RouteLink>
+
+<Button
+   fullWidth
+   href="/:lojaName"
+   variant="contained"
+   sx={{
+     mt: 3,
+     mb: 2,
+     height: "48px",
+     borderRadius: "10px",
+     backgroundColor: "#EB445A",
+     "&:hover": {
+       backgroundColor: "#631740",
+     },
+   }}
+>Link</Button> */
 }

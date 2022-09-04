@@ -15,6 +15,7 @@ import ForgetPassword from "./Seller/Login/ForgetPassword";
 
 import SellerSignUpUser from "./Seller/SignUp/SellerSignUpUser";
 import SellerSignUpStore from "./Seller/SignUp/SellerSignUpStore";
+import SellerProducts from './Seller/Dashboard/SellerProducts'
 
 function App() {
   return (
@@ -37,7 +38,12 @@ function App() {
           <Route path="/:storeName" exact>
             <MainPageStore />
           </Route>
-          <Route path="/:storeName/dashboard">
+
+          <Route path="/:storeName/adm/products" exact>
+            <SellerProducts />
+          </Route>
+
+          <Route path="/:storeName/adm/dashboard">
             <SellerDashboard />
           </Route>
           <Redirect to="/" />
