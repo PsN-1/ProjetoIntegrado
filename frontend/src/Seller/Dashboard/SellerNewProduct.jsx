@@ -1,14 +1,32 @@
 import { Box, Button, Grid, Paper, TextField, Typography } from "@mui/material";
 import { Container } from "@mui/system";
+import { useState } from "react";
+import { Redirect } from "react-router-dom";
+import { Paths, STORE_NAME } from "../../Routes";
 import SignUpTextField from "../components/SignUpTextField";
 import SellerSkeleton from "./SellerSkeleton";
 
 export default function SellerNewProduct(props) {
+  const [submitAction, setSubmitAction] = useState(false);
+
   const handleButtonAction = (event) => {
     event.preventDefault();
+
+    const data = new FormData(event.currentTarget);
+    console.log({
+      Nome: data.get("Nome"),
+      Imagem: data.get("Imagem"),
+      Descricao: data.get("Descricao"),
+      Quantidade: data.get("Quantidade"),
+      Valor: data.get("Valor"),
+    });
+    // props.onNewProduct(data)
+    setSubmitAction(true);
   };
+
   return (
     <SellerSkeleton>
+      {submitAction && <Redirect to={Paths.SellerProducts(STORE_NAME)} />}
       <Typography
         sx={{
           paddingLeft: 5,
@@ -19,7 +37,6 @@ export default function SellerNewProduct(props) {
           lineHeight: "29px",
         }}
       >
-        {" "}
         Novo Produto
       </Typography>
       <Grid container>
@@ -40,24 +57,20 @@ export default function SellerNewProduct(props) {
                   mt: 3,
                 }}
               >
-                <SignUpTextField label="Nome" margin="normal"></SignUpTextField>
+                <SignUpTextField name="Nome" label="Nome" margin="normal" />
+                <SignUpTextField name="Imagem" label="Imagem" margin="normal" />
                 <SignUpTextField
-                  label="Imagem"
-                  margin="normal"
-                ></SignUpTextField>
-                <SignUpTextField
+                  name="Descricao"
                   label="Descricao"
                   margin="normal"
                   height="180px"
-                ></SignUpTextField>
+                />
                 <SignUpTextField
+                  name="Quantidade"
                   label="Quantidade"
                   margin="normal"
-                ></SignUpTextField>
-                <SignUpTextField
-                  label="Valor"
-                  margin="normal"
-                ></SignUpTextField>
+                />
+                <SignUpTextField name="Valor" label="Valor" margin="normal" />
 
                 <Button
                   type="submit"

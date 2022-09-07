@@ -13,6 +13,8 @@ import TableRow from "@mui/material/TableRow";
 import SellerSkeleton from "./SellerSkeleton";
 import LabelTypography from "../../shared/components/LabelTypography";
 import TitleTypography from "../../shared/components/TitleTypography";
+import { Link } from "react-router-dom";
+import { Paths, STORE_NAME } from "../../Routes";
 
 export default function SellerProducts() {
   return (
@@ -31,6 +33,10 @@ const DashBoardProducts = (props) => {
     console.log(+row.amount);
   };
 
+  function addNew(data) {
+    DUMMY_ITENS.push(data)
+    console.log(DUMMY_ITENS)
+  }
   return (
     <Box>
       <TableContainer component={MyPaper}>
@@ -66,7 +72,7 @@ const DashBoardProducts = (props) => {
                   <LabelTypography>{item.value}</LabelTypography>
                 </TableCell>
                 <TableCell align="center">
-                  {+item.amount == 0 && (
+                  {+item.amount === 0 && (
                     <DeleteIcon onClick={() => handleDeleteClick(item)} />
                   )}
                 </TableCell>
@@ -75,6 +81,7 @@ const DashBoardProducts = (props) => {
           </TableBody>
         </Table>
       </TableContainer>
+
       <Typography
         sx={{
           p: 3,
@@ -85,7 +92,9 @@ const DashBoardProducts = (props) => {
           lineHeight: "29px",
         }}
       >
-        Adicionar Novo Produto {<AddCircleOutlineIcon />}
+        <Link to={Paths.SellerAddNewProduct(STORE_NAME)} underline="always" >
+          Adicionar Novo Produto {<AddCircleOutlineIcon />}
+        </Link>
       </Typography>
     </Box>
   );
@@ -115,25 +124,7 @@ let DUMMY_ITENS = [
     name: "Calça Jeans",
     amount: "23",
     value: "132,90",
-  },
-  {
-    id: "i2",
-    name: "Camisa Social",
-    amount: "67",
-    value: "108,90",
-  },
-  {
-    id: "i3",
-    name: "Blusa Xadrez",
-    amount: "0",
-    value: "83,90",
-  },
-  {
-    id: "i4",
-    name: "Calça Jeans",
-    amount: "23",
-    value: "132,90",
-  },
+  }
 ];
 
 const MyPaper = (props) => {

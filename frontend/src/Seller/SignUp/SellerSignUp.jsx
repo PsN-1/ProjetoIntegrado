@@ -17,6 +17,7 @@ const SellerSignUp = (props) => {
         backgroundPosition: "center",
         backgroundSize: "cover",
         display: "flex",
+        
         backgroundImage:
           "url(https://images.unsplash.com/photo-1528698827591-e19ccd7bc23d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1476&q=80)",
       }}

@@ -4,6 +4,7 @@ import SideBar from "../../shared/components/SideBar";
 
 const filterItems = [
   "Produtos",
+  "Dashboard",
   "Vendas",
   "Financeiro",
   "Visitas",

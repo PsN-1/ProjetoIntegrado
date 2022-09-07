@@ -1,18 +1,14 @@
 import { useState } from "react";
 import { Redirect } from "react-router-dom";
 
-import {
-  CssBaseline,
-  Link,
-  Box,
-  Grid,
-  Typography,
-} from "@mui/material";
+import { CssBaseline, Link, Box, Grid, Typography } from "@mui/material";
 
 import SignUpTextField from "../components/SignUpTextField";
-import {SignUpButton, LoginButton} from "../components/SignUpButton";
+import { SignUpButton, LoginButton } from "../components/SignUpButton";
+import Copyright from "../../shared/components/Copyright";
+import { Paths } from "../../Routes";
 
-export default function SignInSide() {
+export default function Login(props) {
   const [loginAction, setLoginAction] = useState(false);
   const [storeName, setStoreName] = useState("");
 
@@ -30,7 +26,9 @@ export default function SignInSide() {
       password,
     });
 
-    setStoreName(email); // TODO: Get store name from server
+    setStoreName(email);
+    props.onLogin(email);
+    // TODO: Get store name from server
     setLoginAction(true);
   };
 
@@ -44,7 +42,7 @@ export default function SignInSide() {
 
   return (
     <Grid container component="main" sx={{ height: "100vh" }}>
-      {loginAction && <Redirect to={`/${storeName}/adm/dashboard`} />}
+      {loginAction && <Redirect to={Paths.SellerDashboard(storeName)} />}
       <CssBaseline />
 
       <Grid item xs={12} sm={8} md={3}>
@@ -93,13 +91,13 @@ export default function SignInSide() {
           <LoginButton onClick={handleSubmit} buttoncolor="#EB445A">
             Login
           </LoginButton>
-          <SignUpButton to="/signup" buttoncolor="#11445A">
+          <SignUpButton to={Paths.SignupUser} buttoncolor="#11445A">
             Cadastre-se
           </SignUpButton>
 
           <Grid container>
             <Grid item xs>
-              <Link href="/forgotpassword" variant="body2">
+              <Link href={Paths.ForgotPassword} variant="body2">
                 Esqueci a Senha
               </Link>
             </Grid>
@@ -129,26 +127,7 @@ export default function SignInSide() {
   );
 }
 
-function Copyright(props) {
-  return (
-    <Typography
-      variant="body2"
-      color="text.secondary"
-      align="center"
-      {...props}
-    >
-      {"Copyright © "}
-      <Link color="inherit" href="https://mui.com/">
-        Loja Universal
-      </Link>{" "}
-      {new Date().getFullYear()}
-      {"."}
-    </Typography>
-  );
-}
-
-{
-  /* <RouteLink to="/:lojaName">
+/* <RouteLink to="/:lojaName">
 <Button
   fullWidth
   variant="contained"
@@ -182,4 +161,3 @@ function Copyright(props) {
      },
    }}
 >Link</Button> */
-}
