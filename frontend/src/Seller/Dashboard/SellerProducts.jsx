@@ -1,42 +1,58 @@
-import { Paper, Typography, Box } from "@mui/material";
+import {
+  Paper,
+  Typography,
+  Box,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+} from "@mui/material";
 import * as React from "react";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-
 import SellerSkeleton from "./SellerSkeleton";
 import LabelTypography from "../../shared/components/LabelTypography";
 import TitleTypography from "../../shared/components/TitleTypography";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { Paths, STORE_NAME } from "../../Routes";
+import { useEffect, useState } from "react";
 
 export default function SellerProducts() {
+  const [loadedProducts, setLoadedProducts] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      setIsLoading(true);
+      const response = await fetch("http://localhost:3030/api/seller/stores/");
+      const responseData = await response.json();
+      setLoadedProducts(responseData);
+      setIsLoading(false);
+    };
+
+    fetchProducts();
+  }, []);
+
   return (
     <SellerSkeleton>
-      <DashBoardProducts items={DUMMY_ITENS} />
+      <DashBoardProducts items={loadedProducts} />
     </SellerSkeleton>
   );
 }
 
 const DashBoardProducts = (props) => {
-  const handleRowClick = (row) => {
-    console.log(row);
+  const history = useHistory()
+  const handleRowClick = (item) => {    
+    history.push(Paths.SellerEditProduct(STORE_NAME, item._id), item)
   };
 
   const handleDeleteClick = (row) => {
     console.log(+row.amount);
   };
 
-  function addNew(data) {
-    DUMMY_ITENS.push(data)
-    console.log(DUMMY_ITENS)
-  }
   return (
     <Box>
       <TableContainer component={MyPaper}>
@@ -57,11 +73,14 @@ const DashBoardProducts = (props) => {
           <TableBody>
             {props.items.map((item) => (
               <TableRow
+                // component={Link}
+                // to={Paths.SellerAddNewProduct}
                 hover
                 onClick={() => handleRowClick(item)}
                 key={item.id}
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
               >
+                {console.log(item)}
                 <TableCell component="th" scope="row">
                   <LabelTypography>{item.name}</LabelTypography>
                 </TableCell>
@@ -92,40 +111,13 @@ const DashBoardProducts = (props) => {
           lineHeight: "29px",
         }}
       >
-        <Link to={Paths.SellerAddNewProduct(STORE_NAME)} underline="always" >
+        <Link to={Paths.SellerAddNewProduct(STORE_NAME)} underline="always">
           Adicionar Novo Produto {<AddCircleOutlineIcon />}
         </Link>
       </Typography>
     </Box>
   );
 };
-
-let DUMMY_ITENS = [
-  {
-    id: "i1",
-    name: "Blusa Laranja",
-    amount: "5",
-    value: "99,90",
-  },
-  {
-    id: "i2",
-    name: "Camisa Social",
-    amount: "67",
-    value: "108,90",
-  },
-  {
-    id: "i3",
-    name: "Blusa Xadrez",
-    amount: "0",
-    value: "83,90",
-  },
-  {
-    id: "i4",
-    name: "Calça Jeans",
-    amount: "23",
-    value: "132,90",
-  }
-];
 
 const MyPaper = (props) => {
   return (

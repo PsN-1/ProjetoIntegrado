@@ -30,7 +30,7 @@ export default function SellerDashboard() {
                 lineHeight="29px"
               />
             </Grid>
-            <Grid item xs={12} spacing={5}>
+            <Grid item xs={12} >
               <DashBoardLargeItem
                 title="Últimas Vendas"
                 product="Item Aleatório"
@@ -38,7 +38,7 @@ export default function SellerDashboard() {
                 value={420}
               />
             </Grid>
-            <Grid item xs={12} spacing={5}>
+            <Grid item xs={12}>
               <DashBoardLargeItem
                 title="Estoque Baixo"
                 product="Item Aleatório"

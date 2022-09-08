@@ -9,17 +9,30 @@ import SellerSkeleton from "./SellerSkeleton";
 export default function SellerNewProduct(props) {
   const [submitAction, setSubmitAction] = useState(false);
 
-  const handleButtonAction = (event) => {
+  const handleButtonAction = async (event) => {
     event.preventDefault();
 
     const data = new FormData(event.currentTarget);
-    console.log({
-      Nome: data.get("Nome"),
-      Imagem: data.get("Imagem"),
-      Descricao: data.get("Descricao"),
-      Quantidade: data.get("Quantidade"),
-      Valor: data.get("Valor"),
+    
+    const newProduct = {
+      name: data.get("Nome"),
+      image: data.get("Imagem"),
+      description: data.get("Descricao"),
+      amount: data.get("Quantidade"),
+      value: data.get("Valor"),
+    };
+    console.log(newProduct)
+    const response = await fetch("http://localhost:3030/api/seller/stores/", {
+      method: "POST",
+      body: JSON.stringify(newProduct),
+      headers: {
+        "Content-Type": "application/json",
+      },
     });
+
+    const responseData = await response.json()
+    console.log(responseData)
+
     // props.onNewProduct(data)
     setSubmitAction(true);
   };
@@ -56,7 +69,7 @@ export default function SellerNewProduct(props) {
                   p: 3,
                   mt: 3,
                 }}
-              >
+              > 
                 <SignUpTextField name="Nome" label="Nome" margin="normal" />
                 <SignUpTextField name="Imagem" label="Imagem" margin="normal" />
                 <SignUpTextField

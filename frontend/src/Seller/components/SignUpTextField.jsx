@@ -6,6 +6,8 @@ const SignUpTextField = (props) => {
       id={props.label}
       required
       fullWidth
+      value ={props.value}
+      onChange={props.onChange}
       inputProps={{
         style: {
           backgroundColor: "rgba(255, 255, 255, 0.7)",

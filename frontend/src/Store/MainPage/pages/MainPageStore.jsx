@@ -5,6 +5,8 @@ import Carousel from "../components/Carousel";
 import Products from "../components/Products";
 import SideBar from "../../../shared/components/SideBar";
 import Copyright from "../../../shared/components/Copyright";
+import { useEffect } from "react";
+import { useState } from "react";
 
 const filterItems = [
   "Casacos",
@@ -16,6 +18,17 @@ const filterItems = [
 ];
 
 const MainPageStore = () => {
+  const [loadedProducts, setLoadedProducts] = useState([]);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      const response = await fetch("http://localhost:3030/api/user/stores/");
+      const responseData = await response.json();
+      setLoadedProducts(responseData);
+    };
+    fetchProducts();
+  }, []);
+
   return (
     <Box>
       <NavBar />
@@ -27,7 +40,7 @@ const MainPageStore = () => {
           <SideBar title="Tipo de produto" items={filterItems} />
         </Grid>
         <Grid item xs={12} md={8}>
-          <Products />
+          <Products products={loadedProducts} />
           <Box display="flex" justifyContent="center" p={5}>
             <Pagination count={5} />
           </Box>

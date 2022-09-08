@@ -15,6 +15,7 @@ import ForgetPassword from "./Seller/Login/ForgetPassword";
 import SellerSignUpUser from "./Seller/SignUp/SellerSignUpUser";
 import SellerSignUpStore from "./Seller/SignUp/SellerSignUpStore";
 import SellerProducts from "./Seller/Dashboard/SellerProducts";
+import SellerEditProduct from "./Seller/Dashboard/SellerEditProduct";
 
 export const Paths = {
   Login: "/",
@@ -27,6 +28,7 @@ export const Paths = {
   SellerDashboard: (storeName) => `/${storeName}/adm/dashboard`,
   SellerProducts: (storeName) => `/${storeName}/adm/products`,
   SellerAddNewProduct: (storeName) => `/${storeName}/adm/products/new`,
+  SellerEditProduct: (storeName, pid) => `/${storeName}/adm/products/${pid}`
 };
 
 export let STORE_NAME = ''
@@ -53,10 +55,11 @@ export function Routes() {
           <Route path={Paths.SellerDashboard(':storeName')} exact component={SellerDashboard} />
           <Route path={Paths.SellerProducts(':storeName')} exact component={SellerProducts} />
           <Route path={Paths.SellerAddNewProduct(':storeName')} exact component={SellerNewProduct} />
-          
+          <Route path={Paths.SellerEditProduct(':storeName', ':pid')} exact component={SellerEditProduct} />
           <Redirect to="/" />
         </Switch>
       </main>
     </Router>
   );
 }
+

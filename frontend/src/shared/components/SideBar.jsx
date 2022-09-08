@@ -18,7 +18,7 @@ export default function SideBar(props) {
       <Item>
         <h1>{props.title}:</h1>
         {props.items.map((item) => (
-          <h3>
+          <h3 key={item}>
             <Link to={getPathFor(item)} underline="always" color="inherit">
               {item}
             </Link>
