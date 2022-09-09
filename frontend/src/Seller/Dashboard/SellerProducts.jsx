@@ -1,7 +1,6 @@
 import {
   Paper,
   Typography,
-  Box,
   Table,
   TableBody,
   TableCell,
@@ -10,13 +9,12 @@ import {
   TableRow,
 } from "@mui/material";
 import * as React from "react";
-import DeleteIcon from "@mui/icons-material/Delete";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 
 import SellerSkeleton from "./SellerSkeleton";
 import LabelTypography from "../../shared/components/LabelTypography";
 import TitleTypography from "../../shared/components/TitleTypography";
-import { Link, useHistory } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { Paths, STORE_NAME } from "../../Routes";
 import { useEffect, useState } from "react";
 
@@ -38,23 +36,15 @@ export default function SellerProducts() {
 
   return (
     <SellerSkeleton>
-      <DashBoardProducts items={loadedProducts} />
+      {isLoading && <h3>Products being loaded.</h3>}
+      {!isLoading && <DashBoardProducts items={loadedProducts} />}
     </SellerSkeleton>
   );
 }
 
 const DashBoardProducts = (props) => {
-  const history = useHistory()
-  const handleRowClick = (item) => {    
-    history.push(Paths.SellerEditProduct(STORE_NAME, item._id), item)
-  };
-
-  const handleDeleteClick = (row) => {
-    console.log(+row.amount);
-  };
-
   return (
-    <Box>
+    <div>
       <TableContainer component={MyPaper}>
         <Table>
           <TableHead>
@@ -73,14 +63,14 @@ const DashBoardProducts = (props) => {
           <TableBody>
             {props.items.map((item) => (
               <TableRow
-                // component={Link}
-                // to={Paths.SellerAddNewProduct}
+                component={Link} // This is causing all the errors, alternative not found
+                to={Paths.SellerEditProduct(STORE_NAME, item._id)}
                 hover
-                onClick={() => handleRowClick(item)}
-                key={item.id}
-                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                key={item._id}
+                sx={{
+                  "&:last-child td, &:last-child th": { border: 0 },
+                }}
               >
-                {console.log(item)}
                 <TableCell component="th" scope="row">
                   <LabelTypography>{item.name}</LabelTypography>
                 </TableCell>
@@ -89,11 +79,6 @@ const DashBoardProducts = (props) => {
                 </TableCell>
                 <TableCell align="center">
                   <LabelTypography>{item.value}</LabelTypography>
-                </TableCell>
-                <TableCell align="center">
-                  {+item.amount === 0 && (
-                    <DeleteIcon onClick={() => handleDeleteClick(item)} />
-                  )}
                 </TableCell>
               </TableRow>
             ))}
@@ -115,7 +100,7 @@ const DashBoardProducts = (props) => {
           Adicionar Novo Produto {<AddCircleOutlineIcon />}
         </Link>
       </Typography>
-    </Box>
+    </div>
   );
 };
 

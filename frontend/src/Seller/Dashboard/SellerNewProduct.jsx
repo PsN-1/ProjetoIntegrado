@@ -1,4 +1,4 @@
-import { Box, Button, Grid, Paper, TextField, Typography } from "@mui/material";
+import { Box, Button, Grid, Paper, Typography } from "@mui/material";
 import { Container } from "@mui/system";
 import { useState } from "react";
 import { Redirect } from "react-router-dom";
@@ -13,7 +13,7 @@ export default function SellerNewProduct(props) {
     event.preventDefault();
 
     const data = new FormData(event.currentTarget);
-    
+
     const newProduct = {
       name: data.get("Nome"),
       image: data.get("Imagem"),
@@ -21,7 +21,7 @@ export default function SellerNewProduct(props) {
       amount: data.get("Quantidade"),
       value: data.get("Valor"),
     };
-    console.log(newProduct)
+    console.log(newProduct);
     const response = await fetch("http://localhost:3030/api/seller/stores/", {
       method: "POST",
       body: JSON.stringify(newProduct),
@@ -30,8 +30,8 @@ export default function SellerNewProduct(props) {
       },
     });
 
-    const responseData = await response.json()
-    console.log(responseData)
+    const responseData = await response.json();
+    console.log(responseData);
 
     // props.onNewProduct(data)
     setSubmitAction(true);
@@ -69,7 +69,7 @@ export default function SellerNewProduct(props) {
                   p: 3,
                   mt: 3,
                 }}
-              > 
+              >
                 <SignUpTextField name="Nome" label="Nome" margin="normal" />
                 <SignUpTextField name="Imagem" label="Imagem" margin="normal" />
                 <SignUpTextField

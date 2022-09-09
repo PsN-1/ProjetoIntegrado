@@ -23,7 +23,7 @@ export default function SellerSkeleton(props) {
         </Grid>
 
         <Grid item xs={8}>
-            {props.children}
+          {props.children}
         </Grid>
       </Grid>
     </Box>

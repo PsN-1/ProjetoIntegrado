@@ -18,6 +18,23 @@ const getProductsForSeller = async (req, res, next) => {
   res.json(products);
 };
 
+const getActiveProduts = async (req, res, next) => {
+  let count;
+
+  try {
+    let products = await Product.find();
+    count = products.length;
+  } catch (err) {
+    const error = new HttpError(
+      "Fetching products failed, please try again later.",
+      500
+    );
+    return next(error);
+  }
+
+  res.json(count);
+};
+
 const createProduct = async (req, res, next) => {
   const { name, image, description, amount, value } = req.body;
 
@@ -124,6 +141,7 @@ const deleteProduct = async (req, res, next) => {
 };
 
 exports.getProductsForSeller = getProductsForSeller;
+exports.getActiveProduts = getActiveProduts;
 exports.getProductById = getProductById;
 exports.createProduct = createProduct;
 exports.updateProduct = updateProduct;

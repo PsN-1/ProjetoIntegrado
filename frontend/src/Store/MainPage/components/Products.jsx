@@ -2,7 +2,7 @@ import { Grid } from "@mui/material";
 import Product from "./Product";
 
 const Products = (props) => {
-  const {products} = props
+  const { products } = props;
 
   return (
     <Grid container spacing={3}>

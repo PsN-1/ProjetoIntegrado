@@ -4,6 +4,7 @@ const sellerControllers = require("../controllers/seller-controllers");
 const router = express.Router();
 
 router.get("/stores", sellerControllers.getProductsForSeller);
+router.get("/stores/count", sellerControllers.getActiveProduts);
 router.get("/stores/:pid", sellerControllers.getProductById);
 
 router.post("/stores", sellerControllers.createProduct);
