@@ -15,7 +15,7 @@ import SellerSkeleton from "./SellerSkeleton";
 import LabelTypography from "../../shared/components/LabelTypography";
 import TitleTypography from "../../shared/components/TitleTypography";
 import { Link } from "react-router-dom";
-import { Paths, STORE_NAME } from "../../Routes";
+import { EndPoint, getStoreName, Paths } from "../../Routes";
 import { useEffect, useState } from "react";
 
 export default function SellerProducts() {
@@ -25,7 +25,7 @@ export default function SellerProducts() {
   useEffect(() => {
     const fetchProducts = async () => {
       setIsLoading(true);
-      const response = await fetch("http://localhost:3030/api/seller/stores/");
+      const response = await fetch(EndPoint.stores);
       const responseData = await response.json();
       setLoadedProducts(responseData);
       setIsLoading(false);
@@ -64,7 +64,7 @@ const DashBoardProducts = (props) => {
             {props.items.map((item) => (
               <TableRow
                 component={Link} // This is causing all the errors, alternative not found
-                to={Paths.SellerEditProduct(STORE_NAME, item._id)}
+                to={Paths.SellerEditProduct(getStoreName(), item._id)}
                 hover
                 key={item._id}
                 sx={{
@@ -96,7 +96,7 @@ const DashBoardProducts = (props) => {
           lineHeight: "29px",
         }}
       >
-        <Link to={Paths.SellerAddNewProduct(STORE_NAME)} underline="always">
+        <Link to={Paths.SellerAddNewProduct(getStoreName())} underline="always">
           Adicionar Novo Produto {<AddCircleOutlineIcon />}
         </Link>
       </Typography>

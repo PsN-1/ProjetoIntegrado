@@ -15,6 +15,7 @@ const getProductsForSeller = async (req, res, next) => {
     return next(error);
   }
 
+  console.log("Response:", products)
   res.json(products);
 };
 
@@ -32,6 +33,7 @@ const getActiveProduts = async (req, res, next) => {
     return next(error);
   }
 
+  console.log("Response:", count)
   res.json(count);
 };
 
@@ -55,6 +57,8 @@ const createProduct = async (req, res, next) => {
     const error = new HttpError("Creating product failed, please try again");
     return next(error);
   }
+
+  console.log("Status Code:", 201, "Response:", createdProduct)
   res.status(201).json({ product: createdProduct });
 };
 
@@ -72,6 +76,7 @@ const getProductById = async (req, res, next) => {
     return next(error);
   }
 
+  console.log("Status Code:", 200, "Response:", product)
   res.status(200).json({ product: product });
 };
 
@@ -106,6 +111,7 @@ const updateProduct = async (req, res, next) => {
     return next(error);
   }
 
+  console.log(200, product)
   res.status(200).json({ product: product });
 };
 
@@ -137,6 +143,8 @@ const deleteProduct = async (req, res, next) => {
     );
     return next(error);
   }
+
+  console.log("Status Code:", 200, "Response: Deleted product.")
   res.status(200).json({ message: "Deleted product." });
 };
 

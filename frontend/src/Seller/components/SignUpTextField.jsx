@@ -21,6 +21,24 @@ const SignUpTextField = (props) => {
   );
 };
 
+export const DescriptionTextField = (props) => {
+  return (
+    <CssTextField
+      id={props.label}
+      required
+      fullWidth
+      value={props.value}
+      onChange={props.onChange}
+      sx={{
+        backgroundColor: "rgba(255, 255, 255, 0.7)",
+        borderRadius: "10px",
+        boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
+      }}
+      {...props}
+    />
+  );
+};
+
 const CssTextField = styled(TextField)({
   "& label.Mui-focused": {
     color: "black",

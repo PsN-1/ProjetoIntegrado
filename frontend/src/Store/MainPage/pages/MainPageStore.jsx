@@ -7,6 +7,7 @@ import SideBar from "../../../shared/components/SideBar";
 import Copyright from "../../../shared/components/Copyright";
 import { useEffect } from "react";
 import { useState } from "react";
+import { EndPoint } from "../../../Routes";
 
 const filterItems = [
   "Casacos",
@@ -22,7 +23,7 @@ const MainPageStore = () => {
 
   useEffect(() => {
     const fetchProducts = async () => {
-      const response = await fetch("http://localhost:3030/api/user/stores/");
+      const response = await fetch(EndPoint.stores);
       const responseData = await response.json();
       setLoadedProducts(responseData);
     };

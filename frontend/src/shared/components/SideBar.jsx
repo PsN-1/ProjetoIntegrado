@@ -1,7 +1,7 @@
 import { Container, Paper } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { Link } from "react-router-dom";
-import { Paths, STORE_NAME } from "../../Routes";
+import { getStoreName, Paths } from "../../Routes";
 
 const Item = styled(Paper)(({ theme }) => ({
   background: "#F2F2F2",
@@ -31,9 +31,9 @@ export default function SideBar(props) {
 
 function getPathFor(item) {
   if (item === "Produtos") {
-    return Paths.SellerProducts(STORE_NAME);
+    return Paths.SellerProducts(getStoreName());
   } else if (item === "Dashboard") {
-    return Paths.SellerDashboard(STORE_NAME);
+    return Paths.SellerDashboard(getStoreName());
   }
 
   return "#";

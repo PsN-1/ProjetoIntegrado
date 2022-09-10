@@ -6,11 +6,10 @@ import { CssBaseline, Link, Box, Grid, Typography } from "@mui/material";
 import SignUpTextField from "../components/SignUpTextField";
 import { SignUpButton, LoginButton } from "../components/SignUpButton";
 import Copyright from "../../shared/components/Copyright";
-import { Paths } from "../../Routes";
+import { getStoreName, Paths, setStoreName } from "../../Routes";
 
 export default function Login(props) {
   const [loginAction, setLoginAction] = useState(false);
-  const [storeName, setStoreName] = useState("");
 
   let email = "";
   let password = "";
@@ -20,14 +19,12 @@ export default function Login(props) {
     if (!(password.length > 6 && email)) {
       return;
     }
-    console.log(event);
     console.log({
       email,
       password,
     });
 
     setStoreName(email);
-    props.onLogin(email);
     // TODO: Get store name from server
     setLoginAction(true);
   };
@@ -42,7 +39,7 @@ export default function Login(props) {
 
   return (
     <Grid container component="main" sx={{ height: "100vh" }}>
-      {loginAction && <Redirect to={Paths.SellerDashboard(storeName)} />}
+      {loginAction && <Redirect to={Paths.SellerDashboard(getStoreName())} />}
       <CssBaseline />
 
       <Grid item xs={12} sm={8} md={3}>

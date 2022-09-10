@@ -31,21 +31,21 @@ export const Paths = {
   SellerEditProduct: (storeName, pid) => `/${storeName}/adm/products/${pid}`,
 };
 
-export let STORE_NAME = "";
-
-function handleLogin(props) {
-  STORE_NAME = props;
-}
+const baseEndPointURL = "https://loja-universal.herokuapp.com";
+export const EndPoint = {
+  storeCount: `${baseEndPointURL}/api/seller/stores/count`,
+  stores: `${baseEndPointURL}/api/seller/stores/`,
+  storeWithId: (productId) =>
+    `${baseEndPointURL}/api/seller/stores/${productId}`,
+};
 
 // Routes
 export function Routes() {
   return (
     <Router>
-      {/* <main> */}
       <Switch>
-        <Route path={Paths.Login} exact>
-          <Login onLogin={handleLogin} />
-        </Route>
+        <Route path={Paths.Login} exact component={Login} />
+
         <Route path={Paths.ForgotPassword} exact component={ForgetPassword} />
         <Route path={Paths.SignupUser} exact component={SellerSignUpUser} />
         <Route path={Paths.SignupStore} exact component={SellerSignUpStore} />
@@ -78,7 +78,27 @@ export function Routes() {
         />
         <Redirect to="/" />
       </Switch>
-      {/* </main> */}
     </Router>
   );
 }
+
+export const getStoreName = () => {
+  try {
+    const serializedState = localStorage.getItem("state");
+    if (serializedState === null) {
+      return undefined;
+    }
+    return JSON.parse(serializedState);
+  } catch (err) {
+    return undefined;
+  }
+};
+
+export const setStoreName = (state) => {
+  try {
+    const serializedState = JSON.stringify(state);
+    localStorage.setItem("state", serializedState);
+  } catch (err) {
+    return undefined;
+  }
+};

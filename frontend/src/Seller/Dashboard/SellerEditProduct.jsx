@@ -3,8 +3,10 @@ import { Container } from "@mui/system";
 import { useEffect } from "react";
 import { useState } from "react";
 import { Redirect, useParams } from "react-router-dom";
-import { Paths, STORE_NAME } from "../../Routes";
-import SignUpTextField from "../components/SignUpTextField";
+import { EndPoint, getStoreName, Paths } from "../../Routes";
+import SignUpTextField, {
+  DescriptionTextField,
+} from "../components/SignUpTextField";
 import SellerSkeleton from "./SellerSkeleton";
 
 export default function SellerEditProduct(props) {
@@ -46,16 +48,13 @@ export default function SellerEditProduct(props) {
       value: value,
     };
 
-    const response = await fetch(
-      `http://localhost:3030/api/seller/stores/${productId}`,
-      {
-        method: "PATCH",
-        body: JSON.stringify(newProduct),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
+    const response = await fetch(EndPoint.storeWithId(productId), {
+      method: "PATCH",
+      body: JSON.stringify(newProduct),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
 
     const responseData = await response.json();
     console.log(responseData);
@@ -65,7 +64,7 @@ export default function SellerEditProduct(props) {
   const handleDeleteButton = async (event) => {
     event.preventDefault();
 
-    await fetch(`http://localhost:3030/api/seller/stores/${productId}`, {
+    await fetch(EndPoint.storeWithId(productId), {
       method: "DELETE",
     });
 
@@ -74,9 +73,7 @@ export default function SellerEditProduct(props) {
 
   useEffect(() => {
     const fetchProduct = async () => {
-      const response = await fetch(
-        `http://localhost:3030/api/seller/stores/${pid}`
-      );
+      const response = await fetch(EndPoint.storeWithId(pid));
       const responseData = await response.json();
       const { _id, name, image, description, amount, value } =
         responseData.product;
@@ -93,7 +90,7 @@ export default function SellerEditProduct(props) {
 
   return (
     <SellerSkeleton>
-      {submitAction && <Redirect to={Paths.SellerProducts(STORE_NAME)} />}
+      {submitAction && <Redirect to={Paths.SellerProducts(getStoreName())} />}
       <Typography
         sx={{
           paddingLeft: 5,
@@ -138,11 +135,12 @@ export default function SellerEditProduct(props) {
                   value={image}
                   onChange={imageChangeHandler}
                 />
-                <SignUpTextField
+                <DescriptionTextField
                   name="Descricao"
                   label="Descricao"
                   margin="normal"
-                  height="180px"
+                  multiline
+                  rows={4}
                   value={description}
                   onChange={descriptionChangeHandler}
                 />

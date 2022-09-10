@@ -2,8 +2,10 @@ import { Box, Button, Grid, Paper, Typography } from "@mui/material";
 import { Container } from "@mui/system";
 import { useState } from "react";
 import { Redirect } from "react-router-dom";
-import { Paths, STORE_NAME } from "../../Routes";
-import SignUpTextField from "../components/SignUpTextField";
+import { EndPoint, getStoreName, Paths } from "../../Routes";
+import SignUpTextField, {
+  DescriptionTextField,
+} from "../components/SignUpTextField";
 import SellerSkeleton from "./SellerSkeleton";
 
 export default function SellerNewProduct(props) {
@@ -22,7 +24,7 @@ export default function SellerNewProduct(props) {
       value: data.get("Valor"),
     };
     console.log(newProduct);
-    const response = await fetch("http://localhost:3030/api/seller/stores/", {
+    const response = await fetch(EndPoint.stores, {
       method: "POST",
       body: JSON.stringify(newProduct),
       headers: {
@@ -39,7 +41,7 @@ export default function SellerNewProduct(props) {
 
   return (
     <SellerSkeleton>
-      {submitAction && <Redirect to={Paths.SellerProducts(STORE_NAME)} />}
+      {submitAction && <Redirect to={Paths.SellerProducts(getStoreName())} />}
       <Typography
         sx={{
           paddingLeft: 5,
@@ -72,11 +74,13 @@ export default function SellerNewProduct(props) {
               >
                 <SignUpTextField name="Nome" label="Nome" margin="normal" />
                 <SignUpTextField name="Imagem" label="Imagem" margin="normal" />
-                <SignUpTextField
+
+                <DescriptionTextField
                   name="Descricao"
-                  label="Descricao"
+                  label="Descrição"
                   margin="normal"
-                  height="180px"
+                  multiline
+                  rows={4}
                 />
                 <SignUpTextField
                   name="Quantidade"

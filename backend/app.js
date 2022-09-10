@@ -19,6 +19,14 @@ app.use((req, res, next) => {
   next();
 });
 
+app.use((req, res, next) => {
+  console.log("IP:", req.ip, ", Method:", req.method, ", Endpoint:", req.url);
+  if (req.body) {
+    console.log("Body:", req.body);
+  }
+  next();
+});
+
 app.use("/api/seller", sellerRoutes);
 app.use("/api/user", userRoutes);
 
@@ -29,21 +37,22 @@ app.use((req, res, next) => {
 
 app.use((error, req, res, next) => {
   if (res.headerSent) {
+    console.log(error);
     return next(error);
   }
 
+  console.log("Error:", error.message || "an unknown error occurred");
   res.status(error.code || 500);
   res.json({ message: error.message || "an unknown error occurred" });
 });
 
-const url =
-  "mongodb+srv://mernUdemy:Vl5e1hqhQKmmkBoQ@cluster0.mca3pfo.mongodb.net/stores?retryWrites=true&w=majority";
-
+const url = process.env.MONGOURL
+const port = process.env.PORT || 4000
 mongoose
   .connect(url)
   .then(() => {
     console.log("Connected to database!");
-    app.listen(3030);
+    app.listen(port);
   })
   .catch((err) => {
     console.log(err);

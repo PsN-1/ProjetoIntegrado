@@ -5,6 +5,7 @@ import DashBoardSmallItem from "./components/DashBoardSmallItem";
 import DashBoardLargeItem from "./components/DashBoardLargeItem";
 import { useEffect } from "react";
 import { useState } from "react";
+import { EndPoint } from "../../Routes";
 
 export default function SellerDashboard() {
   const [activesProducts, setActivesProducts] = useState(0);
@@ -12,7 +13,7 @@ export default function SellerDashboard() {
   useEffect(() => {
     const fetchCount = async () => {
       const response = await fetch(
-        "http://localhost:3030/api/seller/stores/count"
+        EndPoint.storeCount
       );
       const responseData = await response.json();
       setActivesProducts(responseData);
