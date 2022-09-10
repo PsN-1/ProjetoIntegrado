@@ -31,7 +31,7 @@ export const Paths = {
   SellerEditProduct: (storeName, pid) => `/${storeName}/adm/products/${pid}`,
 };
 
-const baseEndPointURL = "https://loja-universal.herokuapp.com";
+const baseEndPointURL = "https://lojauniversal.herokuapp.com";
 export const EndPoint = {
   storeCount: `${baseEndPointURL}/api/seller/stores/count`,
   stores: `${baseEndPointURL}/api/seller/stores/`,
