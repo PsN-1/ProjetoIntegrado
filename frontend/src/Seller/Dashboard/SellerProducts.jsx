@@ -17,6 +17,7 @@ import TitleTypography from "../../shared/components/TitleTypography";
 import { Link } from "react-router-dom";
 import { EndPoint, getStoreName, Paths } from "../../Routes";
 import { useEffect, useState } from "react";
+import Loading from "../../shared/components/Loading";
 
 export default function SellerProducts() {
   const [loadedProducts, setLoadedProducts] = useState([]);
@@ -36,7 +37,7 @@ export default function SellerProducts() {
 
   return (
     <SellerSkeleton>
-      {isLoading && <h3>Products being loaded.</h3>}
+      {isLoading && <Loading />}
       {!isLoading && <DashBoardProducts items={loadedProducts} />}
     </SellerSkeleton>
   );

@@ -8,6 +8,7 @@ import Copyright from "../../../shared/components/Copyright";
 import { useEffect } from "react";
 import { useState } from "react";
 import { EndPoint } from "../../../Routes";
+import Loading from "../../../shared/components/Loading";
 
 const filterItems = [
   "Casacos",
@@ -20,12 +21,15 @@ const filterItems = [
 
 const MainPageStore = () => {
   const [loadedProducts, setLoadedProducts] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const fetchProducts = async () => {
+      setIsLoading(true);
       const response = await fetch(EndPoint.stores);
       const responseData = await response.json();
       setLoadedProducts(responseData);
+      setIsLoading(false);
     };
     fetchProducts();
   }, []);
@@ -41,7 +45,9 @@ const MainPageStore = () => {
           <SideBar title="Tipo de produto" items={filterItems} />
         </Grid>
         <Grid item xs={12} md={8}>
-          <Products products={loadedProducts} />
+          {isLoading && <Loading />}
+
+          {!isLoading && <Products products={loadedProducts} />}
           <Box display="flex" justifyContent="center" p={5}>
             <Pagination count={5} />
           </Box>
