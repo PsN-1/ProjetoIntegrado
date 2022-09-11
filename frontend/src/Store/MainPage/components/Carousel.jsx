@@ -1,7 +1,7 @@
 import { Box, Card, CardMedia, Typography } from "@mui/material";
 
 const image = "https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Nnx8c3RvcmV8ZW58MHx8MHx8&auto=format&fit=crop&w=900&q=60";
-const Carousel = () => {
+const Carousel = (props) => {
   return (
     <Box paddingX={5} paddingY={3}>
       <Card elevation={3} position="relative">
@@ -19,7 +19,7 @@ const Carousel = () => {
           backgroundColor="none"
           fontFamily="Comic Sans MS"
         >
-          Loja Universal
+          {props.title}
         </Typography>
       </Card>
     </Box>

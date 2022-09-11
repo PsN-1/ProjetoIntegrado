@@ -7,6 +7,7 @@ import {
 
 import Login from "./Seller/Login/Login";
 import MainPageStore from "./Store/MainPage/pages/MainPageStore";
+import ProductDetail from "./Store/MainPage/pages/ProductDetail";
 import SellerDashboard from "./Seller/Dashboard/SellerDashboard";
 
 import SellerNewProduct from "./Seller/Dashboard/SellerNewProduct";
@@ -24,6 +25,7 @@ export const Paths = {
   SignupStore: "/signupStore",
 
   MainPageStore: (storeName) => `/${storeName}`,
+  DetailProductStore: (storeName, pid) => `/${storeName}/${pid}`,
 
   SellerDashboard: (storeName) => `/${storeName}/adm/dashboard`,
   SellerProducts: (storeName) => `/${storeName}/adm/products`,
@@ -33,10 +35,18 @@ export const Paths = {
 
 const baseEndPointURL = "https://lojauniversal.herokuapp.com";
 export const EndPoint = {
-  storeCount: `${baseEndPointURL}/api/seller/stores/count`,
-  stores: `${baseEndPointURL}/api/seller/stores/`,
-  storeWithId: (productId) =>
-    `${baseEndPointURL}/api/seller/stores/${productId}`,
+  seller: {
+    storeCount: `${baseEndPointURL}/api/seller/stores/count`,
+    stores: `${baseEndPointURL}/api/seller/stores/`,
+    storeWithId: (productId) =>
+      `${baseEndPointURL}/api/seller/stores/${productId}`,
+  },
+
+  user: {
+    stores: `${baseEndPointURL}/api/user/stores/`,
+    storeWithId: (productId) =>
+      `${baseEndPointURL}/api/user/stores/${productId}`,
+  },
 };
 
 // Routes
@@ -54,6 +64,12 @@ export function Routes() {
           path={Paths.MainPageStore(":storeName")}
           exact
           component={MainPageStore}
+        />
+
+        <Route
+          path={Paths.DetailProductStore(":storeName", ":pid")}
+          exact
+          component={ProductDetail}
         />
 
         <Route

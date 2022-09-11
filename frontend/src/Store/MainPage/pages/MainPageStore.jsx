@@ -9,6 +9,7 @@ import { useEffect } from "react";
 import { useState } from "react";
 import { EndPoint } from "../../../Routes";
 import Loading from "../../../shared/components/Loading";
+import { useParams } from "react-router-dom";
 
 const filterItems = [
   "Casacos",
@@ -23,10 +24,12 @@ const MainPageStore = () => {
   const [loadedProducts, setLoadedProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
+  const { storeName } = useParams();
+
   useEffect(() => {
     const fetchProducts = async () => {
       setIsLoading(true);
-      const response = await fetch(EndPoint.stores);
+      const response = await fetch(EndPoint.user.stores);
       const responseData = await response.json();
       setLoadedProducts(responseData);
       setIsLoading(false);
@@ -38,7 +41,7 @@ const MainPageStore = () => {
     <Box>
       <NavBar />
       <Grid item xs={false}>
-        <Carousel />
+        <Carousel title={storeName} />
       </Grid>
       <Grid container spacing={3} p={2}>
         <Grid item xs={false} md={3}>

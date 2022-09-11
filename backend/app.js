@@ -19,7 +19,8 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use((req, res, next) => {
+app.use(async (req, res, next)   => {
+  // await new Promise(resolve => setTimeout(resolve, 1000));
   console.log("IP:", req.ip, ", Method:", req.method, ", Endpoint:", req.url);
   if (req.body) {
     console.log("Body:", req.body);

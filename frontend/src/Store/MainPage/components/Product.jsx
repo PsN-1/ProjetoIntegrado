@@ -3,13 +3,19 @@ import {
   CardActionArea,
   CardContent,
   CardMedia,
+  
   Typography,
 } from "@mui/material";
+import { Link, useParams } from "react-router-dom";
+import { Paths } from "../../../Routes";
 
 const Product = (props) => {
+    const {storeName} = useParams()
+
   return (
     <Card sx={{ borderRadius: "10px" }}>
-      <CardActionArea>
+      {console.log(props)}
+      <CardActionArea component={Link} to={Paths.DetailProductStore(storeName, props.id)}>
         <CardMedia component="img" src={props.image} sx={{ height: 250 }} />
         <CardContent>
           <Typography

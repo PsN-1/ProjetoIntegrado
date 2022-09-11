@@ -26,7 +26,7 @@ export default function SellerNewProduct(props) {
       value: data.get("Valor"),
     };
 
-    const response = await fetch(EndPoint.stores, {
+    const response = await fetch(EndPoint.seller.stores, {
       method: "POST",
       body: JSON.stringify(newProduct),
       headers: {

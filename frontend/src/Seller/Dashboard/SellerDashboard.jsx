@@ -15,7 +15,7 @@ export default function SellerDashboard() {
   useEffect(() => {
     const fetchCount = async () => {
       setIsLoading(true);
-      const response = await fetch(EndPoint.storeCount);
+      const response = await fetch(EndPoint.seller.storeCount);
       const responseData = await response.json();
       setActivesProducts(responseData);
       setIsLoading(false);
