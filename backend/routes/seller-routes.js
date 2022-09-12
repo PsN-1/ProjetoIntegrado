@@ -3,14 +3,22 @@ const sellerControllers = require("../controllers/seller-controllers");
 
 const router = express.Router();
 
-router.get("/stores", sellerControllers.getProductsForSeller);
-router.get("/stores/count", sellerControllers.getActiveProduts);
-router.get("/stores/:pid", sellerControllers.getProductById);
+// Store
+router.get("/stores", sellerControllers.getStores); // return storeName?
 
-router.post("/stores", sellerControllers.createProduct);
+router.post("/stores/newSeller", sellerControllers.createSeller);
+router.post("/stores/newStore", sellerControllers.createStore); // new store
 
-router.patch("/stores/:pid", sellerControllers.updateProduct);
+// Products
+router.get("/:store/products", sellerControllers.getProductsForSeller);
+router.get("/:store/products/count", sellerControllers.getActiveProduts);
+router.get("/:store/products/:pid", sellerControllers.getProductById);
 
-router.delete("/stores/:pid", sellerControllers.deleteProduct);
+router.post("/:store/products", sellerControllers.createProduct);
+
+router.patch("/:store/products/:pid", sellerControllers.updateProduct);
+
+router.delete("/:store/products/:pid", sellerControllers.deleteProduct);
 
 module.exports = router;
+ 

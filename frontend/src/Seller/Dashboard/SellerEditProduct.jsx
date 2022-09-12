@@ -51,13 +51,16 @@ export default function SellerEditProduct(props) {
       value: value,
     };
 
-    const response = await fetch(EndPoint.seller.storeWithId(productId), {
-      method: "PATCH",
-      body: JSON.stringify(newProduct),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    const response = await fetch(
+      EndPoint.seller.storeWithId(getStoreName(), productId),
+      {
+        method: "PATCH",
+        body: JSON.stringify(newProduct),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
 
     const responseData = await response.json();
     console.log(responseData);
@@ -68,7 +71,7 @@ export default function SellerEditProduct(props) {
   const handleDeleteButton = async (event) => {
     event.preventDefault();
 
-    await fetch(EndPoint.seller.storeWithId(productId), {
+    await fetch(EndPoint.seller.storeWithId(getStoreName(), productId), {
       method: "DELETE",
     });
 
@@ -78,7 +81,9 @@ export default function SellerEditProduct(props) {
   useEffect(() => {
     const fetchProduct = async () => {
       setIsLoading(true);
-      const response = await fetch(EndPoint.seller.storeWithId(pid));
+      const response = await fetch(
+        EndPoint.seller.storeWithId(getStoreName(), pid)
+      );
       const responseData = await response.json();
       const { _id, name, image, description, amount, value } =
         responseData.product;

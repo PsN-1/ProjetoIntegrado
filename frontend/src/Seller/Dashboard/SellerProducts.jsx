@@ -26,7 +26,7 @@ export default function SellerProducts() {
   useEffect(() => {
     const fetchProducts = async () => {
       setIsLoading(true);
-      const response = await fetch(EndPoint.seller.stores);
+      const response = await fetch(EndPoint.seller.stores(getStoreName()));
       const responseData = await response.json();
       setLoadedProducts(responseData);
       setIsLoading(false);

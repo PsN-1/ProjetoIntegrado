@@ -5,7 +5,7 @@ import DashBoardSmallItem from "./components/DashBoardSmallItem";
 import DashBoardLargeItem from "./components/DashBoardLargeItem";
 import React, { useEffect } from "react";
 import { useState } from "react";
-import { EndPoint } from "../../Routes";
+import { EndPoint, getStoreName } from "../../Routes";
 import Loading from "../../shared/components/Loading";
 
 export default function SellerDashboard() {
@@ -15,8 +15,10 @@ export default function SellerDashboard() {
   useEffect(() => {
     const fetchCount = async () => {
       setIsLoading(true);
-      const response = await fetch(EndPoint.seller.storeCount);
+      const response = await fetch(EndPoint.seller.storeCount(getStoreName()));
+      console.log(EndPoint.seller.storeCount(getStoreName()))
       const responseData = await response.json();
+      console.log('responseData',responseData)
       setActivesProducts(responseData);
       setIsLoading(false);
     };

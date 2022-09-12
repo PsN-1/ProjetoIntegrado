@@ -1,11 +1,14 @@
 const HttpError = require("../models/http-error");
 const Product = require("../models/products");
+const Store = require("../models/stores");
 
-const getProductsForStore = async (_req, res, next) => {
+const getProductsForStore = async (req, res, next) => {
+  const storeName = req.params.store;
   let products;
 
   try {
-    products = await Product.find();
+    const store = await Store.findOne({ name: storeName }).populate("products");
+    products = store.products;
   } catch (err) {
     const error = new HttpError(
       "Fetching products failed, please try again later.",
@@ -14,7 +17,7 @@ const getProductsForStore = async (_req, res, next) => {
     return next(error);
   }
 
-  res.json(products);
+  res.json(products.toObject({ getters: true }));
 };
 
 const getProductById = async (req, res, next) => {

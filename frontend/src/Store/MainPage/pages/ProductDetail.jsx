@@ -35,12 +35,12 @@ export default function ProductDetail() {
   const [description, setDescription] = useState("");
   const [value, setValue] = useState("");
 
-  const { pid } = useParams();
+  const { storeName, pid } = useParams();
 
   useEffect(() => {
     const fetchProduct = async () => {
       setIsLoading(true);
-      const response = await fetch(EndPoint.user.storeWithId(pid)); 
+      const response = await fetch(EndPoint.user.storeWithId(storeName, pid)); 
       const responseData = await response.json();
       const { name, image, description, value } = responseData.product;
 
@@ -52,7 +52,7 @@ export default function ProductDetail() {
       setIsLoading(false);
     };
     fetchProduct();
-  }, [pid]);
+  }, [pid, storeName]);
 
   return (
     <React.Fragment>
@@ -98,9 +98,6 @@ export default function ProductDetail() {
                     >
                       {name}
                     </Typography>
-
-
-
                     <Typography
                       sx={{
                         mt: 3,

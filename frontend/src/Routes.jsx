@@ -33,19 +33,18 @@ export const Paths = {
   SellerEditProduct: (storeName, pid) => `/${storeName}/adm/products/${pid}`,
 };
 
-const baseEndPointURL = "https://lojauniversal.herokuapp.com";
+const baseEndPointURL = "http://localhost:3030" // "https://lojauniversal.herokuapp.com";
 export const EndPoint = {
   seller: {
-    storeCount: `${baseEndPointURL}/api/seller/stores/count`,
-    stores: `${baseEndPointURL}/api/seller/stores/`,
-    storeWithId: (productId) =>
-      `${baseEndPointURL}/api/seller/stores/${productId}`,
+    storeCount: (storeName) => `${baseEndPointURL}/api/seller/${storeName}/products/count`,
+    stores: (storeName) => `${baseEndPointURL}/api/seller/${storeName}/products`,
+    storeWithId: (storeName, productId) =>
+      `${baseEndPointURL}/api/seller/${storeName}/products/${productId}`,
   },
 
   user: {
-    stores: `${baseEndPointURL}/api/user/stores/`,
-    storeWithId: (productId) =>
-      `${baseEndPointURL}/api/user/stores/${productId}`,
+    stores: (storeName) => `${baseEndPointURL}/api/user/${storeName}/`,
+    storeWithId: (storeName, productId) => `${baseEndPointURL}/api/user/${storeName}/${productId}`,
   },
 };
 
