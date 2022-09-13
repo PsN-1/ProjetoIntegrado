@@ -151,7 +151,7 @@ export default function ProductDetail() {
                     <DescriptionTextField
                       multiline
                       fullWidth
-                      rows={4}
+                      rows={6}
                       value={description}
                       sx={{
                         mt: 3,

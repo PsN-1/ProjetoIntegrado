@@ -47,8 +47,8 @@ app.use((error, req, res, next) => {
   res.json({ message: error.message || "an unknown error occurred" });
 });
 
-const url = "mongodb+srv://mernUdemy:Vl5e1hqhQKmmkBoQ@cluster0.mca3pfo.mongodb.net/lojaUniversal?retryWrites=true&w=majority"; //process.env.MONGOURL
-const port = 3030 // process.env.PORT || 4000
+const url = process.env.MONGOURL
+const port = process.env.PORT || 4000
 mongoose
   .connect(url)
   .then(() => {
