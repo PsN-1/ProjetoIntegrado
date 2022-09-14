@@ -49,18 +49,6 @@ export default function SellerNewProduct(props) {
           {submitAction && (
             <Redirect to={Paths.SellerProducts(getStoreName())} />
           )}
-          <Typography
-            sx={{
-              paddingLeft: 5,
-              textAlign: "left",
-              fontStyle: "italic",
-              fontWeight: "400",
-              fontSize: "24px",
-              lineHeight: "29px",
-            }}
-          >
-            Novo Produto
-          </Typography>
           <Grid container>
             <Grid item xs={8}>
               <Paper
@@ -76,9 +64,21 @@ export default function SellerNewProduct(props) {
                     onSubmit={handleButtonAction}
                     sx={{
                       p: 3,
-                      mt: 3,
                     }}
                   >
+                    <Typography
+                      sx={{
+                        p: 2,
+                        textAlign: "left",
+                        fontStyle: "italic",
+                        fontWeight: "400",
+                        fontSize: "24px",
+                        lineHeight: "29px",
+                      }}
+                    >
+                      Novo Produto
+                    </Typography>
+
                     <SignUpTextField name="Nome" label="Nome" margin="normal" />
                     <SignUpTextField
                       name="Imagem"

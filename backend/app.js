@@ -20,7 +20,7 @@ app.use((req, res, next) => {
 });
 
 app.use(async (req, res, next)   => {
-  // await new Promise(resolve => setTimeout(resolve, 1000));
+  await new Promise(resolve => setTimeout(resolve, 1000));
   console.log("IP:", req.ip, ", Method:", req.method, ", Endpoint:", req.url);
   if (req.body) {
     console.log("Body:", req.body);
@@ -49,6 +49,7 @@ app.use((error, req, res, next) => {
 
 const url = process.env.MONGOURL
 const port = process.env.PORT || 4000
+
 mongoose
   .connect(url)
   .then(() => {

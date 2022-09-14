@@ -107,18 +107,6 @@ export default function SellerEditProduct(props) {
           {submitAction && (
             <Redirect to={Paths.SellerProducts(getStoreName())} />
           )}
-          <Typography
-            sx={{
-              paddingLeft: 5,
-              textAlign: "left",
-              fontStyle: "italic",
-              fontWeight: "400",
-              fontSize: "24px",
-              lineHeight: "29px",
-            }}
-          >
-            Editar Produto
-          </Typography>
           <Grid container>
             <Grid item xs={8}>
               <Paper
@@ -134,9 +122,21 @@ export default function SellerEditProduct(props) {
                     onSubmit={handleButtonAction}
                     sx={{
                       p: 3,
-                      mt: 3,
                     }}
                   >
+                    
+                    <Typography
+                      sx={{
+                        p:2,
+                        textAlign: "left",
+                        fontStyle: "italic",
+                        fontWeight: "400",
+                        fontSize: "24px",
+                        lineHeight: "29px",
+                      }}
+                    >
+                      Editar Produto
+                    </Typography>
                     <SignUpTextField
                       name="Nome"
                       label="Nome"
@@ -174,7 +174,6 @@ export default function SellerEditProduct(props) {
                       value={value}
                       onChange={valueChangeHandler}
                     />
-
                     {amount === "0" && (
                       <Button
                         type="button"
@@ -195,7 +194,6 @@ export default function SellerEditProduct(props) {
                         REMOVER
                       </Button>
                     )}
-
                     <Button
                       type="submit"
                       fullWidth

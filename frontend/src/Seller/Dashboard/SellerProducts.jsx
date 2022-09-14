@@ -111,7 +111,6 @@ const MyPaper = (props) => {
       elevation={3}
       sx={{
         p: 3,
-        marginTop: 3,
         background: "#F2F2F2",
         borderRadius: "20px",
         // alignItems: "center",

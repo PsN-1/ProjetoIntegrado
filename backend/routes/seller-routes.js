@@ -1,7 +1,11 @@
 const express = require("express");
 const sellerControllers = require("../controllers/seller-controllers");
+const loginControllers = require("../controllers/login-controllers")
 
 const router = express.Router();
+
+// Login
+router.post("/login", loginControllers.getStoreByEmail)
 
 // Store
 router.get("/stores", sellerControllers.getStores); // return storeName?

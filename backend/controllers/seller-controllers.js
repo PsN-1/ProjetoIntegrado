@@ -6,13 +6,16 @@ const Seller = require("../models//users/seller");
 
 // Seller
 const createSeller = async (req, res, next) => {
-  const { name, cpf, email, password } = req.body;
+  const { name, lastname, cpf, email, postalCode, number, password } = req.body;
 
   const createdSeller = new Seller({
     creationDate: Date.now(),
     name,
+    lastname,
     cpf,
     email,
+    postalCode,
+    number,
     password,
   });
 
@@ -63,7 +66,7 @@ const getStore = async (storeName) => {
 };
 
 const createStore = async (req, res, next) => {
-  const { email, name, cnpj, category } = req.body;
+  const { email, name, cnpj, ie, corporateName, category } = req.body;
 
   let owner;
   try {
@@ -82,6 +85,8 @@ const createStore = async (req, res, next) => {
     owner,
     name,
     cnpj,
+    ie,
+    corporateName,
     category,
     products: [],
     balanceAvailable: "0",
@@ -177,7 +182,7 @@ const createProduct = async (req, res, next) => {
     return next(error);
   }
 
-  res.status(201).json({ product: createdProduct.toObject({ getters: true }) });
+  res.status(201).json({ product: createdProduct });
 };
 
 const getProductById = async (req, res, next) => {

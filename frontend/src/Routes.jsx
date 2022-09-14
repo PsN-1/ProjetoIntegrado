@@ -17,12 +17,14 @@ import SellerSignUpUser from "./Seller/SignUp/SellerSignUpUser";
 import SellerSignUpStore from "./Seller/SignUp/SellerSignUpStore";
 import SellerProducts from "./Seller/Dashboard/SellerProducts";
 import SellerEditProduct from "./Seller/Dashboard/SellerEditProduct";
+import ErrorScreen from "./shared/Pages/ErrorScreen";
 
 export const Paths = {
   Login: "/",
   ForgotPassword: "/forgotpassword",
   SignupUser: "/signupUser",
   SignupStore: "/signupStore",
+  ErrorModal: "/error",
 
   MainPageStore: (storeName) => `/${storeName}`,
   DetailProductStore: (storeName, pid) => `/${storeName}/${pid}`,
@@ -33,18 +35,25 @@ export const Paths = {
   SellerEditProduct: (storeName, pid) => `/${storeName}/adm/products/${pid}`,
 };
 
-const baseEndPointURL = "http://localhost:3030" // "https://lojauniversal.herokuapp.com";
+const baseEndPointURL = "http://localhost:3030"; // "https://lojauniversal.herokuapp.com";
 export const EndPoint = {
   seller: {
-    storeCount: (storeName) => `${baseEndPointURL}/api/seller/${storeName}/products/count`,
-    stores: (storeName) => `${baseEndPointURL}/api/seller/${storeName}/products`,
+    storeCount: (storeName) =>
+      `${baseEndPointURL}/api/seller/${storeName}/products/count`,
+    stores: (storeName) =>
+      `${baseEndPointURL}/api/seller/${storeName}/products`,
     storeWithId: (storeName, productId) =>
       `${baseEndPointURL}/api/seller/${storeName}/products/${productId}`,
+
+    createSeller: `${baseEndPointURL}/api/seller/stores/newSeller`,
+    createStore: `${baseEndPointURL}/api/seller/stores/newStore`,
+    login: `${baseEndPointURL}/api/seller/login`,
   },
 
   user: {
     stores: (storeName) => `${baseEndPointURL}/api/user/${storeName}/`,
-    storeWithId: (storeName, productId) => `${baseEndPointURL}/api/user/${storeName}/${productId}`,
+    storeWithId: (storeName, productId) =>
+      `${baseEndPointURL}/api/user/${storeName}/${productId}`,
   },
 };
 
@@ -54,7 +63,7 @@ export function Routes() {
     <Router>
       <Switch>
         <Route path={Paths.Login} exact component={Login} />
-
+        <Route path={Paths.ErrorModal} exact component={ErrorScreen} />
         <Route path={Paths.ForgotPassword} exact component={ForgetPassword} />
         <Route path={Paths.SignupUser} exact component={SellerSignUpUser} />
         <Route path={Paths.SignupStore} exact component={SellerSignUpStore} />
@@ -91,6 +100,7 @@ export function Routes() {
           exact
           component={SellerEditProduct}
         />
+
         <Redirect to="/" />
       </Switch>
     </Router>
