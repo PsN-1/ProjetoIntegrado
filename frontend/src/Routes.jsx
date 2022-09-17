@@ -18,6 +18,8 @@ import SellerSignUpStore from "./Seller/SignUp/SellerSignUpStore";
 import SellerProducts from "./Seller/Dashboard/SellerProducts";
 import SellerEditProduct from "./Seller/Dashboard/SellerEditProduct";
 import ErrorScreen from "./shared/Pages/ErrorScreen";
+import { AuthContext } from "./shared/context/auth-context";
+import { useContext } from "react";
 
 export const Paths = {
   Login: "/",
@@ -59,8 +61,35 @@ export const EndPoint = {
 
 // Routes
 export function Routes() {
-  return (
-    <Router>
+  const auth = useContext(AuthContext);
+
+  let routes;
+
+  if (!auth.isloggedIn) {
+    routes = (
+      <Switch>
+        <Route path={Paths.Login} exact component={Login} />
+        <Route path={Paths.ErrorModal} exact component={ErrorScreen} />
+        <Route path={Paths.ForgotPassword} exact component={ForgetPassword} />
+        <Route path={Paths.SignupUser} exact component={SellerSignUpUser} />
+        <Route path={Paths.SignupStore} exact component={SellerSignUpStore} />
+
+        <Route
+          path={Paths.MainPageStore(":storeName")}
+          exact
+          component={MainPageStore}
+        />
+
+        <Route
+          path={Paths.DetailProductStore(":storeName", ":pid")}
+          exact
+          component={ProductDetail}
+        />
+        <Redirect to="/" />
+      </Switch>
+    );
+  } else {
+    routes = (
       <Switch>
         <Route path={Paths.Login} exact component={Login} />
         <Route path={Paths.ErrorModal} exact component={ErrorScreen} />
@@ -103,7 +132,21 @@ export function Routes() {
 
         <Redirect to="/" />
       </Switch>
+    );
+  }
+
+  return (
+    // <AuthContext.Provider
+    //   value={{
+    //     isloggedIn: auth.isloggedIn,
+    //     login: auth.login,
+    //     logout: auth.logout,
+    //   }}
+    // >
+    <Router>
+      <main>{routes}</main>
     </Router>
+    // </AuthContext.Provider>
   );
 }
 

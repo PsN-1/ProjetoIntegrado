@@ -6,8 +6,8 @@ import StorefrontIcon from "@mui/icons-material/Storefront";
 import Person from "@mui/icons-material/Person";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import FavoriteIcon from "@mui/icons-material/Favorite";
-import { getStoreName, Paths } from "../../Routes";
-import { Link } from "react-router-dom";
+import { Paths } from "../../Routes";
+import { Link, useParams } from "react-router-dom";
 
 const StyledToolbar = styled(Toolbar)({
   display: "flex",
@@ -55,11 +55,12 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 const NavBar = () => {
+  const {storeName} = useParams()
   return (
     <AppBar position="static" sx={{ backgroundColor: "#2C5967" }}>
       <Container>
         <StyledToolbar>
-          <Link to={Paths.MainPageStore(getStoreName())} color="transparent">
+          <Link to={Paths.MainPageStore(storeName)} color="transparent">
             <StorefrontIcon sx={{ fontSize: 45, color: "white" }} />
           </Link>
           <Search>

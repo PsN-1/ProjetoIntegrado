@@ -16,6 +16,7 @@ const SellerSignUp = (props) => {
         backgroundAttachment: "scroll",
         backgroundPosition: "center",
         backgroundSize: "cover",
+        // backgroundRepeat: "no-repeat",
         display: "flex",
         
         backgroundImage:
