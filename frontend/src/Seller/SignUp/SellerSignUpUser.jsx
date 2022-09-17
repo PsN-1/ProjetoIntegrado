@@ -28,6 +28,11 @@ const SellerSignUpUser = () => {
       password2: data.get("senha2"),
     };
 
+    if (newSeller.password !== newSeller.password2) {
+      setIsloading(false);
+      return;
+    }
+
     const response = await fetch(EndPoint.seller.createSeller, {
       method: "POST",
       body: JSON.stringify(newSeller),
@@ -36,8 +41,8 @@ const SellerSignUpUser = () => {
       },
     });
 
-    const responseData = await response.json()
-    console.log(responseData)
+    const responseData = await response.json();
+    console.log(responseData);
     setEmail(newSeller.email);
     setIsloading(false);
     setSubmitAction(true);

@@ -7,8 +7,15 @@ const getProductsForStore = async (req, res, next) => {
   let products;
 
   try {
-    const store = await Store.findOne({ name: storeName }).populate("products");
-    products = store.products;
+    //  let store = await Store.findOne({ name: storeName }).populate("products");
+    // products = store.products;
+
+    const storeId = await Store.findOne({ name: storeName })
+    products = await Product.find(
+      { store: storeId._id },
+      "image name value category"
+    );
+
   } catch (err) {
     const error = new HttpError(
       "Fetching products failed, please try again later.",
@@ -17,15 +24,17 @@ const getProductsForStore = async (req, res, next) => {
     return next(error);
   }
 
-  res.json(products.toObject({ getters: true }));
+  res.json(products);
 };
 
 const getProductById = async (req, res, next) => {
-  let productId = req.params.pid;
+  const productId = req.params.pid;
+  
   let product;
 
   try {
     product = await Product.findById(productId);
+
   } catch (err) {
     const error = new HttpError(
       "Something went wrong, could not find product",

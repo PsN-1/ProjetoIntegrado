@@ -16,14 +16,19 @@ app.use((req, res, next) => {
     "Origin,  X-requested-With, Content-Type, Accept, Authorization"
   );
   res.setHeader("Access-Control-Allow-Methods", "GET, POST, PATCH, DELETE");
+  
   next();
 });
 
 app.use(async (req, res, next)   => {
-  await new Promise(resolve => setTimeout(resolve, 1000));
+  // await new Promise(resolve => setTimeout(resolve, 1000));
   console.log("IP:", req.ip, ", Method:", req.method, ", Endpoint:", req.url);
   if (req.body) {
     console.log("Body:", req.body);
+  }
+
+  if (req.headers) {
+    console.log("Headers:", req.headers)
   }
   next();
 });
@@ -49,7 +54,6 @@ app.use((error, req, res, next) => {
 
 const url = process.env.MONGOURL
 const port = process.env.PORT || 4000
-
 mongoose
   .connect(url)
   .then(() => {

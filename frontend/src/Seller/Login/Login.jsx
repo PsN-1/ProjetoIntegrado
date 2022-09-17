@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Redirect, useHistory } from "react-router-dom";
 import { CssBaseline, Link, Box, Grid, Typography } from "@mui/material";
 import SignUpTextField from "../components/SignUpTextField";
@@ -13,10 +13,14 @@ import { AuthContext } from "../../shared/context/auth-context";
 export default function Login() {
   const [loginAction, setLoginAction] = useState(false);
   const [isLoading, setIsloading] = useState(false);
-  const auth = useContext(AuthContext)
+  const auth = useContext(AuthContext);
   const history = useHistory();
   let email = "";
   let password = "";
+
+  useEffect(() => {
+   setLoginAction(auth.isloggedIn)
+  }, [auth]);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -45,8 +49,9 @@ export default function Login() {
     }
 
     const responseData = await response.json();
-    
-    auth.login(responseData.storeName, responseData.token)
+
+    auth.login(responseData.storeName, responseData.token);
+    console.log(responseData);
     setLoginAction(true);
   };
 
@@ -118,7 +123,7 @@ export default function Login() {
                 Cadastre-se
               </SignUpButton>
               <Grid container justifyContent="flex-end">
-                <Grid item  >
+                <Grid item>
                   <Link href={Paths.ForgotPassword} variant="body2">
                     Esqueci a Senha
                   </Link>

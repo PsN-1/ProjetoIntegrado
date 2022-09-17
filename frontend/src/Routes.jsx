@@ -37,7 +37,7 @@ export const Paths = {
   SellerEditProduct: (storeName, pid) => `/${storeName}/adm/products/${pid}`,
 };
 
-const baseEndPointURL = "http://localhost:3030"; // "https://lojauniversal.herokuapp.com";
+const baseEndPointURL = "https://loja-universal-mvp.herokuapp.com"; // "http://localhost:3030";
 export const EndPoint = {
   seller: {
     storeCount: (storeName) =>
@@ -61,42 +61,14 @@ export const EndPoint = {
 
 // Routes
 export function Routes() {
-  const {token, login, logout, storeName } = useAuth()
+  const { token, login, logout, storeName } = useAuth();
 
   let routes;
 
   if (token) {
     routes = (
       <Switch>
-        <Route path={Paths.Login} exact component={Login} />
         <Route path={Paths.ErrorModal} exact component={ErrorScreen} />
-        <Route path={Paths.ForgotPassword} exact component={ForgetPassword} />
-        <Route path={Paths.SignupUser} exact component={SellerSignUpUser} />
-        <Route path={Paths.SignupStore} exact component={SellerSignUpStore} />
-
-        <Route
-          path={Paths.MainPageStore(":storeName")}
-          exact
-          component={MainPageStore}
-        />
-
-        <Route
-          path={Paths.DetailProductStore(":storeName", ":pid")}
-          exact
-          component={ProductDetail}
-        />
-        <Redirect to="/" />
-      </Switch>
-    );
-  } else {
-    routes = (
-      <Switch>
-        <Route path={Paths.Login} exact component={Login} />
-        <Route path={Paths.ErrorModal} exact component={ErrorScreen} />
-        <Route path={Paths.ForgotPassword} exact component={ForgetPassword} />
-        <Route path={Paths.SignupUser} exact component={SellerSignUpUser} />
-        <Route path={Paths.SignupStore} exact component={SellerSignUpStore} />
-
         <Route
           path={Paths.MainPageStore(":storeName")}
           exact
@@ -130,6 +102,29 @@ export function Routes() {
           component={SellerEditProduct}
         />
 
+        <Redirect to={Paths.SellerDashboard(storeName)} />
+      </Switch>
+    );
+  } else {
+    routes = (
+      <Switch>
+        <Route path={Paths.Login} exact component={Login} />
+        <Route path={Paths.ErrorModal} exact component={ErrorScreen} />
+        <Route path={Paths.ForgotPassword} exact component={ForgetPassword} />
+        <Route path={Paths.SignupUser} exact component={SellerSignUpUser} />
+        <Route path={Paths.SignupStore} exact component={SellerSignUpStore} />
+
+        <Route
+          path={Paths.MainPageStore(":storeName")}
+          exact
+          component={MainPageStore}
+        />
+
+        <Route
+          path={Paths.DetailProductStore(":storeName", ":pid")}
+          exact
+          component={ProductDetail}
+        />
         <Redirect to="/" />
       </Switch>
     );
