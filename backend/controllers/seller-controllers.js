@@ -3,7 +3,6 @@ const { default: mongoose } = require("mongoose");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
-const Product = require("../models/products");
 const Store = require("../models/stores");
 const Seller = require("../models//users/seller");
 
