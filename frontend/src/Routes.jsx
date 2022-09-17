@@ -19,7 +19,7 @@ import SellerProducts from "./Seller/Dashboard/SellerProducts";
 import SellerEditProduct from "./Seller/Dashboard/SellerEditProduct";
 import ErrorScreen from "./shared/Pages/ErrorScreen";
 import { AuthContext } from "./shared/context/auth-context";
-import { useContext } from "react";
+import { useAuth } from "./shared/hooks/auth-hook";
 
 export const Paths = {
   Login: "/",
@@ -61,11 +61,11 @@ export const EndPoint = {
 
 // Routes
 export function Routes() {
-  const auth = useContext(AuthContext);
+  const {token, login, logout, storeName } = useAuth()
 
   let routes;
 
-  if (!auth.isloggedIn) {
+  if (token) {
     routes = (
       <Switch>
         <Route path={Paths.Login} exact component={Login} />
@@ -136,37 +136,18 @@ export function Routes() {
   }
 
   return (
-    // <AuthContext.Provider
-    //   value={{
-    //     isloggedIn: auth.isloggedIn,
-    //     login: auth.login,
-    //     logout: auth.logout,
-    //   }}
-    // >
-    <Router>
-      <main>{routes}</main>
-    </Router>
-    // </AuthContext.Provider>
+    <AuthContext.Provider
+      value={{
+        isloggedIn: !!token,
+        token: token,
+        storeName: storeName,
+        login: login,
+        logout: logout,
+      }}
+    >
+      <Router>
+        <main>{routes}</main>
+      </Router>
+    </AuthContext.Provider>
   );
 }
-
-export const getStoreName = () => {
-  try {
-    const serializedState = localStorage.getItem("state");
-    if (serializedState === null) {
-      return undefined;
-    }
-    return JSON.parse(serializedState);
-  } catch (err) {
-    return undefined;
-  }
-};
-
-export const setStoreName = (state) => {
-  try {
-    const serializedState = JSON.stringify(state);
-    localStorage.setItem("state", serializedState);
-  } catch (err) {
-    return undefined;
-  }
-};

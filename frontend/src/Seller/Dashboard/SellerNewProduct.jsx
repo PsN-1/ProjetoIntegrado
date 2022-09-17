@@ -1,9 +1,10 @@
 import { Box, Button, Grid, Paper, Typography } from "@mui/material";
 import { Container } from "@mui/system";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Redirect } from "react-router-dom";
-import { EndPoint, getStoreName, Paths } from "../../Routes";
+import { EndPoint, Paths } from "../../Routes";
 import Loading from "../../shared/components/Loading";
+import { AuthContext } from "../../shared/context/auth-context";
 import SignUpTextField, {
   DescriptionTextField,
 } from "../components/SignUpTextField";
@@ -12,6 +13,7 @@ import SellerSkeleton from "./SellerSkeleton";
 export default function SellerNewProduct(props) {
   const [submitAction, setSubmitAction] = useState(false);
   const [isLoading, setIsloading] = useState(false);
+  const auth = useContext(AuthContext);
 
   const handleButtonAction = async (event) => {
     event.preventDefault();
@@ -26,11 +28,12 @@ export default function SellerNewProduct(props) {
       value: data.get("Valor"),
     };
 
-    const response = await fetch(EndPoint.seller.stores(getStoreName()), {
+    const response = await fetch(EndPoint.seller.stores(auth.storeName), {
       method: "POST",
       body: JSON.stringify(newProduct),
       headers: {
         "Content-Type": "application/json",
+        Authorization: "Bearer " + auth.token,
       },
     });
 
@@ -47,7 +50,7 @@ export default function SellerNewProduct(props) {
       {!isLoading && (
         <SellerSkeleton>
           {submitAction && (
-            <Redirect to={Paths.SellerProducts(getStoreName())} />
+            <Redirect to={Paths.SellerProducts(auth.storeName)} />
           )}
           <Grid container>
             <Grid item xs={8}>

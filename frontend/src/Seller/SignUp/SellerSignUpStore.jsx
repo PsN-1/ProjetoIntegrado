@@ -1,14 +1,17 @@
 import Grid from "@mui/material/Grid";
 import React, { useState } from "react";
+import { useContext } from "react";
 import { Redirect } from "react-router-dom";
-import { EndPoint, getStoreName, Paths, setStoreName } from "../../Routes";
+import { EndPoint, Paths } from "../../Routes";
 import Loading from "../../shared/components/Loading";
+import { AuthContext } from "../../shared/context/auth-context";
 import SignUpTextField from "../components/SignUpTextField";
 import SellerSignUp from "./SellerSignUp";
 
 const SellerSignUpStore = (props) => {
   const [submitAction, setSubmitAction] = useState(false);
   const [isLoading, setIsloading] = useState(false);
+  const auth = useContext(AuthContext);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -29,6 +32,7 @@ const SellerSignUpStore = (props) => {
       body: JSON.stringify(newStore),
       headers: {
         "Content-Type": "application/json",
+        Authorization: "Bearer " + auth.token,
       },
     });
 
@@ -36,13 +40,14 @@ const SellerSignUpStore = (props) => {
 
     console.log(responseData);
 
-    setStoreName(newStore.name);
+    auth.login(responseData.storeName, responseData.token)
     setIsloading(false);
     setSubmitAction(true);
   };
+
   return (
     <React.Fragment>
-      {submitAction && <Redirect to={Paths.SellerDashboard(getStoreName())} />}
+      {submitAction && <Redirect to={Paths.SellerDashboard(auth.storeName)} />}
       {isLoading && <Loading />}
       {!isLoading && (
         <SellerSignUp title="Cadastrar Nova Loja" onSubmit={handleSubmit}>

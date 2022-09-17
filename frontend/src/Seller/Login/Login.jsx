@@ -4,21 +4,23 @@ import { CssBaseline, Link, Box, Grid, Typography } from "@mui/material";
 import SignUpTextField from "../components/SignUpTextField";
 import { SignUpButton, LoginButton } from "../components/SignUpButton";
 import Copyright from "../../shared/components/Copyright";
-import { EndPoint, getStoreName, Paths, setStoreName } from "../../Routes";
+import { EndPoint, Paths } from "../../Routes";
 import React from "react";
 import Loading from "../../shared/components/Loading";
-import ErrorScreen from "../../shared/Pages/ErrorScreen";
+import { useContext } from "react";
+import { AuthContext } from "../../shared/context/auth-context";
 
 export default function Login() {
   const [loginAction, setLoginAction] = useState(false);
   const [isLoading, setIsloading] = useState(false);
+  const auth = useContext(AuthContext)
   const history = useHistory();
   let email = "";
   let password = "";
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    setStoreName("");
+
     setIsloading(true);
     if (!(password.length > 6 && email)) {
       setIsloading(false);
@@ -43,7 +45,8 @@ export default function Login() {
     }
 
     const responseData = await response.json();
-    setStoreName(responseData);
+    
+    auth.login(responseData.storeName, responseData.token)
     setLoginAction(true);
   };
 
@@ -61,7 +64,7 @@ export default function Login() {
       {!isLoading && (
         <Grid container component="main" sx={{ height: "100vh" }}>
           {loginAction && (
-            <Redirect to={Paths.SellerDashboard(getStoreName())} />
+            <Redirect to={Paths.SellerDashboard(auth.storeName)} />
           )}
           <CssBaseline />
 

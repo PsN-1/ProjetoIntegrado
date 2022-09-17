@@ -1,7 +1,9 @@
 import { Container, Paper } from "@mui/material";
 import { styled } from "@mui/material/styles";
+import { useContext } from "react";
 import { Link } from "react-router-dom";
-import { getStoreName, Paths } from "../../Routes";
+import { Paths } from "../../Routes";
+import { AuthContext } from "../context/auth-context";
 
 const Item = styled(Paper)(({ theme }) => ({
   background: "#F2F2F2",
@@ -13,13 +15,19 @@ const Item = styled(Paper)(({ theme }) => ({
 }));
 
 export default function SideBar(props) {
+  const auth = useContext(AuthContext);
+
   return (
     <Container>
       <Item>
         <h1>{props.title}:</h1>
         {props.items.map((item) => (
           <h3 key={item}>
-            <Link to={getPathFor(item)} underline="always" color="inherit">
+            <Link
+              to={getPathFor(item, auth.storeName)}
+              underline="always"
+              color="inherit"
+            >
               {item}
             </Link>
           </h3>
@@ -29,11 +37,11 @@ export default function SideBar(props) {
   );
 }
 
-function getPathFor(item) {
+function getPathFor(item, storeName) {
   if (item === "Produtos") {
-    return Paths.SellerProducts(getStoreName());
+    return Paths.SellerProducts(storeName);
   } else if (item === "Dashboard") {
-    return Paths.SellerDashboard(getStoreName());
+    return Paths.SellerDashboard(storeName);
   }
 
   return "#";

@@ -1,11 +1,12 @@
 import { Box, Button, Grid, Paper, Typography } from "@mui/material";
 import { Container } from "@mui/system";
-import React from "react";
+import React, { useContext } from "react";
 import { useEffect } from "react";
 import { useState } from "react";
 import { Redirect, useParams } from "react-router-dom";
-import { EndPoint, getStoreName, Paths } from "../../Routes";
+import { EndPoint, Paths } from "../../Routes";
 import Loading from "../../shared/components/Loading";
+import { AuthContext } from "../../shared/context/auth-context";
 import SignUpTextField, {
   DescriptionTextField,
 } from "../components/SignUpTextField";
@@ -15,14 +16,14 @@ export default function SellerEditProduct(props) {
   const [submitAction, setSubmitAction] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  const [productId, setProductId] = useState("");
   const [name, setName] = useState("");
   const [image, setImage] = useState("");
   const [description, setDescription] = useState("");
   const [amount, setAmount] = useState("");
   const [value, setValue] = useState("");
 
-  let { pid } = useParams();
+  const auth = useContext(AuthContext);
+  const { pid } = useParams();
 
   const nameChangeHandler = (event) => {
     setName(event.target.value);
@@ -52,12 +53,13 @@ export default function SellerEditProduct(props) {
     };
 
     const response = await fetch(
-      EndPoint.seller.storeWithId(getStoreName(), productId),
+      EndPoint.seller.storeWithId(auth.storeName, pid),
       {
         method: "PATCH",
         body: JSON.stringify(newProduct),
         headers: {
           "Content-Type": "application/json",
+          Authorization: "Bearer " + auth.token,
         },
       }
     );
@@ -71,8 +73,11 @@ export default function SellerEditProduct(props) {
   const handleDeleteButton = async (event) => {
     event.preventDefault();
 
-    await fetch(EndPoint.seller.storeWithId(getStoreName(), productId), {
+    await fetch(EndPoint.seller.storeWithId(auth.storeName, pid), {
       method: "DELETE",
+      headers: {
+        Authorization: "Bearer " + auth.token,
+      },
     });
 
     setSubmitAction(true);
@@ -82,13 +87,17 @@ export default function SellerEditProduct(props) {
     const fetchProduct = async () => {
       setIsLoading(true);
       const response = await fetch(
-        EndPoint.seller.storeWithId(getStoreName(), pid)
+        EndPoint.seller.storeWithId(auth.storeName, pid),
+        {
+          method: "Get",
+          headers: {
+            Authorization: "Bearer " + auth.token,
+          },
+        }
       );
       const responseData = await response.json();
-      const { _id, name, image, description, amount, value } =
-        responseData.product;
+      const { name, image, description, amount, value } = responseData.product;
 
-      setProductId(_id);
       setName(name);
       setImage(image);
       setDescription(description);
@@ -105,7 +114,7 @@ export default function SellerEditProduct(props) {
       {!isLoading && (
         <SellerSkeleton>
           {submitAction && (
-            <Redirect to={Paths.SellerProducts(getStoreName())} />
+            <Redirect to={Paths.SellerProducts(auth.storeName)} />
           )}
           <Grid container>
             <Grid item xs={8}>
@@ -124,10 +133,9 @@ export default function SellerEditProduct(props) {
                       p: 3,
                     }}
                   >
-                    
                     <Typography
                       sx={{
-                        p:2,
+                        p: 2,
                         textAlign: "left",
                         fontStyle: "italic",
                         fontWeight: "400",

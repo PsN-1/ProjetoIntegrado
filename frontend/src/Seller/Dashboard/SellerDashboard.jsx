@@ -3,28 +3,34 @@ import { Grid } from "@mui/material";
 import SellerSkeleton from "./SellerSkeleton";
 import DashBoardSmallItem from "./components/DashBoardSmallItem";
 import DashBoardLargeItem from "./components/DashBoardLargeItem";
-import React, { useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import { useState } from "react";
-import { EndPoint, getStoreName } from "../../Routes";
+import { EndPoint } from "../../Routes";
 import Loading from "../../shared/components/Loading";
+import { AuthContext } from "../../shared/context/auth-context";
 
 export default function SellerDashboard() {
   const [activesProducts, setActivesProducts] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
+  const auth = useContext(AuthContext);
 
   useEffect(() => {
     const fetchCount = async () => {
       setIsLoading(true);
-      const response = await fetch(EndPoint.seller.storeCount(getStoreName()));
-      console.log(EndPoint.seller.storeCount(getStoreName()))
+      const response = await fetch(EndPoint.seller.storeCount(auth.storeName), {
+        method: "GET",
+        headers: {
+          Authorization: "Bearer " + auth.token,
+        },
+      });
       const responseData = await response.json();
-      console.log('responseData',responseData)
+      console.log("responseData", responseData);
       setActivesProducts(responseData);
       setIsLoading(false);
     };
 
     fetchCount();
-  }, []);
+  }, [auth.storeName, auth.token]);
 
   return (
     <React.Fragment>
