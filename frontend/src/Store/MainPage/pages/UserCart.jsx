@@ -97,7 +97,10 @@ const Cart = (props) => {
                 <TitleTypography>Quantidade</TitleTypography>
               </TableCell>
               <TableCell align="center">
-                <TitleTypography>Valor Und.</TitleTypography>
+                <TitleTypography>Und.</TitleTypography>
+              </TableCell>
+              <TableCell align="center">
+                <TitleTypography>Valor</TitleTypography>
               </TableCell>
             </TableRow>
           </TableHead>
@@ -112,7 +115,8 @@ const Cart = (props) => {
               />
             ))}
             <TableRow>
-              <TableCell></TableCell>
+              <TableCell />
+              <TableCell />
               <TableCell align="right">
                 <TitleTypography>Total:</TitleTypography>
               </TableCell>

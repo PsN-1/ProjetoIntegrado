@@ -52,6 +52,9 @@ export default function UserCartItem(props) {
       <TableCell align="center">
         <LabelTypography>R$ {item.value}</LabelTypography>
       </TableCell>
+      <TableCell align="center">
+        <LabelTypography>R$ {item.value * item.amount}</LabelTypography>
+      </TableCell>
       <TableCell>
         <IconButton onClick={() => props.onDelete(item)}>
           <DeleteOutlineIcon />
