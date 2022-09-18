@@ -8,6 +8,7 @@ import {
 import Login from "./Seller/Login/Login";
 import MainPageStore from "./Store/MainPage/pages/MainPageStore";
 import ProductDetail from "./Store/MainPage/pages/ProductDetail";
+import UserCart from "./Store/MainPage/pages/UserCart";
 import SellerDashboard from "./Seller/Dashboard/SellerDashboard";
 
 import SellerNewProduct from "./Seller/Dashboard/SellerNewProduct";
@@ -20,6 +21,8 @@ import SellerEditProduct from "./Seller/Dashboard/SellerEditProduct";
 import ErrorScreen from "./shared/Pages/ErrorScreen";
 import { AuthContext } from "./shared/context/auth-context";
 import { useAuth } from "./shared/hooks/auth-hook";
+import { UserCartContext } from "./shared/context/user-cart";
+import { useCart } from "./shared/hooks/cart-hook";
 
 export const Paths = {
   Login: "/",
@@ -30,6 +33,7 @@ export const Paths = {
 
   MainPageStore: (storeName) => `/${storeName}`,
   DetailProductStore: (storeName, pid) => `/${storeName}/${pid}`,
+  UserCart: (storeName) => `/${storeName}/cart`,
 
   SellerDashboard: (storeName) => `/${storeName}/adm/dashboard`,
   SellerProducts: (storeName) => `/${storeName}/adm/products`,
@@ -59,9 +63,15 @@ export const EndPoint = {
   },
 };
 
-// Routes
 export function Routes() {
   const { token, login, logout, storeName } = useAuth();
+  const {
+    products,
+    addProduct,
+    removeProduct,
+    increaseAmount,
+    decreaseAmount,
+  } = useCart();
 
   let routes;
 
@@ -69,11 +79,14 @@ export function Routes() {
     routes = (
       <Switch>
         <Route path={Paths.ErrorModal} exact component={ErrorScreen} />
+
         <Route
           path={Paths.MainPageStore(":storeName")}
           exact
           component={MainPageStore}
         />
+
+        <Route path={Paths.UserCart(":storeName")} exact component={UserCart} />
 
         <Route
           path={Paths.DetailProductStore(":storeName", ":pid")}
@@ -120,11 +133,14 @@ export function Routes() {
           component={MainPageStore}
         />
 
+        <Route path={Paths.UserCart(":storeName")} exact component={UserCart} />
+
         <Route
           path={Paths.DetailProductStore(":storeName", ":pid")}
           exact
           component={ProductDetail}
         />
+
         <Redirect to="/" />
       </Switch>
     );
@@ -140,9 +156,19 @@ export function Routes() {
         logout: logout,
       }}
     >
-      <Router>
-        <main>{routes}</main>
-      </Router>
+      <UserCartContext.Provider
+        value={{
+          products: products,
+          addProduct: addProduct,
+          removeProduct: removeProduct,
+          increaseAmount: increaseAmount,
+          decreaseAmount: decreaseAmount,
+        }}
+      >
+        <Router>
+          <main>{routes}</main>
+        </Router>
+      </UserCartContext.Provider>
     </AuthContext.Provider>
   );
 }

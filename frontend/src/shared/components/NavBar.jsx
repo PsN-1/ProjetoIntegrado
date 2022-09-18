@@ -102,7 +102,9 @@ const NavBar = () => {
               gap: "30px",
             }}
           >
-            <ShoppingCartIcon sx={{ fontSize: 45 }} />
+            <Link to={Paths.UserCart(storeName)}>
+              <ShoppingCartIcon sx={{ fontSize: 45, color: "white" }} />
+            </Link>
             <FavoriteIcon sx={{ fontSize: 45 }} />
             <Person sx={{ fontSize: 45 }} onClick={handleClick} />
             <Menu
@@ -115,17 +117,15 @@ const NavBar = () => {
               }}
             >
               {!auth.isloggedIn && (
-                <>
-                  <MenuItem onClick={handleClose}>Login</MenuItem>
-                </>
+                <MenuItem onClick={handleClose}>Login</MenuItem>
               )}
 
               {auth.isloggedIn && (
-                <>
+                <div>
                   <MenuItem onClick={handleClose}>My account</MenuItem>
                   <MenuItem onClick={handleClose}>My Store</MenuItem>
                   <MenuItem onClick={auth.logout}>Logout</MenuItem>
-                </>
+                </div>
               )}
             </Menu>
           </Box>
