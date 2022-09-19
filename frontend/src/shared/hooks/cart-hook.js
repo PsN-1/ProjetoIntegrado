@@ -51,7 +51,7 @@ export const useCart = () => {
       saveProducts(oldProducts);
       return oldProducts;
     });
-    
+
     return amount;
   }
 
@@ -97,7 +97,9 @@ export const useCart = () => {
         localStorage.setItem("cart", "[]");
         return [];
       }
-      return JSON.parse(serializedProducts);
+      let products = JSON.parse(serializedProducts);
+
+      return products;
     } catch (error) {
       console.log(error);
       console.log("Error while retrieving cart");
@@ -106,7 +108,9 @@ export const useCart = () => {
   }
 
   useEffect(() => {
-    setProducts(getProducts());
+    let products = getProducts();
+    updateTotal(products);
+    setProducts(products);
   }, []);
 
   return {
