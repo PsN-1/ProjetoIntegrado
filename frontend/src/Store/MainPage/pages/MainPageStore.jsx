@@ -29,9 +29,8 @@ const MainPageStore = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       setIsLoading(true);
-      const storePath = EndPoint.user.stores(storeName)
+      const storePath = EndPoint.user.stores(storeName);
       const response = await fetch(storePath);
-      console.log(storePath)
       const responseData = await response.json();
       setLoadedProducts(responseData);
       setIsLoading(false);

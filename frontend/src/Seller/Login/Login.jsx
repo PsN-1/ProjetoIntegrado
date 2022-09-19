@@ -51,7 +51,6 @@ export default function Login() {
     const responseData = await response.json();
 
     auth.login(responseData.storeName, responseData.token);
-    console.log(responseData);
     setLoginAction(true);
   };
 

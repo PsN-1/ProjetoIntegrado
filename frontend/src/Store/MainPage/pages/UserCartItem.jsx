@@ -11,6 +11,7 @@ import { useState } from "react";
 export default function UserCartItem(props) {
   const { item } = props;
   const [amount, setAmount] = useState(item.amount);
+
   const handleAddAmount = (item) => {
     setAmount(props.onAddAmount(item));
   };
@@ -18,6 +19,7 @@ export default function UserCartItem(props) {
   const handleDecreaseAmount = (item) => {
     setAmount(props.onDecreaseAmount(item));
   };
+
   return (
     <TableRow
       key={item._id}

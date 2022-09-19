@@ -67,6 +67,7 @@ export function Routes() {
   const { token, login, logout, storeName } = useAuth();
   const {
     products,
+    total,
     addProduct,
     removeProduct,
     increaseAmount,
@@ -159,6 +160,7 @@ export function Routes() {
       <UserCartContext.Provider
         value={{
           products: products,
+          total: total,
           addProduct: addProduct,
           removeProduct: removeProduct,
           increaseAmount: increaseAmount,

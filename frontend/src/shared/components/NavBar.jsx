@@ -7,7 +7,7 @@ import Person from "@mui/icons-material/Person";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import { Paths } from "../../Routes";
-import { Link, useParams } from "react-router-dom";
+import { Link, useHistory, useParams } from "react-router-dom";
 import { useContext } from "react";
 import { AuthContext } from "../context/auth-context";
 
@@ -62,6 +62,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
 const NavBar = () => {
   const auth = useContext(AuthContext);
+  const history = useHistory()
   const { storeName } = useParams();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
@@ -73,6 +74,10 @@ const NavBar = () => {
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+  const handleLoginClick = () => {
+    history.push(Paths.Login)
+  }
 
   return (
     <AppBar position="static" sx={{ backgroundColor: "#2C5967" }}>
@@ -117,7 +122,7 @@ const NavBar = () => {
               }}
             >
               {!auth.isloggedIn && (
-                <MenuItem onClick={handleClose}>Login</MenuItem>
+                <MenuItem onClick={handleLoginClick}>Login</MenuItem>
               )}
 
               {auth.isloggedIn && (

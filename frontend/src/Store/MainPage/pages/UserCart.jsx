@@ -21,7 +21,6 @@ import TitleTypography from "../../../shared/components/TitleTypography";
 import { useContext } from "react";
 import { UserCartContext } from "../../../shared/context/user-cart";
 import UserCartItem from "./UserCartItem";
-import { useState } from "react";
 import LabelTypography from "../../../shared/components/LabelTypography";
 
 const filterItems = [
@@ -51,6 +50,7 @@ export default function UserCart() {
         <Grid item xs={12} md={8}>
           <Cart
             items={cart.products}
+            total={cart.total}
             storeName
             onDelete={cart.removeProduct}
             onAddAmount={cart.increaseAmount}
@@ -64,26 +64,6 @@ export default function UserCart() {
 }
 
 const Cart = (props) => {
-  const [subtotal, setSubtotal] = useState("0");
-
-  function handleOnAddAmount(item) {
-    const newItem = props.onAddAmount(item);
-    handleSubTotal();
-    return newItem;
-  }
-
-  function handleOnDecreaseAmount(item) {
-    const newItem = props.onDecreaseAmount(item);
-    handleSubTotal();
-    return newItem;
-  }
-
-  function handleSubTotal() {
-    setSubtotal(
-      props.items.reduce((total, item) => total + +item.amount * +item.value, 0)
-    );
-  }
-
   return (
     <div>
       <TableContainer component={MyPaper}>
@@ -109,22 +89,24 @@ const Cart = (props) => {
               <UserCartItem
                 key={item._id}
                 item={item}
-                onAddAmount={handleOnAddAmount}
-                onDecreaseAmount={handleOnDecreaseAmount}
+                onAddAmount={props.onAddAmount}
+                onDecreaseAmount={props.onDecreaseAmount}
                 onDelete={props.onDelete}
               />
             ))}
-            <TableRow>
-              <TableCell />
-              <TableCell />
-              <TableCell align="right">
-                <TitleTypography>Total:</TitleTypography>
-              </TableCell>
-              <TableCell align="center">
-                <LabelTypography>R$ {subtotal}</LabelTypography>
-              </TableCell>
-              <TableCell></TableCell>
-            </TableRow>
+            {!(props.items.length === 0) && (
+              <TableRow>
+                <TableCell />
+                <TableCell />
+                <TableCell align="right">
+                  <TitleTypography>Total:</TitleTypography>
+                </TableCell>
+                <TableCell align="center">
+                  <LabelTypography>R$ {props.total}</LabelTypography>
+                </TableCell>
+                <TableCell></TableCell>
+              </TableRow>
+            )}
           </TableBody>
         </Table>
       </TableContainer>

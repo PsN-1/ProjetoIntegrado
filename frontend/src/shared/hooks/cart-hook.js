@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 
 export const useCart = () => {
   const [products, setProducts] = useState([]);
+  const [total, setTotal] = useState(0);
 
   function addProduct(product) {
     console.log("added", product);
@@ -12,20 +13,27 @@ export const useCart = () => {
     if (existingProductId !== -1) {
       setProducts((oldProducts) => {
         oldProducts[existingProductId].amount++;
+        saveProducts(oldProducts);
         return oldProducts;
       });
       return;
     }
 
-    setProducts((oldProducts) => [...oldProducts, product]);
-    saveProducts();
+    setProducts((oldProducts) => {
+      let newArray = [...oldProducts, product];
+      saveProducts(newArray);
+      return newArray;
+    });
   }
 
   function removeProduct(product) {
-    setProducts((oldProducts) =>
-      oldProducts.filter((item) => item._id !== product._id)
-    );
-    saveProducts();
+    setProducts((oldProducts) => {
+      let newProducts = oldProducts.filter((item) => item._id !== product._id);
+      saveProducts(newProducts);
+      return newProducts;
+    });
+
+    console.log(products);
   }
 
   function increaseAmount(product) {
@@ -40,9 +48,10 @@ export const useCart = () => {
         : oldProducts[index].amount++;
 
       amount = oldProducts[index].amount;
+      saveProducts(oldProducts);
       return oldProducts;
     });
-    saveProducts();
+    
     return amount;
   }
 
@@ -56,17 +65,27 @@ export const useCart = () => {
         : oldProducts[index].amount--;
 
       amount = oldProducts[index].amount;
+      saveProducts(oldProducts);
       return oldProducts;
     });
-    saveProducts();
+
     return amount;
   }
 
-  function saveProducts() {
+  function updateTotal(products) {
+    setTotal(
+      products.reduce((total, item) => total + +item.amount * +item.value, 0)
+    );
+  }
+
+  function saveProducts(products) {
+    updateTotal(products);
     try {
       const serializedProducts = JSON.stringify(products);
       localStorage.setItem("cart", serializedProducts);
     } catch (error) {
+      console.log(error);
+      console.log("Error while saving cart");
       return undefined;
     }
   }
@@ -75,11 +94,14 @@ export const useCart = () => {
     try {
       const serializedProducts = localStorage.getItem("cart");
       if (serializedProducts === null) {
+        localStorage.setItem("cart", "[]");
         return [];
       }
       return JSON.parse(serializedProducts);
     } catch (error) {
-      return undefined;
+      console.log(error);
+      console.log("Error while retrieving cart");
+      return [];
     }
   }
 
@@ -89,6 +111,7 @@ export const useCart = () => {
 
   return {
     products,
+    total,
     addProduct,
     removeProduct,
     increaseAmount,

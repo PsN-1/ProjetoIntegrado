@@ -24,7 +24,6 @@ export default function SellerDashboard() {
         },
       });
       const responseData = await response.json();
-      console.log("responseData", responseData);
       setActivesProducts(responseData);
       setIsLoading(false);
     };
