@@ -19,7 +19,7 @@ export default function Login() {
   let password = "";
 
   useEffect(() => {
-   setLoginAction(auth.isloggedIn)
+    setLoginAction(auth.isloggedIn);
   }, [auth]);
 
   const handleSubmit = async (event) => {
