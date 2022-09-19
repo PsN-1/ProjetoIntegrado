@@ -1,11 +1,16 @@
-import { Box, Grid } from "@mui/material";
+import {
+  Box,
+  Button,
+  Grid,
+  TextField,
+  styled,
+} from "@mui/material";
 
 import NavBar from "../../../shared/components/NavBar";
 import SideBar from "../../../shared/components/SideBar";
 import Copyright from "../../../shared/components/Copyright";
 import {
   Paper,
-  Typography,
   Table,
   TableBody,
   TableCell,
@@ -56,6 +61,65 @@ export default function UserCart() {
             onAddAmount={cart.increaseAmount}
             onDecreaseAmount={cart.decreaseAmount}
           />
+          <Grid container>
+            <Grid item xs={8}>
+              <Paper
+                elevation={3}
+                sx={{
+                  p: 3,
+                  background: "#F2F2F2",
+                  mr: 3,
+                  mt: 3,
+                  mb: 2,
+                  height: "48px",
+                  borderRadius: "10px",
+                }}
+              >
+                <Grid container>
+                  <Grid item xs={8} sx={{ pr: 2 }}>
+                    <CepTextField name="cep" label="CEP:" />
+                  </Grid>
+                  <Grid item xs={4} sx={{ pt: 0.5 }}>
+                    <Button
+                      type="submit"
+                      fullWidth
+                      variant="contained"
+                      sx={{
+                        height: "48px",
+                        borderRadius: "10px",
+                        backgroundColor: "rgba(138, 160, 167, 0.8)",
+                        "&:hover": {
+                          backgroundColor: "#631740",
+                        },
+                      }}
+                    >
+                      Calcular Frete
+                    </Button>
+                  </Grid>
+                </Grid>
+              </Paper>
+            </Grid>
+
+            <Grid item xs={4} sx={{ pr: 2 }}>
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                sx={{
+                  mt: 6,
+                  mb: 2,
+                  height: "48px",
+                  borderRadius: "10px",
+                  backgroundColor: "rgba(44, 89, 103, 0.8)",
+                  "&:hover": {
+                    backgroundColor: "#631740",
+                  },
+                }}
+              >
+                Finalizar Pedido
+              </Button>
+            </Grid>
+          </Grid>
         </Grid>
       </Grid>
       <Copyright sx={{ mt: 5 }} />
@@ -66,7 +130,9 @@ export default function UserCart() {
 const Cart = (props) => {
   return (
     <div>
+      
       <TableContainer component={MyPaper}>
+        
         <Table>
           <TableHead>
             <TableRow>
@@ -110,17 +176,6 @@ const Cart = (props) => {
           </TableBody>
         </Table>
       </TableContainer>
-
-      <Typography
-        sx={{
-          p: 3,
-          textAlign: "right",
-          fontStyle: "italic",
-          fontWeight: "400",
-          fontSize: "24px",
-          lineHeight: "29px",
-        }}
-      ></Typography>
     </div>
   );
 };
@@ -133,10 +188,41 @@ const MyPaper = (props) => {
         p: 3,
         background: "#F2F2F2",
         borderRadius: "20px",
-        // alignItems: "center",
       }}
     >
       {props.children}
     </Paper>
   );
 };
+
+const CepTextField = (props) => {
+  return (
+    <CssTextField
+      id={props.label}
+      fullWidth
+      value={props.value}
+      onChange={props.onChange}
+      inputProps={{
+        style: {
+          backgroundColor: "rgba(255, 255, 255, 0.7)",
+          borderRadius: "10px",
+          boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
+          ...props,
+        },
+      }}
+      {...props}
+    />
+  );
+};
+const CssTextField = styled(TextField)({
+  "& label.Mui-focused": {
+    color: "black",
+    textShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
+  },
+  "& .MuiOutlinedInput-root": {
+    "&.Mui-focused fieldset": {
+      borderColor: "gray",
+      borderRadius: "10px",
+    },
+  },
+});
