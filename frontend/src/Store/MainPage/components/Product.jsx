@@ -31,7 +31,7 @@ const Product = (props) => {
             {props.name}
             <br />
             <br />
-            R${props.price}
+            {props.price}
           </Typography>
         </CardContent>
       </CardActionArea>

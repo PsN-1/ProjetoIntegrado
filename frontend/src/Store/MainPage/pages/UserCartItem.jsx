@@ -52,10 +52,10 @@ export default function UserCartItem(props) {
       </TableCell>
 
       <TableCell align="center">
-        <LabelTypography>R$ {item.value}</LabelTypography>
+        <LabelTypography>{item.value}</LabelTypography>
       </TableCell>
       <TableCell align="center">
-        <LabelTypography>R$ {item.value * item.amount}</LabelTypography>
+        <LabelTypography>{item.value.split(' ')[1] * item.amount}</LabelTypography>
       </TableCell>
       <TableCell>
         <IconButton onClick={() => props.onDelete(item)}>

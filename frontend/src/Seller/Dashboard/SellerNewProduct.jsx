@@ -1,6 +1,7 @@
 import { Box, Button, Grid, Paper, Typography } from "@mui/material";
 import { Container } from "@mui/system";
 import React, { useContext, useState } from "react";
+import { NumericFormat } from "react-number-format";
 import { Redirect } from "react-router-dom";
 import { EndPoint, Paths } from "../../Routes";
 import Loading from "../../shared/components/Loading";
@@ -96,17 +97,24 @@ export default function SellerNewProduct(props) {
                       multiline
                       rows={4}
                     />
-                    <SignUpTextField
+                    <NumericFormat
+                      customInput={SignUpTextField}
+                      allowNegative={false}
                       name="Quantidade"
                       label="Quantidade"
                       margin="normal"
                     />
-                    <SignUpTextField
+                    <NumericFormat
+                      customInput={SignUpTextField}
+                      prefix={"R$ "}
+                      thousandSeparator="."
+                      decimalSeparator=","
+                      decimalScale={2}
+                      allowNegative={false}
                       name="Valor"
                       label="Valor"
                       margin="normal"
                     />
-
                     <Button
                       type="submit"
                       fullWidth

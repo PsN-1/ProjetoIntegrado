@@ -74,7 +74,7 @@ export const useCart = () => {
 
   function updateTotal(products) {
     setTotal(
-      products.reduce((total, item) => total + +item.amount * +item.value, 0)
+      products.reduce((total, item) => total + +item.amount * +item.value.split(' ')[1], 0)
     );
   }
 

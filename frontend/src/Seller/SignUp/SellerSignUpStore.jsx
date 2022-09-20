@@ -1,6 +1,7 @@
 import Grid from "@mui/material/Grid";
 import React, { useState } from "react";
 import { useContext } from "react";
+import { NumericFormat, PatternFormat } from "react-number-format";
 import { Redirect } from "react-router-dom";
 import { EndPoint, Paths } from "../../Routes";
 import Loading from "../../shared/components/Loading";
@@ -53,10 +54,15 @@ const SellerSignUpStore = (props) => {
         <SellerSignUp title="Cadastrar Nova Loja" onSubmit={handleSubmit}>
           <Grid container spacing={2}>
             <Grid item xs={12}>
-              <SignUpTextField label="CNPJ" name="cnpj" />
+              <PatternFormat
+                format="##.###.###/####-##"
+                label="CNPJ"
+                name="cnpj"
+                customInput={SignUpTextField}
+              />
             </Grid>
             <Grid item xs={12}>
-              <SignUpTextField label="Inscrição Estadual" name="ie" />
+              <NumericFormat label="Inscrição Estadual" name="ie" customInput={SignUpTextField}/>
             </Grid>
             <Grid item xs={12}>
               <SignUpTextField label="Razão Social" name="razaoSocial" />

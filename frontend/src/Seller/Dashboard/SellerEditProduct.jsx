@@ -3,6 +3,7 @@ import { Container } from "@mui/system";
 import React, { useContext } from "react";
 import { useEffect } from "react";
 import { useState } from "react";
+import { NumericFormat } from "react-number-format";
 import { Redirect, useParams } from "react-router-dom";
 import { EndPoint, Paths } from "../../Routes";
 import Loading from "../../shared/components/Loading";
@@ -168,14 +169,23 @@ export default function SellerEditProduct(props) {
                       value={description}
                       onChange={descriptionChangeHandler}
                     />
-                    <SignUpTextField
+
+                    <NumericFormat
+                      customInput={SignUpTextField}
+                      allowNegative={false}
                       name="Quantidade"
                       label="Quantidade"
                       margin="normal"
                       value={amount}
                       onChange={amountChangeHandler}
                     />
-                    <SignUpTextField
+                    <NumericFormat
+                      customInput={SignUpTextField}
+                      prefix={"R$ "}
+                      thousandSeparator="."
+                      decimalSeparator=","
+                      decimalScale={2}
+                      allowNegative={false}
                       name="Valor"
                       label="Valor"
                       margin="normal"

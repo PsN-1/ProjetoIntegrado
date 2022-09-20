@@ -1,6 +1,7 @@
 import { Grid } from "@mui/material";
 import React from "react";
 import { useState } from "react";
+import { PatternFormat, NumericFormat } from "react-number-format";
 import { Redirect } from "react-router-dom";
 import { EndPoint, Paths } from "../../Routes";
 import Loading from "../../shared/components/Loading";
@@ -11,6 +12,7 @@ const SellerSignUpUser = () => {
   const [submitAction, setSubmitAction] = useState(false);
   const [isLoading, setIsloading] = useState(false);
   const [email, setEmail] = useState("");
+  const [invalidPassword, setInvalidPassword] = useState(false);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -30,6 +32,7 @@ const SellerSignUpUser = () => {
 
     if (newSeller.password !== newSeller.password2) {
       setIsloading(false);
+      setInvalidPassword(true);
       return;
     }
 
@@ -66,26 +69,52 @@ const SellerSignUpUser = () => {
             <Grid item xs={12} sm={6}>
               <SignUpTextField label="Nome" name="nome" />
             </Grid>
+
             <Grid item xs={12} sm={6}>
               <SignUpTextField label="Sobrenome" name="sobrenome" />
             </Grid>
+
             <Grid item xs={12}>
               <SignUpTextField label="Email" name="email" />
             </Grid>
             <Grid item xs={12}>
-              <SignUpTextField label="CPF" name="cpf" />
+              <PatternFormat
+                format="###.###.###-##"
+                label="CPF"
+                name="cpf"
+                customInput={SignUpTextField}
+              />
             </Grid>
             <Grid item xs={12} sm={6}>
-              <SignUpTextField label="Cep" name="cep" />
+              <PatternFormat
+                format="##.###-###"
+                label="Cep"
+                name="cep"
+                customInput={SignUpTextField}
+              />
             </Grid>
             <Grid item xs={12} sm={6}>
-              <SignUpTextField label="Numero" name="numero" />
-            </Grid>
-            <Grid item xs={12}>
-              <SignUpTextField label="Senha" name="senha" type="password" />
+              <NumericFormat
+                customInput={SignUpTextField}
+                label="Numero"
+                name="numero"
+              />
             </Grid>
             <Grid item xs={12}>
               <SignUpTextField
+                error={invalidPassword}
+                helperText={invalidPassword ? "Passwords don't match" : ""}
+                onFocus={() => setInvalidPassword(false)}
+                label="Senha"
+                name="senha"
+                type="password"
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <SignUpTextField
+                error={invalidPassword}
+                helperText={invalidPassword ? "Passwords don't match" : ""}
+                onFocus={() => setInvalidPassword(false)}
                 label="Repetir Senha"
                 name="senha2"
                 type="password"
