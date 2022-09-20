@@ -4,6 +4,7 @@ import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import { Redirect } from 'react-router-dom';
 import { Paths } from '../../Routes';
+import { Button } from '@mui/material';
 
 const style = {
   position: 'absolute',
@@ -36,8 +37,9 @@ export default function ErrorScreen(props) {
       >
         <Box sx={style}>
           <Typography id="modal-modal-title" variant="h6" component="h2">
-            Alguma coisa deu errado, Você está sendo redirecionado.
+            Alguma coisa deu errado, Clique na tela para ser redirecionado.
           </Typography>
+          <Button onClick={handleClose}>Voltar para o Login </Button>
           <Typography id="modal-modal-description" sx={{ mt: 2 }}>
             {props.error}
           </Typography>
