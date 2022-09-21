@@ -65,23 +65,6 @@ const createSeller = async (req, res, next) => {
 };
 
 // Store
-const getStores = async (req, res, next) => {
-  let stores;
-
-  try {
-    stores = await Store.find();
-  } catch (err) {
-    const error = new HttpError(
-      "Fetching store failed, please try again later.",
-      500
-    );
-    return next(error);
-  }
-
-  console.log("Response:", stores);
-  res.json(stores);
-};
-
 const createStore = async (req, res, next) => {
   const { email, name, cnpj, ie, corporateName, category } = req.body;
 
@@ -228,7 +211,96 @@ const login = async (req, res, next) => {
   });
 };
 
+const getSeller = async (req, res, next) => {
+  const paramsStoreName = req.params.store;
+  const loggedStore = req.userData.storeName.name;
+  
+  if (loggedStore != paramsStoreName) {
+    const error = new HttpError(
+      "BAD URL",
+      500
+    );
+    return next(error);
+  }
+
+  let seller;
+  try {
+    let store = await Store.findOne({ name: loggedStore }, "owner").populate("owner", "name lastname cpf email postalCode number");
+    seller = store.owner
+  } catch (err) {
+    const error = new HttpError(
+      "Fetching seller failed, please try again later.",
+      500
+    );
+    return next(error);
+  }
+  res.json(seller);
+};
+
+const updateSeller = async (req, res, next) => {
+  const paramsStoreName = req.params.store;
+  const loggedStore = req.userData.storeName.name;
+  const {name, lastname, postalCode, number} = req.body
+  
+  if (loggedStore != paramsStoreName) {
+    const error = new HttpError(
+      "BAD URL",
+      500
+    );
+    return next(error);
+  } 
+
+  let seller
+  try {
+    let store = await Store.findOne({ name: loggedStore }, "owner").populate("owner");
+    seller = store.owner
+  } catch (err) {
+    const error = new HttpError(
+      "Fetching seller failed, please try again later.",
+      500
+    );
+    return next(error);
+  }
+
+  seller.name = name
+  seller.lastname = lastname
+  seller.postalCode = postalCode
+  seller.number = number
+
+  try {
+    seller.save()
+  } catch (err) {
+    const error = new HttpError(
+      "Something went wrong, could not update seller",
+      500
+    );
+    return next(error);
+  }
+
+  console.log("seller updated");
+  res.status(200).json({ message: "seller updated" });
+}
+
+const getStores = async (req, res, next) => {
+  let stores;
+
+  try {
+    stores = await Store.find();
+  } catch (err) {
+    const error = new HttpError(
+      "Fetching store failed, please try again later.",
+      500
+    );
+    return next(error);
+  }
+
+  console.log("Response:", stores);
+  res.json(stores);
+};
+
 exports.createSeller = createSeller;
 exports.getStores = getStores;
 exports.createStore = createStore;
 exports.login = login;
+exports.getSeller = getSeller;
+exports.updateSeller = updateSeller

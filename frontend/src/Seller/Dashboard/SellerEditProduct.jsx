@@ -90,7 +90,7 @@ export default function SellerEditProduct(props) {
       const response = await fetch(
         EndPoint.seller.storeWithId(auth.storeName, pid),
         {
-          method: "Get",
+          method: "GET",
           headers: {
             Authorization: "Bearer " + auth.token,
           },
@@ -107,7 +107,7 @@ export default function SellerEditProduct(props) {
       setIsLoading(false);
     };
     fetchProduct();
-  }, [pid]);
+  }, [pid, auth.storeName, auth.token]);
 
   return (
     <React.Fragment>

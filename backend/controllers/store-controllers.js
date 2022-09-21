@@ -7,8 +7,8 @@ const Seller = require("../models//users/seller");
 // Products
 const getProductsForSeller = async (req, res, next) => {
   const storeName = req.params.store;
-  
-  let store
+
+  let store;
   try {
     store = await Store.findOne({ name: storeName }).populate("products");
   } catch (err) {
@@ -24,12 +24,77 @@ const getProductsForSeller = async (req, res, next) => {
   res.json(products.toObject({ getters: true }));
 };
 
+const getSellerStore = async (req, res, next) => {
+  const paramsStoreName = req.params.store;
+  const loggedStore = req.userData.storeName.name;
+
+  if (loggedStore != paramsStoreName) {
+    const error = new HttpError("BAD URL", 500);
+    return next(error);
+  }
+
+  let store;
+  try {
+    store = await Store.findOne(
+      { name: loggedStore },
+      "name cnpj ie corporateName category"
+    );
+  } catch (err) {
+    const error = new HttpError(
+      "Fetching store failed, please try again later.",
+      500
+    );
+    return next(error);
+  }
+  res.json(store);
+};
+
+const updateSellerStore = async (req, res, next) => {
+  const paramsStoreName = req.params.store;
+  const loggedStore = req.userData.storeName.name;
+  const { cnpj, ie, corporateName, category } = req.body;
+
+  if (loggedStore != paramsStoreName) {
+    const error = new HttpError("BAD URL", 500);
+    return next(error);
+  }
+
+  let store;
+  try {
+    store = await Store.findOne({ name: loggedStore });
+  } catch (err) {
+    const error = new HttpError(
+      "Something went wrong, could not update store",
+      500
+    );
+    return next(error);
+  }
+
+  store.cnpj = cnpj;
+  store.ie = ie;
+  store.corporateName = corporateName;
+  store.category = category;
+
+  try {
+    await store.save();
+  } catch (err) {
+    const error = new HttpError(
+      "Something went wrong, could not update store",
+      500
+    );
+    return next(error);
+  }
+
+  console.log("store updated");
+  res.status(200).json({ message: "store updated" });
+};
+
 const getActiveProduts = async (req, res, next) => {
   const storeName = req.params.store;
-  
-  let store
+
+  let store;
   try {
-     store = await Store.findOne({ name: storeName });
+    store = await Store.findOne({ name: storeName });
   } catch (err) {
     const error = new HttpError(
       "Fetching products failed, please try again later.",
@@ -77,7 +142,7 @@ const createProduct = async (req, res, next) => {
     );
     return next(error);
   }
-  
+
   res.status(201).json({ message: "Product Created" });
 };
 
@@ -219,3 +284,5 @@ exports.getProductById = getProductById;
 exports.createProduct = createProduct;
 exports.updateProduct = updateProduct;
 exports.deleteProduct = deleteProduct;
+exports.getSellerStore = getSellerStore;
+exports.updateSellerStore = updateSellerStore;

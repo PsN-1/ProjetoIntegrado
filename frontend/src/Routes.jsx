@@ -34,7 +34,7 @@ export const Paths = {
   ErrorModal: "/error",
 
   MainPageStore: (storeName) => `/${storeName}`,
-  DetailProductStore: (storeName, pid) => `/${storeName}/${pid}`,
+  DetailProductStore: (storeName, pid) => `/products/${storeName}/${pid}`,
   UserCart: (storeName) => `/${storeName}/cart`,
   UserSettings: (storeName) => `/${storeName}/editUser`,
   StoreSettings: (storeName) => `/${storeName}/editStore`,
@@ -54,6 +54,11 @@ export const EndPoint = {
       `${baseEndPointURL}/api/seller/${storeName}/products`,
     storeWithId: (storeName, productId) =>
       `${baseEndPointURL}/api/seller/${storeName}/products/${productId}`,
+
+    editStore: (storeName) =>
+      `${baseEndPointURL}/api/seller/${storeName}/store`,
+    editSeller: (storeName) =>
+      `${baseEndPointURL}/api/seller/${storeName}/seller`,
 
     createSeller: `${baseEndPointURL}/api/seller/stores/newSeller`,
     createStore: `${baseEndPointURL}/api/seller/stores/newStore`,
@@ -92,8 +97,16 @@ export function Routes() {
         />
 
         <Route path={Paths.UserCart(":storeName")} exact component={UserCart} />
-        <Route path={Paths.UserSettings(":storeName")} exact component={UserSettings} /> 
-        <Route path={Paths.StoreSettings(":storeName")} exact component={StoreSettings} />
+        <Route
+          path={Paths.UserSettings(":storeName")}
+          exact
+          component={UserSettings}
+        />
+        <Route
+          path={Paths.StoreSettings(":storeName")}
+          exact
+          component={StoreSettings}
+        />
 
         <Route
           path={Paths.DetailProductStore(":storeName", ":pid")}
