@@ -1,156 +1,306 @@
 const HttpError = require("../models/http-error");
 const { default: mongoose } = require("mongoose");
-const Product = require("../models/products");
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 
-const getProductsForSeller = async (req, res, next) => {
-  let products;
+const Store = require("../models/stores");
+const Seller = require("../models//users/seller");
 
+const createSeller = async (req, res, next) => {
+  const { name, lastname, cpf, email, postalCode, number, password } = req.body;
+
+  let existingSeller;
   try {
-    products = await Product.find();
+    existingSeller = await Seller.findOne({ email: email });
   } catch (err) {
     const error = new HttpError(
-      "Fetching products failed, please try again later.",
+      "Signing up failed, please try again later.",
       500
     );
     return next(error);
   }
 
-  console.log("Response:", products)
-  res.json(products);
-};
+  if (existingSeller) {
+    const error = new HttpError(
+      "User exists already, please login instead.",
+      422
+    );
+    return next(error);
+  }
 
-const getActiveProduts = async (req, res, next) => {
-  let count;
-
+  let hashedPassword;
   try {
-    let products = await Product.find();
-    count = products.length;
+    hashedPassword = await bcrypt.hash(password, 12);
   } catch (err) {
     const error = new HttpError(
-      "Fetching products failed, please try again later.",
+      "Could not create user, please try again.",
       500
     );
     return next(error);
   }
 
-  console.log("Response:", count)
-  res.json(count);
-};
-
-const createProduct = async (req, res, next) => {
-  const { name, image, description, amount, value } = req.body;
-
-  const createdProduct = new Product({
+  const createdSeller = new Seller({
+    creationDate: Date.now(),
     name,
-    image,
-    description,
-    amount,
-    value,
+    lastname,
+    cpf,
+    email,
+    postalCode,
+    number,
+    password: hashedPassword,
+  });
+
+  try {
+    await createdSeller.save();
+  } catch (err) {
+    console.log(err);
+    const error = new HttpError("Creating user failed, please try again.", 500);
+    return next(error);
+  }
+
+  res.status(201);
+  res.json({
+    email: createdSeller.email,
+  });
+};
+
+// Store
+const createStore = async (req, res, next) => {
+  const { email, name, cnpj, ie, corporateName, category } = req.body;
+
+  let existingStore;
+  try {
+    existingStore = await Store.findOne({ name: name, cnpj: cnpj });
+  } catch (err) {
+    const error = new HttpError(
+      "Signing up failed, please try again later.",
+      500
+    );
+    return next(error);
+  }
+
+  if (existingStore) {
+    const error = new HttpError(
+      "Store exists already, please login instead.",
+      422
+    );
+    return next(error);
+  }
+
+  let owner;
+  try {
+    owner = await Seller.findOne({ email: email });
+  } catch (err) {
+    const error = new HttpError(
+      "Creating store failed, please try again.",
+      500
+    );
+    console.log(err);
+    return next(error);
+  }
+  console.log(owner);
+
+  const createdStore = new Store({
+    owner,
+    name,
+    cnpj,
+    ie,
+    corporateName,
+    category,
+    products: [],
+    balanceAvailable: "0",
+    clients: [],
   });
 
   try {
     const sess = await mongoose.startSession();
     sess.startTransaction();
-    await createdProduct.save({ session: sess });
+    await createdStore.save({ session: sess });
+    owner.stores = createdStore;
+    await owner.save({ session: sess });
     await sess.commitTransaction();
   } catch (err) {
-    const error = new HttpError("Creating product failed, please try again");
+    const error = new HttpError(
+      "Creating store failed, please try again.",
+      500
+    );
+    console.log(err);
     return next(error);
   }
 
-  console.log("Status Code:", 201, "Response:", createdProduct)
-  res.status(201).json({ product: createdProduct });
+  let token;
+  console.log('created store ', createdStore, 'owner email', owner.email, 'owner ', owner)
+  try {
+    token = jwt.sign(
+      { storeName: createdStore.name, email: owner.email },
+      process.env.SECRET,
+      { expiresIn: "1h" }
+    );
+  } catch (err) {
+    const error = new HttpError(
+      "Logging in failed, please try again later.",
+      500
+    );
+    return next(error);
+  }
+
+  console.log("Status Code", 201, "Response: Store created");
+  res.status(201);
+  res.json({
+    storeName: createdStore.name,
+    email: owner.email,
+    token: token,
+  });
 };
 
-const getProductById = async (req, res, next) => {
-  const productId = req.params.pid;
+const login = async (req, res, next) => {
+  let { email, password } = req.body;
 
-  let product;
+  let store;
+  let seller;
   try {
-    product = await Product.findById(productId);
+    seller = await Seller.findOne({ email: email }).populate("stores");
+    store = seller.stores.name;
   } catch (err) {
+    console.log(err);
     const error = new HttpError(
-      "Something went wrong, could not find product",
+      "Logging in failed, please try again later.",
       500
     );
     return next(error);
   }
 
-  console.log("Status Code:", 200, "Response:", product)
-  res.status(200).json({ product: product });
+  if (!seller) {
+    const error = new HttpError(
+      "Invalid credentials, could not log you in.",
+      403
+    );
+    return next(error);
+  }
+
+  let isValidPassword = false;
+  try {
+    isValidPassword = await bcrypt.compare(password, seller.password);
+  } catch (err) {
+    const error = new HttpError(
+      "Could not log you in, please check your credentials and try again.",
+      500
+    );
+    return next(error);
+  }
+
+  let token;
+  try {
+    token = jwt.sign(
+      { storeName: seller.stores.name, email: seller.email },
+      process.env.SECRET,
+      { expiresIn: "1h" }
+    );
+  } catch (err) {
+    const error = new HttpError(
+      "Logging in failed, please try again later.",
+      500
+    );
+    return next(error);
+  }
+
+  res.json({
+    storeName: store,
+    email: seller.email,
+    token: token,
+  });
 };
 
-const updateProduct = async (req, res, next) => {
-  const { name, image, description, amount, value } = req.body;
-  const productId = req.params.pid;
+const getSeller = async (req, res, next) => {
+  const paramsStoreName = req.params.store;
+  const loggedStore = req.userData.storeName;
+  console.log(paramsStoreName)
+  console.log(loggedStore)
+  if (loggedStore != paramsStoreName) {
+    const error = new HttpError("BAD URL", 500);
+    return next(error);
+  }
 
-  let product;
+  let seller;
   try {
-    product = await Product.findById(productId);
+    let store = await Store.findOne({ name: loggedStore }, "owner").populate(
+      "owner",
+      "name lastname cpf email postalCode number"
+    );
+    seller = store.owner;
   } catch (err) {
     const error = new HttpError(
-      "Something went wrong, could not update product",
+      "Fetching seller failed, please try again later.",
       500
     );
     return next(error);
   }
-
-  product.name = name;
-  product.image = image;
-  product.description = description;
-  product.amount = amount;
-  product.value = value;
-
-  try {
-    await product.save();
-  } catch (err) {
-    const error = new HttpError(
-      "Something went wrong, could not update product",
-      500
-    );
-    return next(error);
-  }
-
-  console.log(200, product)
-  res.status(200).json({ product: product });
+  res.json(seller);
 };
 
-const deleteProduct = async (req, res, next) => {
-  const productId = req.params.pid;
+const updateSeller = async (req, res, next) => {
+  const paramsStoreName = req.params.store;
+  const loggedStore = req.userData.storeName;
+  const { name, lastname, postalCode, number } = req.body;
 
-  let product;
+  if (loggedStore != paramsStoreName) {
+    const error = new HttpError("BAD URL", 500);
+    return next(error);
+  }
+
+  let seller;
   try {
-    product = await Product.findById(productId);
+    let store = await Store.findOne({ name: loggedStore }, "owner").populate(
+      "owner"
+    );
+    seller = store.owner;
   } catch (err) {
     const error = new HttpError(
-      "Something went wrong, could not delete product",
+      "Fetching seller failed, please try again later.",
       500
     );
     return next(error);
   }
 
-  if (!product) {
-    const error = new HttpError("Could not find product for this id.", 404);
-    return next(error);
-  }
+  seller.name = name;
+  seller.lastname = lastname;
+  seller.postalCode = postalCode;
+  seller.number = number;
 
   try {
-    await product.delete();
+    seller.save();
   } catch (err) {
     const error = new HttpError(
-      "Something went wrong, could not delete product",
+      "Something went wrong, could not update seller",
       500
     );
     return next(error);
   }
 
-  console.log("Status Code:", 200, "Response: Deleted product.")
-  res.status(200).json({ message: "Deleted product." });
+  console.log("seller updated");
+  res.status(200).json({ message: "seller updated" });
 };
 
-exports.getProductsForSeller = getProductsForSeller;
-exports.getActiveProduts = getActiveProduts;
-exports.getProductById = getProductById;
-exports.createProduct = createProduct;
-exports.updateProduct = updateProduct;
-exports.deleteProduct = deleteProduct;
+const getStores = async (req, res, next) => {
+  let stores;
+
+  try {
+    stores = await Store.find();
+  } catch (err) {
+    const error = new HttpError(
+      "Fetching store failed, please try again later.",
+      500
+    );
+    return next(error);
+  }
+
+  console.log("Response:", stores);
+  res.json(stores);
+};
+
+exports.createSeller = createSeller;
+exports.getStores = getStores;
+exports.createStore = createStore;
+exports.login = login;
+exports.getSeller = getSeller;
+exports.updateSeller = updateSeller;

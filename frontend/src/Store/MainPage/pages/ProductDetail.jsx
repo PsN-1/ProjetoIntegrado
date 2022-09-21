@@ -5,9 +5,9 @@ import SideBar from "../../../shared/components/SideBar";
 import Copyright from "../../../shared/components/Copyright";
 import { useEffect } from "react";
 import { useState } from "react";
-import { EndPoint } from "../../../Routes";
+import { EndPoint, Paths } from "../../../Routes";
 import Loading from "../../../shared/components/Loading";
-import { useParams } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
@@ -16,6 +16,8 @@ import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
 import React from "react";
 import { DescriptionTextField } from "../../../Seller/components/SignUpTextField";
+import { useContext } from "react";
+import { UserCartContext } from "../../../shared/context/user-cart";
 
 const filterItems = [
   "Casacos",
@@ -27,32 +29,47 @@ const filterItems = [
 ];
 
 export default function ProductDetail() {
-  //   const [submitAction, setSubmitAction] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
   const [name, setName] = useState("");
   const [image, setImage] = useState("");
   const [description, setDescription] = useState("");
   const [value, setValue] = useState("");
+  const [amount, setAmount] = useState("");
 
-  const { pid } = useParams();
+  const { storeName, pid } = useParams();
+  const cart = useContext(UserCartContext);
+  const history = useHistory();
+
+  function handleAddCart() {
+    let product = {
+      _id: pid,
+      name: name,
+      value: value,
+      amount: 1,
+      maxAmount: amount,
+    };
+    cart.addProduct(product);
+    history.push(Paths.UserCart(storeName));
+  }
 
   useEffect(() => {
     const fetchProduct = async () => {
       setIsLoading(true);
-      const response = await fetch(EndPoint.user.storeWithId(pid)); 
+      const response = await fetch(EndPoint.user.storeWithId(storeName, pid));
       const responseData = await response.json();
-      const { name, image, description, value } = responseData.product;
+      const { name, image, description, value, amount } = responseData.product;
 
       setName(name);
       setImage(image);
       setDescription(description);
+      setAmount(amount);
 
       setValue(value);
       setIsLoading(false);
     };
     fetchProduct();
-  }, [pid]);
+  }, [pid, storeName]);
 
   return (
     <React.Fragment>
@@ -77,10 +94,7 @@ export default function ProductDetail() {
                   sx={{ height: "626px", width: "435px" }}
                   image={image}
                 />
-                <Box
-                  
-                  sx={{ display: "flex", flexDirection: "column" }}
-                >
+                <Box sx={{ display: "flex", flexDirection: "column" }}>
                   <CardContent sx={{ flex: "1 0 auto" }}>
                     <Typography
                       sx={{
@@ -98,9 +112,6 @@ export default function ProductDetail() {
                     >
                       {name}
                     </Typography>
-
-
-
                     <Typography
                       sx={{
                         mt: 3,
@@ -115,12 +126,13 @@ export default function ProductDetail() {
                         textShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
                       }}
                     >
-                      R${value}
+                      {value}
                     </Typography>
                     <Button
                       type="submit"
                       fullWidth
                       variant="contained"
+                      onClick={handleAddCart}
                       sx={{
                         mt: 3,
                         mb: 2,
@@ -154,7 +166,7 @@ export default function ProductDetail() {
                     <DescriptionTextField
                       multiline
                       fullWidth
-                      rows={4}
+                      rows={6}
                       value={description}
                       sx={{
                         mt: 3,
@@ -168,7 +180,6 @@ export default function ProductDetail() {
                         lineHeight: "30px",
                       }}
                     />
-             
                   </CardContent>
                 </Box>
               </Card>

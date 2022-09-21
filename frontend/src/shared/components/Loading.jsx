@@ -9,7 +9,7 @@ export default function Loading() {
         position: "absolute",
         top: "0",
         left: "0",
-        background: "rgba(255, 255, 255, 0.9)",
+        background: "rgba(255, 255, 255, 0.7)",
         display: "flex",
         justifyContent: "center",
         alignItems: "center",

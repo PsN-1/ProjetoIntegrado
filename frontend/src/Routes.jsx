@@ -8,6 +8,7 @@ import {
 import Login from "./Seller/Login/Login";
 import MainPageStore from "./Store/MainPage/pages/MainPageStore";
 import ProductDetail from "./Store/MainPage/pages/ProductDetail";
+import UserCart from "./Store/MainPage/pages/UserCart";
 import SellerDashboard from "./Seller/Dashboard/SellerDashboard";
 
 import SellerNewProduct from "./Seller/Dashboard/SellerNewProduct";
@@ -17,53 +18,94 @@ import SellerSignUpUser from "./Seller/SignUp/SellerSignUpUser";
 import SellerSignUpStore from "./Seller/SignUp/SellerSignUpStore";
 import SellerProducts from "./Seller/Dashboard/SellerProducts";
 import SellerEditProduct from "./Seller/Dashboard/SellerEditProduct";
+import ErrorScreen from "./shared/Pages/ErrorScreen";
+import { AuthContext } from "./shared/context/auth-context";
+import { useAuth } from "./shared/hooks/auth-hook";
+import { UserCartContext } from "./shared/context/user-cart";
+import { useCart } from "./shared/hooks/cart-hook";
+import UserSettings from "./shared/Pages/Settings/UserSettings";
+import StoreSettings from "./shared/Pages/Settings/StoreSettings";
 
 export const Paths = {
   Login: "/",
   ForgotPassword: "/forgotpassword",
   SignupUser: "/signupUser",
   SignupStore: "/signupStore",
+  ErrorModal: "/error",
 
-  MainPageStore: (storeName) => `/${storeName}`,
-  DetailProductStore: (storeName, pid) => `/${storeName}/${pid}`,
+  MainPageStore: (storeName) => `/store/${storeName}`,
+  DetailProductStore: (storeName, pid) => `/store/products/${storeName}/${pid}`,
+  UserCart: (storeName) => `/store/${storeName}/cart`,
+  UserSettings: (storeName) => `/store/${storeName}/editUser`,
+  StoreSettings: (storeName) => `/store/${storeName}/editStore`,
 
-  SellerDashboard: (storeName) => `/${storeName}/adm/dashboard`,
-  SellerProducts: (storeName) => `/${storeName}/adm/products`,
-  SellerAddNewProduct: (storeName) => `/${storeName}/adm/products/new`,
-  SellerEditProduct: (storeName, pid) => `/${storeName}/adm/products/${pid}`,
+  SellerDashboard: (storeName) => `/store/${storeName}/adm/dashboard`,
+  SellerProducts: (storeName) => `/store/${storeName}/adm/products`,
+  SellerAddNewProduct: (storeName) => `/store/${storeName}/adm/products/new`,
+  SellerEditProduct: (storeName, pid) => `/store/${storeName}/adm/products/${pid}`,
 };
 
-const baseEndPointURL = "https://lojauniversal.herokuapp.com";
+const baseEndPointURL =   "https://loja-universal-mvp.herokuapp.com"; // "http://localhost:3030";
 export const EndPoint = {
   seller: {
-    storeCount: `${baseEndPointURL}/api/seller/stores/count`,
-    stores: `${baseEndPointURL}/api/seller/stores/`,
-    storeWithId: (productId) =>
-      `${baseEndPointURL}/api/seller/stores/${productId}`,
+    storeCount: (storeName) =>
+      `${baseEndPointURL}/api/seller/${storeName}/products/count`,
+    stores: (storeName) =>
+      `${baseEndPointURL}/api/seller/${storeName}/products`,
+    storeWithId: (storeName, productId) =>
+      `${baseEndPointURL}/api/seller/${storeName}/products/${productId}`,
+
+    editStore: (storeName) =>
+      `${baseEndPointURL}/api/seller/${storeName}/store`,
+    editSeller: (storeName) =>
+      `${baseEndPointURL}/api/seller/${storeName}/seller`,
+
+    createSeller: `${baseEndPointURL}/api/seller/stores/newSeller`,
+    createStore: `${baseEndPointURL}/api/seller/stores/newStore`,
+    login: `${baseEndPointURL}/api/seller/login`,
   },
 
   user: {
-    stores: `${baseEndPointURL}/api/user/stores/`,
-    storeWithId: (productId) =>
-      `${baseEndPointURL}/api/user/stores/${productId}`,
+    stores: (storeName) => `${baseEndPointURL}/api/user/${storeName}/`,
+    storeWithId: (storeName, productId) =>
+      `${baseEndPointURL}/api/user/${storeName}/${productId}`,
   },
 };
 
-// Routes
 export function Routes() {
-  return (
-    <Router>
-      <Switch>
-        <Route path={Paths.Login} exact component={Login} />
+  const { token, login, logout, storeName } = useAuth();
+  const {
+    products,
+    total,
+    addProduct,
+    removeProduct,
+    increaseAmount,
+    decreaseAmount,
+  } = useCart();
 
-        <Route path={Paths.ForgotPassword} exact component={ForgetPassword} />
-        <Route path={Paths.SignupUser} exact component={SellerSignUpUser} />
-        <Route path={Paths.SignupStore} exact component={SellerSignUpStore} />
+  let routes;
+
+  if (token) {
+    routes = (
+      <Switch>
+        <Route path={Paths.ErrorModal} exact component={ErrorScreen} />
 
         <Route
           path={Paths.MainPageStore(":storeName")}
           exact
           component={MainPageStore}
+        />
+
+        <Route path={Paths.UserCart(":storeName")} exact component={UserCart} />
+        <Route
+          path={Paths.UserSettings(":storeName")}
+          exact
+          component={UserSettings}
+        />
+        <Route
+          path={Paths.StoreSettings(":storeName")}
+          exact
+          component={StoreSettings}
         />
 
         <Route
@@ -92,29 +134,62 @@ export function Routes() {
           exact
           component={SellerEditProduct}
         />
+
+        <Redirect to={Paths.SellerDashboard(storeName)} />
+      </Switch>
+    );
+  } else {
+    routes = (
+      <Switch>
+        <Route path={Paths.Login} exact component={Login} />
+        <Route path={Paths.ErrorModal} exact component={ErrorScreen} />
+        <Route path={Paths.ForgotPassword} exact component={ForgetPassword} />
+        <Route path={Paths.SignupUser} exact component={SellerSignUpUser} />
+        <Route path={Paths.SignupStore} exact component={SellerSignUpStore} />
+
+        <Route
+          path={Paths.MainPageStore(":storeName")}
+          exact
+          component={MainPageStore}
+        />
+
+        <Route path={Paths.UserCart(":storeName")} exact component={UserCart} />
+
+        <Route
+          path={Paths.DetailProductStore(":storeName", ":pid")}
+          exact
+          component={ProductDetail}
+        />
+
         <Redirect to="/" />
       </Switch>
-    </Router>
+    );
+  }
+
+  return (
+    <AuthContext.Provider
+      value={{
+        isloggedIn: !!token,
+        token: token,
+        storeName: storeName,
+        login: login,
+        logout: logout,
+      }}
+    >
+      <UserCartContext.Provider
+        value={{
+          products: products,
+          total: total,
+          addProduct: addProduct,
+          removeProduct: removeProduct,
+          increaseAmount: increaseAmount,
+          decreaseAmount: decreaseAmount,
+        }}
+      >
+        <Router>
+          <main>{routes}</main>
+        </Router>
+      </UserCartContext.Provider>
+    </AuthContext.Provider>
   );
 }
-
-export const getStoreName = () => {
-  try {
-    const serializedState = localStorage.getItem("state");
-    if (serializedState === null) {
-      return undefined;
-    }
-    return JSON.parse(serializedState);
-  } catch (err) {
-    return undefined;
-  }
-};
-
-export const setStoreName = (state) => {
-  try {
-    const serializedState = JSON.stringify(state);
-    localStorage.setItem("state", serializedState);
-  } catch (err) {
-    return undefined;
-  }
-};

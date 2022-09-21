@@ -15,18 +15,25 @@ import SellerSkeleton from "./SellerSkeleton";
 import LabelTypography from "../../shared/components/LabelTypography";
 import TitleTypography from "../../shared/components/TitleTypography";
 import { Link } from "react-router-dom";
-import { EndPoint, getStoreName, Paths } from "../../Routes";
-import { useEffect, useState } from "react";
+import { EndPoint, Paths } from "../../Routes";
+import { useEffect, useState, useContext } from "react";
 import Loading from "../../shared/components/Loading";
+import { AuthContext } from "../../shared/context/auth-context";
 
 export default function SellerProducts() {
   const [loadedProducts, setLoadedProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const auth = useContext(AuthContext);
 
   useEffect(() => {
     const fetchProducts = async () => {
       setIsLoading(true);
-      const response = await fetch(EndPoint.seller.stores);
+      const response = await fetch(EndPoint.seller.stores(auth.storeName), {
+        method: 'GET',
+        headers: {
+          Authorization: "Bearer " + auth.token,
+        }
+      });
       const responseData = await response.json();
       setLoadedProducts(responseData);
       setIsLoading(false);
@@ -38,7 +45,7 @@ export default function SellerProducts() {
   return (
     <SellerSkeleton>
       {isLoading && <Loading />}
-      {!isLoading && <DashBoardProducts items={loadedProducts} />}
+      {!isLoading && <DashBoardProducts items={loadedProducts} storeName={auth.storeName} />}
     </SellerSkeleton>
   );
 }
@@ -65,7 +72,7 @@ const DashBoardProducts = (props) => {
             {props.items.map((item) => (
               <TableRow
                 component={Link} // This is causing all the errors, alternative not found
-                to={Paths.SellerEditProduct(getStoreName(), item._id)}
+                to={Paths.SellerEditProduct(props.storeName, item._id)}
                 hover
                 key={item._id}
                 sx={{
@@ -97,7 +104,7 @@ const DashBoardProducts = (props) => {
           lineHeight: "29px",
         }}
       >
-        <Link to={Paths.SellerAddNewProduct(getStoreName())} underline="always">
+        <Link to={Paths.SellerAddNewProduct(props.storeName)} underline="always">
           Adicionar Novo Produto {<AddCircleOutlineIcon />}
         </Link>
       </Typography>
@@ -111,7 +118,6 @@ const MyPaper = (props) => {
       elevation={3}
       sx={{
         p: 3,
-        marginTop: 3,
         background: "#F2F2F2",
         borderRadius: "20px",
         // alignItems: "center",

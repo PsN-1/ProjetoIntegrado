@@ -1,9 +1,11 @@
 import { Box, Button, Grid, Paper, Typography } from "@mui/material";
 import { Container } from "@mui/system";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
+import { NumericFormat } from "react-number-format";
 import { Redirect } from "react-router-dom";
-import { EndPoint, getStoreName, Paths } from "../../Routes";
+import { EndPoint, Paths } from "../../Routes";
 import Loading from "../../shared/components/Loading";
+import { AuthContext } from "../../shared/context/auth-context";
 import SignUpTextField, {
   DescriptionTextField,
 } from "../components/SignUpTextField";
@@ -12,6 +14,7 @@ import SellerSkeleton from "./SellerSkeleton";
 export default function SellerNewProduct(props) {
   const [submitAction, setSubmitAction] = useState(false);
   const [isLoading, setIsloading] = useState(false);
+  const auth = useContext(AuthContext);
 
   const handleButtonAction = async (event) => {
     event.preventDefault();
@@ -26,11 +29,12 @@ export default function SellerNewProduct(props) {
       value: data.get("Valor"),
     };
 
-    const response = await fetch(EndPoint.seller.stores, {
+    const response = await fetch(EndPoint.seller.stores(auth.storeName), {
       method: "POST",
       body: JSON.stringify(newProduct),
       headers: {
         "Content-Type": "application/json",
+        Authorization: "Bearer " + auth.token,
       },
     });
 
@@ -47,20 +51,8 @@ export default function SellerNewProduct(props) {
       {!isLoading && (
         <SellerSkeleton>
           {submitAction && (
-            <Redirect to={Paths.SellerProducts(getStoreName())} />
+            <Redirect to={Paths.SellerProducts(auth.storeName)} />
           )}
-          <Typography
-            sx={{
-              paddingLeft: 5,
-              textAlign: "left",
-              fontStyle: "italic",
-              fontWeight: "400",
-              fontSize: "24px",
-              lineHeight: "29px",
-            }}
-          >
-            Novo Produto
-          </Typography>
           <Grid container>
             <Grid item xs={8}>
               <Paper
@@ -76,9 +68,21 @@ export default function SellerNewProduct(props) {
                     onSubmit={handleButtonAction}
                     sx={{
                       p: 3,
-                      mt: 3,
                     }}
                   >
+                    <Typography
+                      sx={{
+                        p: 2,
+                        textAlign: "left",
+                        fontStyle: "italic",
+                        fontWeight: "400",
+                        fontSize: "24px",
+                        lineHeight: "29px",
+                      }}
+                    >
+                      Novo Produto
+                    </Typography>
+
                     <SignUpTextField name="Nome" label="Nome" margin="normal" />
                     <SignUpTextField
                       name="Imagem"
@@ -93,17 +97,24 @@ export default function SellerNewProduct(props) {
                       multiline
                       rows={4}
                     />
-                    <SignUpTextField
+                    <NumericFormat
+                      customInput={SignUpTextField}
+                      allowNegative={false}
                       name="Quantidade"
                       label="Quantidade"
                       margin="normal"
                     />
-                    <SignUpTextField
+                    <NumericFormat
+                      customInput={SignUpTextField}
+                      prefix={"R$ "}
+                      thousandSeparator="."
+                      decimalSeparator=","
+                      decimalScale={2}
+                      allowNegative={false}
                       name="Valor"
                       label="Valor"
                       margin="normal"
                     />
-
                     <Button
                       type="submit"
                       fullWidth

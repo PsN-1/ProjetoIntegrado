@@ -7,9 +7,9 @@ import SideBar from "../../../shared/components/SideBar";
 import Copyright from "../../../shared/components/Copyright";
 import { useEffect } from "react";
 import { useState } from "react";
-import { EndPoint } from "../../../Routes";
+import { EndPoint, Paths } from "../../../Routes";
 import Loading from "../../../shared/components/Loading";
-import { useParams } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 
 const filterItems = [
   "Casacos",
@@ -25,17 +25,23 @@ const MainPageStore = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const { storeName } = useParams();
+  const history = useHistory();
 
   useEffect(() => {
     const fetchProducts = async () => {
       setIsLoading(true);
-      const response = await fetch(EndPoint.user.stores);
+      const storePath = EndPoint.user.stores(storeName);
+      const response = await fetch(storePath);
       const responseData = await response.json();
-      setLoadedProducts(responseData);
+
       setIsLoading(false);
+      if (response.status !== 200) {
+        history.push(Paths.ErrorModal);
+      }
+      setLoadedProducts(responseData);
     };
     fetchProducts();
-  }, []);
+  }, [storeName, history]);
 
   return (
     <Box>

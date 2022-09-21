@@ -1,11 +1,13 @@
 import { Box, Button, Grid, Paper, Typography } from "@mui/material";
 import { Container } from "@mui/system";
-import React from "react";
+import React, { useContext } from "react";
 import { useEffect } from "react";
 import { useState } from "react";
+import { NumericFormat } from "react-number-format";
 import { Redirect, useParams } from "react-router-dom";
-import { EndPoint, getStoreName, Paths } from "../../Routes";
+import { EndPoint, Paths } from "../../Routes";
 import Loading from "../../shared/components/Loading";
+import { AuthContext } from "../../shared/context/auth-context";
 import SignUpTextField, {
   DescriptionTextField,
 } from "../components/SignUpTextField";
@@ -15,14 +17,14 @@ export default function SellerEditProduct(props) {
   const [submitAction, setSubmitAction] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  const [productId, setProductId] = useState("");
   const [name, setName] = useState("");
   const [image, setImage] = useState("");
   const [description, setDescription] = useState("");
   const [amount, setAmount] = useState("");
   const [value, setValue] = useState("");
 
-  let { pid } = useParams();
+  const auth = useContext(AuthContext);
+  const { pid } = useParams();
 
   const nameChangeHandler = (event) => {
     setName(event.target.value);
@@ -51,13 +53,17 @@ export default function SellerEditProduct(props) {
       value: value,
     };
 
-    const response = await fetch(EndPoint.seller.storeWithId(productId), {
-      method: "PATCH",
-      body: JSON.stringify(newProduct),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    const response = await fetch(
+      EndPoint.seller.storeWithId(auth.storeName, pid),
+      {
+        method: "PATCH",
+        body: JSON.stringify(newProduct),
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + auth.token,
+        },
+      }
+    );
 
     const responseData = await response.json();
     console.log(responseData);
@@ -68,8 +74,11 @@ export default function SellerEditProduct(props) {
   const handleDeleteButton = async (event) => {
     event.preventDefault();
 
-    await fetch(EndPoint.seller.storeWithId(productId), {
+    await fetch(EndPoint.seller.storeWithId(auth.storeName, pid), {
       method: "DELETE",
+      headers: {
+        Authorization: "Bearer " + auth.token,
+      },
     });
 
     setSubmitAction(true);
@@ -78,12 +87,18 @@ export default function SellerEditProduct(props) {
   useEffect(() => {
     const fetchProduct = async () => {
       setIsLoading(true);
-      const response = await fetch(EndPoint.seller.storeWithId(pid));
+      const response = await fetch(
+        EndPoint.seller.storeWithId(auth.storeName, pid),
+        {
+          method: "GET",
+          headers: {
+            Authorization: "Bearer " + auth.token,
+          },
+        }
+      );
       const responseData = await response.json();
-      const { _id, name, image, description, amount, value } =
-        responseData.product;
+      const { name, image, description, amount, value } = responseData.product;
 
-      setProductId(_id);
       setName(name);
       setImage(image);
       setDescription(description);
@@ -92,7 +107,7 @@ export default function SellerEditProduct(props) {
       setIsLoading(false);
     };
     fetchProduct();
-  }, [pid]);
+  }, [pid, auth.storeName, auth.token]);
 
   return (
     <React.Fragment>
@@ -100,20 +115,8 @@ export default function SellerEditProduct(props) {
       {!isLoading && (
         <SellerSkeleton>
           {submitAction && (
-            <Redirect to={Paths.SellerProducts(getStoreName())} />
+            <Redirect to={Paths.SellerProducts(auth.storeName)} />
           )}
-          <Typography
-            sx={{
-              paddingLeft: 5,
-              textAlign: "left",
-              fontStyle: "italic",
-              fontWeight: "400",
-              fontSize: "24px",
-              lineHeight: "29px",
-            }}
-          >
-            Editar Produto
-          </Typography>
           <Grid container>
             <Grid item xs={8}>
               <Paper
@@ -129,9 +132,20 @@ export default function SellerEditProduct(props) {
                     onSubmit={handleButtonAction}
                     sx={{
                       p: 3,
-                      mt: 3,
                     }}
                   >
+                    <Typography
+                      sx={{
+                        p: 2,
+                        textAlign: "left",
+                        fontStyle: "italic",
+                        fontWeight: "400",
+                        fontSize: "24px",
+                        lineHeight: "29px",
+                      }}
+                    >
+                      Editar Produto
+                    </Typography>
                     <SignUpTextField
                       name="Nome"
                       label="Nome"
@@ -155,21 +169,29 @@ export default function SellerEditProduct(props) {
                       value={description}
                       onChange={descriptionChangeHandler}
                     />
-                    <SignUpTextField
+
+                    <NumericFormat
+                      customInput={SignUpTextField}
+                      allowNegative={false}
                       name="Quantidade"
                       label="Quantidade"
                       margin="normal"
                       value={amount}
                       onChange={amountChangeHandler}
                     />
-                    <SignUpTextField
+                    <NumericFormat
+                      customInput={SignUpTextField}
+                      prefix={"R$ "}
+                      thousandSeparator="."
+                      decimalSeparator=","
+                      decimalScale={2}
+                      allowNegative={false}
                       name="Valor"
                       label="Valor"
                       margin="normal"
                       value={value}
                       onChange={valueChangeHandler}
                     />
-
                     {amount === "0" && (
                       <Button
                         type="button"
@@ -190,7 +212,6 @@ export default function SellerEditProduct(props) {
                         REMOVER
                       </Button>
                     )}
-
                     <Button
                       type="submit"
                       fullWidth

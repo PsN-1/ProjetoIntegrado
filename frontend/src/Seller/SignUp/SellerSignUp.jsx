@@ -16,8 +16,9 @@ const SellerSignUp = (props) => {
         backgroundAttachment: "scroll",
         backgroundPosition: "center",
         backgroundSize: "cover",
+        // backgroundRepeat: "no-repeat",
         display: "flex",
-        
+
         backgroundImage:
           "url(https://images.unsplash.com/photo-1528698827591-e19ccd7bc23d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1476&q=80)",
       }}
@@ -29,7 +30,7 @@ const SellerSignUp = (props) => {
             marginTop: 3,
             display: "flex",
             flexDirection: "column",
-            alignItems: 'centerx',
+            alignItems: "centerx",
           }}
         >
           <Typography
