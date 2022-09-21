@@ -129,6 +129,7 @@ const createStore = async (req, res, next) => {
   }
 
   let token;
+  console.log('created store ', createdStore, 'owner email', owner.email, 'owner ', owner)
   try {
     token = jwt.sign(
       { storeName: createdStore.name, email: owner.email },
@@ -146,7 +147,7 @@ const createStore = async (req, res, next) => {
   console.log("Status Code", 201, "Response: Store created");
   res.status(201);
   res.json({
-    storeName: createdStore.storeName,
+    storeName: createdStore.name,
     email: owner.email,
     token: token,
   });
@@ -179,7 +180,6 @@ const login = async (req, res, next) => {
 
   let isValidPassword = false;
   try {
-    console.log("SELLER", seller);
     isValidPassword = await bcrypt.compare(password, seller.password);
   } catch (err) {
     const error = new HttpError(
@@ -192,7 +192,7 @@ const login = async (req, res, next) => {
   let token;
   try {
     token = jwt.sign(
-      { storeName: seller.stores, email: seller.email },
+      { storeName: seller.stores.name, email: seller.email },
       process.env.SECRET,
       { expiresIn: "1h" }
     );
@@ -213,20 +213,21 @@ const login = async (req, res, next) => {
 
 const getSeller = async (req, res, next) => {
   const paramsStoreName = req.params.store;
-  const loggedStore = req.userData.storeName.name;
-  
+  const loggedStore = req.userData.storeName;
+  console.log(paramsStoreName)
+  console.log(loggedStore)
   if (loggedStore != paramsStoreName) {
-    const error = new HttpError(
-      "BAD URL",
-      500
-    );
+    const error = new HttpError("BAD URL", 500);
     return next(error);
   }
 
   let seller;
   try {
-    let store = await Store.findOne({ name: loggedStore }, "owner").populate("owner", "name lastname cpf email postalCode number");
-    seller = store.owner
+    let store = await Store.findOne({ name: loggedStore }, "owner").populate(
+      "owner",
+      "name lastname cpf email postalCode number"
+    );
+    seller = store.owner;
   } catch (err) {
     const error = new HttpError(
       "Fetching seller failed, please try again later.",
@@ -239,21 +240,20 @@ const getSeller = async (req, res, next) => {
 
 const updateSeller = async (req, res, next) => {
   const paramsStoreName = req.params.store;
-  const loggedStore = req.userData.storeName.name;
-  const {name, lastname, postalCode, number} = req.body
-  
-  if (loggedStore != paramsStoreName) {
-    const error = new HttpError(
-      "BAD URL",
-      500
-    );
-    return next(error);
-  } 
+  const loggedStore = req.userData.storeName;
+  const { name, lastname, postalCode, number } = req.body;
 
-  let seller
+  if (loggedStore != paramsStoreName) {
+    const error = new HttpError("BAD URL", 500);
+    return next(error);
+  }
+
+  let seller;
   try {
-    let store = await Store.findOne({ name: loggedStore }, "owner").populate("owner");
-    seller = store.owner
+    let store = await Store.findOne({ name: loggedStore }, "owner").populate(
+      "owner"
+    );
+    seller = store.owner;
   } catch (err) {
     const error = new HttpError(
       "Fetching seller failed, please try again later.",
@@ -262,13 +262,13 @@ const updateSeller = async (req, res, next) => {
     return next(error);
   }
 
-  seller.name = name
-  seller.lastname = lastname
-  seller.postalCode = postalCode
-  seller.number = number
+  seller.name = name;
+  seller.lastname = lastname;
+  seller.postalCode = postalCode;
+  seller.number = number;
 
   try {
-    seller.save()
+    seller.save();
   } catch (err) {
     const error = new HttpError(
       "Something went wrong, could not update seller",
@@ -279,7 +279,7 @@ const updateSeller = async (req, res, next) => {
 
   console.log("seller updated");
   res.status(200).json({ message: "seller updated" });
-}
+};
 
 const getStores = async (req, res, next) => {
   let stores;
@@ -303,4 +303,4 @@ exports.getStores = getStores;
 exports.createStore = createStore;
 exports.login = login;
 exports.getSeller = getSeller;
-exports.updateSeller = updateSeller
+exports.updateSeller = updateSeller;

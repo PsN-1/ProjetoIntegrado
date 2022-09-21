@@ -2,17 +2,17 @@ import { Grid } from "@mui/material";
 import React from "react";
 import { useState } from "react";
 import { PatternFormat, NumericFormat } from "react-number-format";
-import { Redirect } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { EndPoint, Paths } from "../../Routes";
 import Loading from "../../shared/components/Loading";
 import SignUpTextField from "../components/SignUpTextField";
 import SellerSignUp from "./SellerSignUp";
 
 const SellerSignUpUser = () => {
-  const [submitAction, setSubmitAction] = useState(false);
   const [isLoading, setIsloading] = useState(false);
-  const [email, setEmail] = useState("");
   const [invalidPassword, setInvalidPassword] = useState(false);
+
+  const history = useHistory();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -45,23 +45,15 @@ const SellerSignUpUser = () => {
     });
 
     const responseData = await response.json();
-    console.log(responseData);
-    setEmail(newSeller.email);
     setIsloading(false);
-    setSubmitAction(true);
+    history.push({
+      pathname: Paths.SignupStore,
+      state: { email: responseData.email },
+    });
   };
 
   return (
     <React.Fragment>
-      {submitAction && (
-        <Redirect
-          push
-          to={{
-            pathname: Paths.SignupStore,
-            state: { email: email },
-          }}
-        />
-      )}
       {isLoading && <Loading />}
       {!isLoading && (
         <SellerSignUp title="Cadastrar Novo Cliente" onSubmit={handleSubmit}>

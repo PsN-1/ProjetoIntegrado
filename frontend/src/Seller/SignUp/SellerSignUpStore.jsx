@@ -2,7 +2,7 @@ import Grid from "@mui/material/Grid";
 import React, { useState } from "react";
 import { useContext } from "react";
 import { NumericFormat, PatternFormat } from "react-number-format";
-import { Redirect } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { EndPoint, Paths } from "../../Routes";
 import Loading from "../../shared/components/Loading";
 import { AuthContext } from "../../shared/context/auth-context";
@@ -10,9 +10,9 @@ import SignUpTextField from "../components/SignUpTextField";
 import SellerSignUp from "./SellerSignUp";
 
 const SellerSignUpStore = (props) => {
-  const [submitAction, setSubmitAction] = useState(false);
   const [isLoading, setIsloading] = useState(false);
   const auth = useContext(AuthContext);
+  const history = useHistory();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -25,8 +25,10 @@ const SellerSignUpStore = (props) => {
       corporateName: data.get("razaoSocial"),
       name: data.get("nomeFantasia"),
       category: data.get("categoria"),
-      email: props.location.state.email
+      email: props.location.state.email,
     };
+
+    console.log(newStore);
 
     const response = await fetch(EndPoint.seller.createStore, {
       method: "POST",
@@ -38,17 +40,15 @@ const SellerSignUpStore = (props) => {
     });
 
     const responseData = await response.json();
-
-    console.log(responseData);
-
-    auth.login(responseData.storeName, responseData.token)
+    console.log(responseData)
+    auth.login(responseData.storeName, responseData.token);
     setIsloading(false);
-    setSubmitAction(true);
+
+    history.push(Paths.SellerDashboard(responseData.storeName));
   };
 
   return (
     <React.Fragment>
-      {submitAction && <Redirect to={Paths.SellerDashboard(auth.storeName)} />}
       {isLoading && <Loading />}
       {!isLoading && (
         <SellerSignUp title="Cadastrar Nova Loja" onSubmit={handleSubmit}>
@@ -62,7 +62,11 @@ const SellerSignUpStore = (props) => {
               />
             </Grid>
             <Grid item xs={12}>
-              <NumericFormat label="Inscrição Estadual" name="ie" customInput={SignUpTextField}/>
+              <NumericFormat
+                label="Inscrição Estadual"
+                name="ie"
+                customInput={SignUpTextField}
+              />
             </Grid>
             <Grid item xs={12}>
               <SignUpTextField label="Razão Social" name="razaoSocial" />

@@ -26,8 +26,10 @@ const getProductsForSeller = async (req, res, next) => {
 
 const getSellerStore = async (req, res, next) => {
   const paramsStoreName = req.params.store;
-  const loggedStore = req.userData.storeName.name;
+  const loggedStore = req.userData.storeName;
 
+  console.log(paramsStoreName)
+  console.log(loggedStore)
   if (loggedStore != paramsStoreName) {
     const error = new HttpError("BAD URL", 500);
     return next(error);
@@ -51,7 +53,7 @@ const getSellerStore = async (req, res, next) => {
 
 const updateSellerStore = async (req, res, next) => {
   const paramsStoreName = req.params.store;
-  const loggedStore = req.userData.storeName.name;
+  const loggedStore = req.userData.storeName;
   const { cnpj, ie, corporateName, category } = req.body;
 
   if (loggedStore != paramsStoreName) {
@@ -104,8 +106,13 @@ const getActiveProduts = async (req, res, next) => {
   }
 
   let count;
-  if (!store.products) {
-    res.json(0);
+  if (store === null) {
+    return res.json(0);
+    
+  }
+  if (store.products === null) {
+    return res.json(0);
+    
   }
   count = store.products.length;
 

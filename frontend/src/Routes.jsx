@@ -33,19 +33,19 @@ export const Paths = {
   SignupStore: "/signupStore",
   ErrorModal: "/error",
 
-  MainPageStore: (storeName) => `/${storeName}`,
-  DetailProductStore: (storeName, pid) => `/products/${storeName}/${pid}`,
-  UserCart: (storeName) => `/${storeName}/cart`,
-  UserSettings: (storeName) => `/${storeName}/editUser`,
-  StoreSettings: (storeName) => `/${storeName}/editStore`,
+  MainPageStore: (storeName) => `/store/${storeName}`,
+  DetailProductStore: (storeName, pid) => `/store/products/${storeName}/${pid}`,
+  UserCart: (storeName) => `/store/${storeName}/cart`,
+  UserSettings: (storeName) => `/store/${storeName}/editUser`,
+  StoreSettings: (storeName) => `/store/${storeName}/editStore`,
 
-  SellerDashboard: (storeName) => `/${storeName}/adm/dashboard`,
-  SellerProducts: (storeName) => `/${storeName}/adm/products`,
-  SellerAddNewProduct: (storeName) => `/${storeName}/adm/products/new`,
-  SellerEditProduct: (storeName, pid) => `/${storeName}/adm/products/${pid}`,
+  SellerDashboard: (storeName) => `/store/${storeName}/adm/dashboard`,
+  SellerProducts: (storeName) => `/store/${storeName}/adm/products`,
+  SellerAddNewProduct: (storeName) => `/store/${storeName}/adm/products/new`,
+  SellerEditProduct: (storeName, pid) => `/store/${storeName}/adm/products/${pid}`,
 };
 
-const baseEndPointURL = "https://loja-universal-mvp.herokuapp.com"; // "http://localhost:3030";
+const baseEndPointURL =   "https://loja-universal-mvp.herokuapp.com"; // "http://localhost:3030";
 export const EndPoint = {
   seller: {
     storeCount: (storeName) =>
