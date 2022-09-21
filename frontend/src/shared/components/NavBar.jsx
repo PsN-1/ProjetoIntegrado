@@ -62,7 +62,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
 const NavBar = () => {
   const auth = useContext(AuthContext);
-  const history = useHistory()
+  const history = useHistory();
   const { storeName } = useParams();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
@@ -76,8 +76,16 @@ const NavBar = () => {
   };
 
   const handleLoginClick = () => {
-    history.push(Paths.Login)
-  }
+    history.push(Paths.Login);
+  };
+
+  const handleUserSettingsClick = () => {
+    history.push(Paths.UserSettings(storeName));
+  };
+
+  const handleStoreSettingsClick = () => {
+    history.push(Paths.StoreSettings(storeName));
+  };
 
   return (
     <AppBar position="static" sx={{ backgroundColor: "#2C5967" }}>
@@ -127,8 +135,12 @@ const NavBar = () => {
 
               {auth.isloggedIn && (
                 <div>
-                  <MenuItem onClick={handleClose}>My account</MenuItem>
-                  <MenuItem onClick={handleClose}>My Store</MenuItem>
+                  <MenuItem onClick={handleUserSettingsClick}>
+                    My account
+                  </MenuItem>
+                  <MenuItem onClick={handleStoreSettingsClick}>
+                    My Store
+                  </MenuItem>
                   <MenuItem onClick={auth.logout}>Logout</MenuItem>
                 </div>
               )}

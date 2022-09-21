@@ -23,6 +23,8 @@ import { AuthContext } from "./shared/context/auth-context";
 import { useAuth } from "./shared/hooks/auth-hook";
 import { UserCartContext } from "./shared/context/user-cart";
 import { useCart } from "./shared/hooks/cart-hook";
+import UserSettings from "./shared/Pages/Settings/UserSettings";
+import StoreSettings from "./shared/Pages/Settings/StoreSettings";
 
 export const Paths = {
   Login: "/",
@@ -34,6 +36,8 @@ export const Paths = {
   MainPageStore: (storeName) => `/${storeName}`,
   DetailProductStore: (storeName, pid) => `/${storeName}/${pid}`,
   UserCart: (storeName) => `/${storeName}/cart`,
+  UserSettings: (storeName) => `/${storeName}/editUser`,
+  StoreSettings: (storeName) => `/${storeName}/editStore`,
 
   SellerDashboard: (storeName) => `/${storeName}/adm/dashboard`,
   SellerProducts: (storeName) => `/${storeName}/adm/products`,
@@ -88,6 +92,8 @@ export function Routes() {
         />
 
         <Route path={Paths.UserCart(":storeName")} exact component={UserCart} />
+        <Route path={Paths.UserSettings(":storeName")} exact component={UserSettings} /> 
+        <Route path={Paths.StoreSettings(":storeName")} exact component={StoreSettings} />
 
         <Route
           path={Paths.DetailProductStore(":storeName", ":pid")}
