@@ -1,4 +1,12 @@
-import { AppBar, Toolbar, styled, alpha, Box, Container } from "@mui/material";
+import {
+  AppBar,
+  Toolbar,
+  styled,
+  alpha,
+  Box,
+  Container,
+  Badge,
+} from "@mui/material";
 import InputBase from "@mui/material/InputBase";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import SearchIcon from "@mui/icons-material/Search";
@@ -8,12 +16,12 @@ import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import { Paths } from "../../Routes";
 import { Link, useHistory, useParams } from "react-router-dom";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../context/auth-context";
 
-import * as React from "react";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
+import { UserCartContext } from "../context/user-cart";
 
 const StyledToolbar = styled(Toolbar)({
   display: "flex",
@@ -60,11 +68,23 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
+const StyledBadge = styled(Badge)(({ theme }) => ({
+  "& .MuiBadge-badge": {
+    right: -3,
+    top: 13,
+    border: `2px solid ${theme.palette.background.paper}`,
+    padding: "0 4px",
+  },
+}));
+
 const NavBar = () => {
   const auth = useContext(AuthContext);
+  const cart = useContext(UserCartContext);
   const history = useHistory();
   const { storeName } = useParams();
-  const [anchorEl, setAnchorEl] = React.useState(null);
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [productsCount, setProductsCount] = useState(0);
+
   const open = Boolean(anchorEl);
 
   const handleClick = (event) => {
@@ -86,6 +106,10 @@ const NavBar = () => {
   const handleStoreSettingsClick = () => {
     history.push(Paths.StoreSettings(storeName));
   };
+
+  useEffect(() => {
+    setProductsCount(cart.products.length);
+  },[cart.products.length]);
 
   return (
     <AppBar position="static" sx={{ backgroundColor: "#2C5967" }}>
@@ -116,8 +140,11 @@ const NavBar = () => {
             }}
           >
             <Link to={Paths.UserCart(storeName)}>
-              <ShoppingCartIcon sx={{ fontSize: 45, color: "white" }} />
+              <StyledBadge badgeContent={productsCount} color="info">
+                <ShoppingCartIcon sx={{ fontSize: 45, color: "white" }} />
+              </StyledBadge>
             </Link>
+
             <FavoriteIcon sx={{ fontSize: 45 }} />
             <Person sx={{ fontSize: 45 }} onClick={handleClick} />
             <Menu
