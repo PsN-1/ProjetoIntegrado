@@ -58,6 +58,11 @@ export default function StoreSettings(props) {
       },
     });
 
+    if (response.status < 200 || response.status > 299) {
+      history.push(Paths.ErrorModal);
+      return;
+    }
+
     const responseData = await response.json();
     console.log(responseData);
     setIsLoading(false);
@@ -73,6 +78,11 @@ export default function StoreSettings(props) {
           Authorization: "Bearer " + auth.token,
         },
       });
+
+      if (response.status < 200 || response.status > 299) {
+        history.push(Paths.ErrorModal);
+        return;
+      }
 
       const responseData = await response.json();
       const { cnpj, ie, corporateName, name, category } = responseData;

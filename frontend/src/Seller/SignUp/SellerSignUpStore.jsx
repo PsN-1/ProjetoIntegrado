@@ -39,8 +39,13 @@ const SellerSignUpStore = (props) => {
       },
     });
 
+    if (response.status < 200 || response.status > 299) {
+      history.push(Paths.ErrorModal);
+      return;
+    }
+
     const responseData = await response.json();
-    console.log(responseData)
+    console.log(responseData);
     auth.login(responseData.storeName, responseData.token);
     setIsloading(false);
 

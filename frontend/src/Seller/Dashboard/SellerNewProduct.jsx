@@ -2,7 +2,7 @@ import { Box, Button, Grid, Paper, Typography } from "@mui/material";
 import { Container } from "@mui/system";
 import React, { useContext, useState } from "react";
 import { NumericFormat } from "react-number-format";
-import { Redirect } from "react-router-dom";
+import { Redirect, useHistory } from "react-router-dom";
 import { EndPoint, Paths } from "../../Routes";
 import Loading from "../../shared/components/Loading";
 import { AuthContext } from "../../shared/context/auth-context";
@@ -15,6 +15,7 @@ export default function SellerNewProduct(props) {
   const [submitAction, setSubmitAction] = useState(false);
   const [isLoading, setIsloading] = useState(false);
   const auth = useContext(AuthContext);
+  const history = useHistory();
 
   const handleButtonAction = async (event) => {
     event.preventDefault();
@@ -37,6 +38,11 @@ export default function SellerNewProduct(props) {
         Authorization: "Bearer " + auth.token,
       },
     });
+
+    if (response.status < 200 || response.status > 299) {
+      history.push(Paths.ErrorModal);
+      return;
+    }
 
     const responseData = await response.json();
     console.log(responseData);

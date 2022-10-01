@@ -5,14 +5,16 @@ import DashBoardSmallItem from "./components/DashBoardSmallItem";
 import DashBoardLargeItem from "./components/DashBoardLargeItem";
 import React, { useContext, useEffect } from "react";
 import { useState } from "react";
-import { EndPoint } from "../../Routes";
+import { EndPoint, Paths } from "../../Routes";
 import Loading from "../../shared/components/Loading";
 import { AuthContext } from "../../shared/context/auth-context";
+import { useHistory } from "react-router-dom";
 
 export default function SellerDashboard() {
   const [activesProducts, setActivesProducts] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const auth = useContext(AuthContext);
+  const history = useHistory()
 
   useEffect(() => {
     const fetchCount = async () => {
@@ -23,6 +25,11 @@ export default function SellerDashboard() {
           Authorization: "Bearer " + auth.token,
         },
       });
+
+      if (response.status < 200 || response.status > 299) {
+        history.push(Paths.ErrorModal);
+        return;
+      }
       const responseData = await response.json();
       setActivesProducts(responseData);
       setIsLoading(false);
