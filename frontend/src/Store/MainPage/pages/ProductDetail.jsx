@@ -6,7 +6,7 @@ import Copyright from "../../../shared/components/Copyright";
 import { useEffect } from "react";
 import { useState } from "react";
 import { EndPoint, Paths } from "../../../Routes";
-import Loading from "../../../shared/components/Loading";
+import { BoxLoading } from "../../../shared/components/Loading";
 import { useHistory, useParams } from "react-router-dom";
 
 import Card from "@mui/material/Card";
@@ -79,10 +79,10 @@ export default function ProductDetail() {
 
   return (
     <React.Fragment>
-      {isLoading && <Loading />}
-      {!isLoading && (
-        <Box>
-          <NavBar />
+      <Box>
+        <NavBar />
+        {isLoading && <BoxLoading />}
+        {!isLoading && (
           <Grid container spacing={3} p={2}>
             <Grid item xs={false} md={3}>
               <SideBar title="Tipo de produto" items={filterItems} />
@@ -191,9 +191,9 @@ export default function ProductDetail() {
               </Card>
             </Grid>
           </Grid>
-          <Copyright sx={{ mt: 5 }} />
-        </Box>
-      )}
+        )}
+        <Copyright sx={{ mt: 5 }} />
+      </Box>
     </React.Fragment>
   );
 }
