@@ -97,7 +97,7 @@ export default function StoreSettings(props) {
     };
 
     fetchStore();
-  }, [auth.token, storeName]);
+  }, [auth.token, storeName, history]);
 
   return (
     <React.Fragment>

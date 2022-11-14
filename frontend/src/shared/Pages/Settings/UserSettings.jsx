@@ -96,7 +96,7 @@ export default function UserSettings() {
     };
 
     fetchSeller();
-  }, [auth.token, storeName]);
+  }, [auth.token, storeName, history]);
 
   return (
     <React.Fragment>

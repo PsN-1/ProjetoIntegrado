@@ -75,7 +75,7 @@ export default function ProductDetail() {
       setIsLoading(false);
     };
     fetchProduct();
-  }, [pid, storeName]);
+  }, [pid, storeName, history]);
 
   return (
     <React.Fragment>
