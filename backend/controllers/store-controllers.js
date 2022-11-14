@@ -2,7 +2,6 @@ const HttpError = require("../models/http-error");
 const { default: mongoose } = require("mongoose");
 const Product = require("../models/products");
 const Store = require("../models/stores");
-const Seller = require("../models//users/seller");
 
 // Products
 const getProductsForSeller = async (req, res, next) => {
@@ -30,7 +29,7 @@ const getSellerStore = async (req, res, next) => {
 
   console.log(paramsStoreName)
   console.log(loggedStore)
-  if (loggedStore != paramsStoreName) {
+  if (loggedStore !== paramsStoreName) {
     const error = new HttpError("BAD URL", 500);
     return next(error);
   }
@@ -56,7 +55,7 @@ const updateSellerStore = async (req, res, next) => {
   const loggedStore = req.userData.storeName;
   const { cnpj, ie, corporateName, category } = req.body;
 
-  if (loggedStore != paramsStoreName) {
+  if (loggedStore !== paramsStoreName) {
     const error = new HttpError("BAD URL", 500);
     return next(error);
   }
@@ -257,7 +256,6 @@ const deleteProduct = async (req, res, next) => {
     await product.store.save({ session: sess });
     await sess.commitTransaction();
   } catch (err) {
-    console.log("290", err);
     const error = new HttpError(
       "Something went wrong, could not delete product",
       500

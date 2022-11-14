@@ -40,7 +40,7 @@ export default function SellerProducts() {
     };
 
     fetchProducts();
-  }, []);
+  }, [auth.storeName, auth.token]);
 
   return (
     <SellerSkeleton>

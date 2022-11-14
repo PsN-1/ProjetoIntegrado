@@ -31,7 +31,7 @@ import LabelTypography from "../../../shared/components/LabelTypography";
 const filterItems = [
   "Casacos",
   "Camisetas",
-  "Calcas",
+  "Calças",
   "Bermudas",
   "Oculos",
   "Tenis",
