@@ -36,7 +36,7 @@ export default function SellerDashboard() {
     };
 
     fetchCount();
-  }, [auth.storeName, auth.token]);
+  }, [auth.storeName, auth.token, history]);
 
   return (
     <React.Fragment>

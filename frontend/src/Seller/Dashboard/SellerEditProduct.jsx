@@ -127,7 +127,7 @@ export default function SellerEditProduct(props) {
       setIsLoading(false);
     };
     fetchProduct();
-  }, [pid, auth.storeName, auth.token]);
+  }, [pid, auth.storeName, auth.token, history]);
 
   return (
     <React.Fragment>
