@@ -4,7 +4,7 @@ import React, { useContext } from "react";
 import { useEffect } from "react";
 import { useState } from "react";
 import { NumericFormat } from "react-number-format";
-import { Redirect, useParams } from "react-router-dom";
+import { Redirect, useHistory, useParams } from "react-router-dom";
 import { EndPoint, Paths } from "../../Routes";
 import Loading from "../../shared/components/Loading";
 import { AuthContext } from "../../shared/context/auth-context";
@@ -24,6 +24,7 @@ export default function SellerEditProduct(props) {
   const [value, setValue] = useState("");
 
   const auth = useContext(AuthContext);
+  const history = useHistory();
   const { pid } = useParams();
 
   const nameChangeHandler = (event) => {
@@ -65,21 +66,34 @@ export default function SellerEditProduct(props) {
       }
     );
 
+    if (response.status < 200 || response.status > 299) {
+      history.push(Paths.ErrorModal);
+      return;
+    }
+
     const responseData = await response.json();
     console.log(responseData);
-    setIsLoading(false);
+    setIsLoading(false); 
     setSubmitAction(true);
   };
 
   const handleDeleteButton = async (event) => {
     event.preventDefault();
 
-    await fetch(EndPoint.seller.storeWithId(auth.storeName, pid), {
-      method: "DELETE",
-      headers: {
-        Authorization: "Bearer " + auth.token,
-      },
-    });
+    const response = await fetch(
+      EndPoint.seller.storeWithId(auth.storeName, pid),
+      {
+        method: "DELETE",
+        headers: {
+          Authorization: "Bearer " + auth.token,
+        },
+      }
+    );
+
+    if (response.status < 200 || response.status > 299) {
+      history.push(Paths.ErrorModal);
+      return;
+    }
 
     setSubmitAction(true);
   };
@@ -96,6 +110,12 @@ export default function SellerEditProduct(props) {
           },
         }
       );
+
+      if (response.status < 200 || response.status > 299) {
+        history.push(Paths.ErrorModal);
+        return;
+      }
+
       const responseData = await response.json();
       const { name, image, description, amount, value } = responseData.product;
 

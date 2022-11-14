@@ -57,6 +57,12 @@ export default function ProductDetail() {
     const fetchProduct = async () => {
       setIsLoading(true);
       const response = await fetch(EndPoint.user.storeWithId(storeName, pid));
+
+      if (response.status < 200 || response.status > 299) {
+        history.push(Paths.ErrorModal);
+        return;
+      }
+
       const responseData = await response.json();
       const { name, image, description, value, amount } = responseData.product;
 

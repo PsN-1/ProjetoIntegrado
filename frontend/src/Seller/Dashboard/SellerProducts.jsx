@@ -14,7 +14,7 @@ import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import SellerSkeleton from "./SellerSkeleton";
 import LabelTypography from "../../shared/components/LabelTypography";
 import TitleTypography from "../../shared/components/TitleTypography";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { EndPoint, Paths } from "../../Routes";
 import { useEffect, useState, useContext } from "react";
 import Loading from "../../shared/components/Loading";
@@ -24,16 +24,23 @@ export default function SellerProducts() {
   const [loadedProducts, setLoadedProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const auth = useContext(AuthContext);
+  const history = useHistory();
 
   useEffect(() => {
     const fetchProducts = async () => {
       setIsLoading(true);
       const response = await fetch(EndPoint.seller.stores(auth.storeName), {
-        method: 'GET',
+        method: "GET",
         headers: {
           Authorization: "Bearer " + auth.token,
-        }
+        },
       });
+
+      if (response.status < 200 || response.status > 299) {
+        history.push(Paths.ErrorModal);
+        return;
+      }
+
       const responseData = await response.json();
       setLoadedProducts(responseData);
       setIsLoading(false);
@@ -45,7 +52,9 @@ export default function SellerProducts() {
   return (
     <SellerSkeleton>
       {isLoading && <Loading />}
-      {!isLoading && <DashBoardProducts items={loadedProducts} storeName={auth.storeName} />}
+      {!isLoading && (
+        <DashBoardProducts items={loadedProducts} storeName={auth.storeName} />
+      )}
     </SellerSkeleton>
   );
 }
@@ -104,7 +113,10 @@ const DashBoardProducts = (props) => {
           lineHeight: "29px",
         }}
       >
-        <Link to={Paths.SellerAddNewProduct(props.storeName)} underline="always">
+        <Link
+          to={Paths.SellerAddNewProduct(props.storeName)}
+          underline="always"
+        >
           Adicionar Novo Produto {<AddCircleOutlineIcon />}
         </Link>
       </Typography>

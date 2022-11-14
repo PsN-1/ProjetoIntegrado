@@ -46,6 +46,7 @@ export const Paths = {
 };
 
 const baseEndPointURL = "https://loja-universal-mvp.herokuapp.com"; // "http://localhost:3030";
+
 export const EndPoint = {
   seller: {
     storeCount: (storeName) =>

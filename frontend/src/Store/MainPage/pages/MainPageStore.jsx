@@ -32,6 +32,12 @@ const MainPageStore = () => {
       setIsLoading(true);
       const storePath = EndPoint.user.stores(storeName);
       const response = await fetch(storePath);
+
+      if (response.status < 200 || response.status > 299) {
+        history.push(Paths.ErrorModal);
+        return;
+      }
+
       const responseData = await response.json();
 
       setIsLoading(false);

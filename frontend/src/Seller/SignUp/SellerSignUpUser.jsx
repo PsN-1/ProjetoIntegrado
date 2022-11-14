@@ -44,6 +44,11 @@ const SellerSignUpUser = () => {
       },
     });
 
+    if (response.status < 200 || response.status > 299) {
+      history.push(Paths.ErrorModal);
+      return;
+    }
+
     const responseData = await response.json();
     setIsloading(false);
     history.push({

@@ -20,7 +20,7 @@ export default function UserSettings() {
   const [number, setNumber] = useState("");
 
   const auth = useContext(AuthContext);
-  const history = useHistory()
+  const history = useHistory();
   const { storeName } = useParams();
 
   const nameChangeHandler = (event) => {
@@ -56,10 +56,15 @@ export default function UserSettings() {
       },
     });
 
-    const responseData = await response.json()
-    console.log(responseData)
+    if (response.status < 200 || response.status > 299) {
+      history.push(Paths.ErrorModal);
+      return;
+    }
+
+    const responseData = await response.json();
+    console.log(responseData);
     setIsLoading(false);
-    history.push(Paths.SellerDashboard(auth.storeName))
+    history.push(Paths.SellerDashboard(auth.storeName));
   };
 
   useEffect(() => {
@@ -71,6 +76,11 @@ export default function UserSettings() {
           Authorization: "Bearer " + auth.token,
         },
       });
+
+      if (response.status < 200 || response.status > 299) {
+        history.push(Paths.ErrorModal);
+        return;
+      }
 
       const responseData = await response.json();
       const { name, lastname, email, cpf, postalCode, number } = responseData;

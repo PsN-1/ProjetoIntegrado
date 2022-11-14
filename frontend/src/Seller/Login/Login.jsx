@@ -43,7 +43,7 @@ export default function Login() {
     });
 
     setIsloading(false);
-    if (response.status !== 200) {
+    if (response.status < 200 || response.status > 299) {
       history.push(Paths.ErrorModal);
       return;
     }
