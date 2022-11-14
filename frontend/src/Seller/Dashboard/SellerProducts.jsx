@@ -17,7 +17,7 @@ import TitleTypography from "../../shared/components/TitleTypography";
 import { Link, useHistory } from "react-router-dom";
 import { EndPoint, Paths } from "../../Routes";
 import { useEffect, useState, useContext } from "react";
-import Loading from "../../shared/components/Loading";
+import { BoxLoading } from "../../shared/components/Loading";
 import { AuthContext } from "../../shared/context/auth-context";
 
 export default function SellerProducts() {
@@ -51,7 +51,7 @@ export default function SellerProducts() {
 
   return (
     <SellerSkeleton>
-      {isLoading && <Loading />}
+      {isLoading && <BoxLoading />}
       {!isLoading && (
         <DashBoardProducts items={loadedProducts} storeName={auth.storeName} />
       )}
@@ -132,7 +132,6 @@ const MyPaper = (props) => {
         p: 3,
         background: "#F2F2F2",
         borderRadius: "20px",
-        // alignItems: "center",
       }}
     >
       {props.children}

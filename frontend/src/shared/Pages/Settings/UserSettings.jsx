@@ -5,7 +5,7 @@ import { NumericFormat, PatternFormat } from "react-number-format";
 import { useHistory, useParams } from "react-router-dom";
 import { EndPoint, Paths } from "../../../Routes";
 import SignUpTextField from "../../../Seller/components/SignUpTextField";
-import Loading from "../../components/Loading";
+import { BoxLoading } from "../../components/Loading";
 import NavBar from "../../components/NavBar";
 import { AuthContext } from "../../context/auth-context";
 
@@ -100,10 +100,10 @@ export default function UserSettings() {
 
   return (
     <React.Fragment>
-      {isLoading && <Loading />}
-      {!isLoading && (
-        <Box>
-          <NavBar />
+      <Box>
+        <NavBar />
+        {isLoading && <BoxLoading />}
+        {!isLoading && (
           <Container
             component="main"
             maxWidth="xs"
@@ -205,8 +205,8 @@ export default function UserSettings() {
               </Grid>
             </Box>
           </Container>
-        </Box>
-      )}
+        )}
+      </Box>
     </React.Fragment>
   );
 }

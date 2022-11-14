@@ -6,7 +6,7 @@ import DashBoardLargeItem from "./components/DashBoardLargeItem";
 import React, { useContext, useEffect } from "react";
 import { useState } from "react";
 import { EndPoint, Paths } from "../../Routes";
-import Loading from "../../shared/components/Loading";
+import { BoxLoading } from "../../shared/components/Loading";
 import { AuthContext } from "../../shared/context/auth-context";
 import { useHistory } from "react-router-dom";
 
@@ -14,7 +14,7 @@ export default function SellerDashboard() {
   const [activesProducts, setActivesProducts] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const auth = useContext(AuthContext);
-  const history = useHistory()
+  const history = useHistory();
 
   useEffect(() => {
     const fetchCount = async () => {
@@ -40,9 +40,9 @@ export default function SellerDashboard() {
 
   return (
     <React.Fragment>
-      {isLoading && <Loading />}
-      {!isLoading && (
-        <SellerSkeleton>
+      <SellerSkeleton>
+        {isLoading && <BoxLoading />}
+        {!isLoading && (
           <Grid container spacing={3}>
             <Grid item xs={3}>
               <DashBoardSmallItem
@@ -85,8 +85,8 @@ export default function SellerDashboard() {
               />
             </Grid>
           </Grid>
-        </SellerSkeleton>
-      )}
+        )}
+      </SellerSkeleton>
     </React.Fragment>
   );
 }

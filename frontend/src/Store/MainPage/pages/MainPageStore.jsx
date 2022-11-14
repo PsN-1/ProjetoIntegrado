@@ -8,7 +8,7 @@ import Copyright from "../../../shared/components/Copyright";
 import { useEffect } from "react";
 import { useState } from "react";
 import { EndPoint, Paths } from "../../../Routes";
-import Loading from "../../../shared/components/Loading";
+import { BoxLoading } from "../../../shared/components/Loading";
 import { useHistory, useParams } from "react-router-dom";
 
 const filterItems = [
@@ -20,7 +20,7 @@ const filterItems = [
   "Tenis",
 ];
 
-const MainPageStore = () => {
+export default function MainPageStore() {
   const [loadedProducts, setLoadedProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -60,8 +60,7 @@ const MainPageStore = () => {
           <SideBar title="Tipo de produto" items={filterItems} />
         </Grid>
         <Grid item xs={12} md={8}>
-          {isLoading && <Loading />}
-
+          {isLoading && <BoxLoading />}
           {!isLoading && <Products products={loadedProducts} />}
           <Box display="flex" justifyContent="center" p={5}>
             <Pagination count={5} />
@@ -71,6 +70,4 @@ const MainPageStore = () => {
       <Copyright sx={{ mt: 5 }} />
     </Box>
   );
-};
-
-export default MainPageStore;
+}

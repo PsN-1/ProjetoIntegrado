@@ -6,7 +6,7 @@ import { useState } from "react";
 import { NumericFormat } from "react-number-format";
 import { Redirect, useHistory, useParams } from "react-router-dom";
 import { EndPoint, Paths } from "../../Routes";
-import Loading from "../../shared/components/Loading";
+import { BoxLoading } from "../../shared/components/Loading";
 import { AuthContext } from "../../shared/context/auth-context";
 import SignUpTextField, {
   DescriptionTextField,
@@ -73,7 +73,7 @@ export default function SellerEditProduct(props) {
 
     const responseData = await response.json();
     console.log(responseData);
-    setIsLoading(false); 
+    setIsLoading(false);
     setSubmitAction(true);
   };
 
@@ -131,12 +131,10 @@ export default function SellerEditProduct(props) {
 
   return (
     <React.Fragment>
-      {isLoading && <Loading />}
-      {!isLoading && (
-        <SellerSkeleton>
-          {submitAction && (
-            <Redirect to={Paths.SellerProducts(auth.storeName)} />
-          )}
+      {submitAction && <Redirect to={Paths.SellerProducts(auth.storeName)} />}
+      <SellerSkeleton>
+        {isLoading && <BoxLoading />}
+        {!isLoading && (
           <Grid container>
             <Grid item xs={8}>
               <Paper
@@ -254,8 +252,8 @@ export default function SellerEditProduct(props) {
               </Paper>
             </Grid>
           </Grid>
-        </SellerSkeleton>
-      )}
+        )}
+      </SellerSkeleton>
     </React.Fragment>
   );
 }
