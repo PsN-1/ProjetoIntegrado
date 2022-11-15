@@ -10,15 +10,12 @@ const getProductsForStore = async (req, res, next) => {
   try {
     storeId = await Store.findOne({ name: storeName });
   } catch (err) {
-    console.log(err)
-    const error = new HttpError("Store Name not found, please check.", 404)
-    return next(error)
+    console.log(err);
+    const error = new HttpError("Store Name not found, please check.", 404);
+    return next(error);
   }
 
   try {
-    //  let store = await Store.findOne({ name: storeName }).populate("products");
-    // products = store.products;
-
     products = await Product.find(
       { store: storeId._id },
       "image name value category"
@@ -51,5 +48,21 @@ const getProductById = async (req, res, next) => {
   res.status(200).json({ product: product });
 };
 
+const getLogoImage = async (req, res, next) => {
+  const storeName = req.params.store;
+
+  let logoImage;
+
+  try {
+    logoImage = await Store.findOne({ name: storeName }, "logoImage");
+  } catch (err) {
+    console.log(err);
+    const error = new HttpError("Logo image for store was not found.", 404);
+    return next(error);
+  }
+  res.json(logoImage);
+};
+
 exports.getProductsForStore = getProductsForStore;
 exports.getProductById = getProductById;
+exports.getLogoImage = getLogoImage;

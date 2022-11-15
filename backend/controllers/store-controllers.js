@@ -27,8 +27,6 @@ const getSellerStore = async (req, res, next) => {
   const paramsStoreName = req.params.store;
   const loggedStore = req.userData.storeName;
 
-  console.log(paramsStoreName)
-  console.log(loggedStore)
   if (loggedStore !== paramsStoreName) {
     const error = new HttpError("BAD URL", 500);
     return next(error);
@@ -38,7 +36,7 @@ const getSellerStore = async (req, res, next) => {
   try {
     store = await Store.findOne(
       { name: loggedStore },
-      "name cnpj ie corporateName category"
+      "name cnpj ie corporateName category logoImage"
     );
   } catch (err) {
     const error = new HttpError(
@@ -53,7 +51,7 @@ const getSellerStore = async (req, res, next) => {
 const updateSellerStore = async (req, res, next) => {
   const paramsStoreName = req.params.store;
   const loggedStore = req.userData.storeName;
-  const { cnpj, ie, corporateName, category } = req.body;
+  const { cnpj, ie, corporateName, category, logoImage } = req.body;
 
   if (loggedStore !== paramsStoreName) {
     const error = new HttpError("BAD URL", 500);
@@ -75,6 +73,7 @@ const updateSellerStore = async (req, res, next) => {
   store.ie = ie;
   store.corporateName = corporateName;
   store.category = category;
+  store.logoImage = logoImage;
 
   try {
     await store.save();
@@ -107,11 +106,9 @@ const getActiveProduts = async (req, res, next) => {
   let count;
   if (store === null) {
     return res.json(0);
-    
   }
   if (store.products === null) {
     return res.json(0);
-    
   }
   count = store.products.length;
 

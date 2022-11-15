@@ -9,6 +9,7 @@ const storeSchema = new Schema({
   ie: { type: String, required: true },
   corporateName: { type: String, required: true },
   category: { type: String, required: true },
+  logoImage: { type: String, require: false },
   products: [{ type: mongoose.Types.ObjectId, required: true, ref: "Product" }],
   balanceAvailable: { type: String, required: true },
   clients: [{ type: mongoose.Types.ObjectId, required: true, ref: "Buyer" }],

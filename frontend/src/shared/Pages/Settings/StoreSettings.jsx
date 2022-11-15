@@ -17,6 +17,7 @@ export default function StoreSettings(props) {
   const [corporateName, setCorporateName] = useState("");
   const [store, setStore] = useState("");
   const [category, setCategory] = useState("");
+  const [logoImage, setLogoImage] = useState("");
 
   const auth = useContext(AuthContext);
   const history = useHistory();
@@ -34,6 +35,10 @@ export default function StoreSettings(props) {
     setCorporateName(event.target.value);
   };
 
+  const logoImageChangeHandler = (event) => {
+    setLogoImage(event.target.value);
+  };
+
   const categoryChangeHandler = (event) => {
     setCategory(event.target.value);
   };
@@ -47,6 +52,7 @@ export default function StoreSettings(props) {
       ie,
       corporateName,
       category,
+      logoImage,
     };
 
     const response = await fetch(EndPoint.seller.editStore(storeName), {
@@ -85,13 +91,16 @@ export default function StoreSettings(props) {
       }
 
       const responseData = await response.json();
-      const { cnpj, ie, corporateName, name, category } = responseData;
+      const { cnpj, ie, corporateName, name, category, logoImage } =
+        responseData;
 
       setCnpj(cnpj);
       setIe(ie);
       setCorporateName(corporateName);
       setStore(name);
       setCategory(category);
+
+      setLogoImage(logoImage);
 
       setIsLoading(false);
     };
@@ -167,6 +176,15 @@ export default function StoreSettings(props) {
                     label="Razão Social"
                     value={corporateName}
                     onChange={corporateNameChangeHandler}
+                  />
+                </Grid>
+
+                <Grid item xs={12}>
+                  <SignUpTextField
+                    required={false}
+                    label="Logo da Empresa"
+                    value={logoImage}
+                    onChange={logoImageChangeHandler}
                   />
                 </Grid>
 

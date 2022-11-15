@@ -68,8 +68,8 @@ export const EndPoint = {
 
   user: {
     stores: (storeName) => `${baseEndPointURL}/api/user/${storeName}/`,
-    storeWithId: (storeName, productId) =>
-      `${baseEndPointURL}/api/user/${storeName}/${productId}`,
+    storeWithId: (storeName, productId) => `${baseEndPointURL}/api/user/${storeName}/${productId}`,
+    storeLogoImage: (storeName) => `${baseEndPointURL}/api/user/${storeName}/logo`,
   },
 };
 
