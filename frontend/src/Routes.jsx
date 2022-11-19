@@ -26,52 +26,10 @@ import { useCart } from "./shared/hooks/cart-hook";
 import UserSettings from "./shared/Pages/Settings/UserSettings";
 import StoreSettings from "./shared/Pages/Settings/StoreSettings";
 
-export const Paths = {
-  Login: "/",
-  ForgotPassword: "/forgotpassword",
-  SignupUser: "/signupUser",
-  SignupStore: "/signupStore",
-  ErrorModal: "/error",
+import Paths from "./Paths";
+import EndPoint from "./EndPoint";
 
-  MainPageStore: (storeName) => `/store/${storeName}`,
-  DetailProductStore: (storeName, pid) => `/store/products/${storeName}/${pid}`,
-  UserCart: (storeName) => `/store/${storeName}/cart`,
-  UserSettings: (storeName) => `/store/${storeName}/editUser`,
-  StoreSettings: (storeName) => `/store/${storeName}/editStore`,
-
-  SellerDashboard: (storeName) => `/store/${storeName}/adm/dashboard`,
-  SellerProducts: (storeName) => `/store/${storeName}/adm/products`,
-  SellerAddNewProduct: (storeName) => `/store/${storeName}/adm/products/new`,
-  SellerEditProduct: (storeName, pid) => `/store/${storeName}/adm/products/${pid}`,
-};
-
-const baseEndPointURL = "https://loja-universal-mvp.herokuapp.com"; // "http://localhost:3030";
-
-export const EndPoint = {
-  seller: {
-    storeCount: (storeName) =>
-      `${baseEndPointURL}/api/seller/${storeName}/products/count`,
-    stores: (storeName) =>
-      `${baseEndPointURL}/api/seller/${storeName}/products`,
-    storeWithId: (storeName, productId) =>
-      `${baseEndPointURL}/api/seller/${storeName}/products/${productId}`,
-
-    editStore: (storeName) =>
-      `${baseEndPointURL}/api/seller/${storeName}/store`,
-    editSeller: (storeName) =>
-      `${baseEndPointURL}/api/seller/${storeName}/seller`,
-
-    createSeller: `${baseEndPointURL}/api/seller/stores/newSeller`,
-    createStore: `${baseEndPointURL}/api/seller/stores/newStore`,
-    login: `${baseEndPointURL}/api/seller/login`,
-  },
-
-  user: {
-    stores: (storeName) => `${baseEndPointURL}/api/user/${storeName}/`,
-    storeWithId: (storeName, productId) => `${baseEndPointURL}/api/user/${storeName}/${productId}`,
-    storeLogoImage: (storeName) => `${baseEndPointURL}/api/user/${storeName}/logo`,
-  },
-};
+export { Paths, EndPoint };
 
 export function Routes() {
   const { token, login, logout, storeName } = useAuth();

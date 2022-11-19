@@ -1,6 +1,5 @@
 import { Box, Paper, Typography } from "@mui/material";
-import { useState } from "react";
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import { EndPoint, Paths } from "../../../Routes";
 import { BoxLoading } from "../../../shared/components/Loading";
@@ -29,12 +28,11 @@ const Carousel = (props) => {
       setIsLoading(false);
     };
     fetchLogoImage();
-  }, []);
+  }, [history, props.title]);
 
   return (
     <>
-      {isLoading && <BoxLoading />}
-      {!isLoading && (
+      {isLoading ? <BoxLoading/> : 
         <Box paddingX={5} paddingY={3}>
           <Paper
             elevation={3}
@@ -76,7 +74,7 @@ const Carousel = (props) => {
             </Box>
           </Paper>
         </Box>
-      )}
+      }
     </>
   );
 };
