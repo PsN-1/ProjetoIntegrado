@@ -1,14 +1,17 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { Redirect, useHistory } from "react-router-dom";
 import { CssBaseline, Link, Box, Grid, Typography } from "@mui/material";
-import SignUpTextField from "../components/SignUpTextField";
-import { SignUpButton, LoginButton } from "../components/SignUpButton";
-import Copyright from "../../shared/components/Copyright";
-import { EndPoint, Paths } from "../../Routes";
-import React from "react";
-import Loading from "../../shared/components/Loading";
-import { useContext } from "react";
-import { AuthContext } from "../../shared/context/auth-context";
+
+import {
+  SignUpTextField,
+  SignUpButton,
+  LoginButton,
+  Copyright,
+  EndPoint,
+  Paths,
+  Loading,
+  AuthContext,
+} from "../../LojaUniversal";
 
 export default function Login() {
   const [loginAction, setLoginAction] = useState(false);
@@ -63,7 +66,7 @@ export default function Login() {
   };
 
   return (
-    <React.Fragment>
+    <>
       {isLoading && <Loading />}
       {!isLoading && (
         <Grid container component="main" sx={{ height: "100vh" }}>
@@ -151,6 +154,6 @@ export default function Login() {
           />
         </Grid>
       )}
-    </React.Fragment>
+    </>
   );
 }

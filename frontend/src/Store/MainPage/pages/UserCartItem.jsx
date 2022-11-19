@@ -1,12 +1,11 @@
-import { IconButton, TextField } from "@mui/material";
-import { TableCell, TableRow } from "@mui/material";
-import * as React from "react";
-import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
-import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
-import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
-
-import LabelTypography from "../../../shared/components/LabelTypography";
 import { useState } from "react";
+import { IconButton, TextField, TableCell, TableRow } from "@mui/material";
+import { LabelTypography } from "../../../LojaUniversal";
+import {
+  AddCircleOutline,
+  RemoveCircleOutline,
+  DeleteOutline,
+} from "@mui/icons-material";
 
 export default function UserCartItem(props) {
   const { item } = props;
@@ -33,7 +32,7 @@ export default function UserCartItem(props) {
 
       <TableCell align="center">
         <IconButton align="center" onClick={() => handleDecreaseAmount(item)}>
-          <RemoveCircleOutlineIcon />
+          <RemoveCircleOutline />
         </IconButton>
 
         <TextField
@@ -47,7 +46,7 @@ export default function UserCartItem(props) {
         />
 
         <IconButton onClick={() => handleAddAmount(item)}>
-          <AddCircleOutlineIcon />
+          <AddCircleOutline />
         </IconButton>
       </TableCell>
 
@@ -61,7 +60,7 @@ export default function UserCartItem(props) {
       </TableCell>
       <TableCell>
         <IconButton onClick={() => props.onDelete(item)}>
-          <DeleteOutlineIcon />
+          <DeleteOutline />
         </IconButton>
       </TableCell>
     </TableRow>

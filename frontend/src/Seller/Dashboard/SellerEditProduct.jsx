@@ -1,17 +1,17 @@
-import { Box, Button, Grid, Paper, Typography } from "@mui/material";
-import { Container } from "@mui/system";
-import React, { useContext } from "react";
-import { useEffect } from "react";
-import { useState } from "react";
+import { Box, Button, Grid, Paper, Typography, Container } from "@mui/material";
+import { useContext, useEffect, useState } from "react";
 import { NumericFormat } from "react-number-format";
 import { Redirect, useHistory, useParams } from "react-router-dom";
-import { EndPoint, Paths } from "../../Routes";
-import { BoxLoading } from "../../shared/components/Loading";
-import { AuthContext } from "../../shared/context/auth-context";
-import SignUpTextField, {
+
+import {
+  EndPoint,
+  Paths,
+  BoxLoading,
+  AuthContext,
+  SignUpTextField,
   DescriptionTextField,
-} from "../components/SignUpTextField";
-import SellerSkeleton from "./SellerSkeleton";
+  SellerSkeleton,
+} from "../../LojaUniversal";
 
 export default function SellerEditProduct(props) {
   const [submitAction, setSubmitAction] = useState(false);
@@ -130,7 +130,7 @@ export default function SellerEditProduct(props) {
   }, [pid, auth.storeName, auth.token, history]);
 
   return (
-    <React.Fragment>
+    <>
       {submitAction && <Redirect to={Paths.SellerProducts(auth.storeName)} />}
       <SellerSkeleton>
         {isLoading && <BoxLoading />}
@@ -254,6 +254,6 @@ export default function SellerEditProduct(props) {
           </Grid>
         )}
       </SellerSkeleton>
-    </React.Fragment>
+    </>
   );
 }

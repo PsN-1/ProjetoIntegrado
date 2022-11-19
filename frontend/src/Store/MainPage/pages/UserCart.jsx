@@ -1,15 +1,11 @@
+import { useContext } from "react";
+import { useParams } from "react-router-dom";
 import {
   Box,
   Button,
   Grid,
   TextField,
   styled,
-} from "@mui/material";
-
-import NavBar from "../../../shared/components/NavBar";
-import SideBar from "../../../shared/components/SideBar";
-import Copyright from "../../../shared/components/Copyright";
-import {
   Paper,
   Table,
   TableBody,
@@ -18,15 +14,16 @@ import {
   TableHead,
   TableRow,
 } from "@mui/material";
-import * as React from "react";
 
-import { useParams } from "react-router-dom";
-
-import TitleTypography from "../../../shared/components/TitleTypography";
-import { useContext } from "react";
-import { UserCartContext } from "../../../shared/context/user-cart";
-import UserCartItem from "./UserCartItem";
-import LabelTypography from "../../../shared/components/LabelTypography";
+import {
+  NavBar,
+  SideBar,
+  Copyright,
+  TitleTypography,
+  UserCartContext,
+  UserCartItem,
+  LabelTypography,
+} from "../../../LojaUniversal";
 
 const filterItems = [
   "Casacos",
@@ -130,9 +127,7 @@ export default function UserCart() {
 const Cart = (props) => {
   return (
     <div>
-      
       <TableContainer component={MyPaper}>
-        
         <Table>
           <TableHead>
             <TableRow>

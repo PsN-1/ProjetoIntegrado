@@ -1,6 +1,5 @@
 import { Grid, Box } from "@mui/material";
-import NavBar from "../../shared/components/NavBar";
-import SideBar from "../../shared/components/SideBar";
+import { NavBar, SideBar } from "../../LojaUniversal";
 
 const filterItems = [
   "Produtos",

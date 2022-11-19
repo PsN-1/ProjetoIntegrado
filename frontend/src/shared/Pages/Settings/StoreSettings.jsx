@@ -3,11 +3,15 @@ import React, { useEffect } from "react";
 import { useContext, useState } from "react";
 import { NumericFormat, PatternFormat } from "react-number-format";
 import { useHistory, useParams } from "react-router-dom";
-import { EndPoint, Paths } from "../../../Routes";
-import SignUpTextField from "../../../Seller/components/SignUpTextField";
-import { BoxLoading } from "../../components/Loading";
-import NavBar from "../../components/NavBar";
-import { AuthContext } from "../../context/auth-context";
+
+import {
+  EndPoint,
+  Paths,
+  SignUpTextField,
+  BoxLoading,
+  NavBar,
+  AuthContext,
+} from "../../../LojaUniversal";
 
 export default function StoreSettings(props) {
   const [isLoading, setIsLoading] = useState(false);
@@ -109,7 +113,7 @@ export default function StoreSettings(props) {
   }, [auth.token, storeName, history]);
 
   return (
-    <React.Fragment>
+    <>
       <Box>
         <NavBar />
         {isLoading && <BoxLoading />}
@@ -219,6 +223,6 @@ export default function StoreSettings(props) {
           </Container>
         )}
       </Box>
-    </React.Fragment>
+    </>
   );
 }

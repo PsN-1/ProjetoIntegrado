@@ -6,7 +6,7 @@ import {
   Typography,
 } from "@mui/material";
 import { Link, useParams } from "react-router-dom";
-import { Paths } from "../../../Routes";
+import { Paths } from "../../../LojaUniversal";
 
 const Product = (props) => {
   const { storeName } = useParams();

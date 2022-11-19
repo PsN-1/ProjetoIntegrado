@@ -1,12 +1,13 @@
-import * as React from "react";
-import Button from "@mui/material/Button";
-import CssBaseline from "@mui/material/CssBaseline";
-import Paper from "@mui/material/Paper";
-import Box from "@mui/material/Box";
-import Grid from "@mui/material/Grid";
-import Typography from "@mui/material/Typography";
-import SignUpTextField from "../components/SignUpTextField";
-import Copyright from "../../shared/components/Copyright";
+import {
+  Button,
+  CssBaseline,
+  Paper,
+  Box,
+  Grid,
+  Typography,
+} from "@mui/material";
+
+import { SignUpTextField, Copyright } from "../../LojaUniversal";
 
 export default function ForgetPassword() {
   const handleSubmit = (event) => {

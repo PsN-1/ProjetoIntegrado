@@ -1,15 +1,16 @@
-import { Box, Grid, Pagination } from "@mui/material";
-
-import NavBar from "../../../shared/components/NavBar";
-import Carousel from "../components/Carousel";
-import Products from "../components/Products";
-import SideBar from "../../../shared/components/SideBar";
-import Copyright from "../../../shared/components/Copyright";
-import { useEffect } from "react";
-import { useState } from "react";
-import { EndPoint, Paths } from "../../../Routes";
-import { BoxLoading } from "../../../shared/components/Loading";
+import { useEffect, useState } from "react";
 import { useHistory, useParams } from "react-router-dom";
+import { Box, Grid, Pagination } from "@mui/material";
+import {
+  EndPoint,
+  BoxLoading,
+  NavBar,
+  Carousel,
+  Products,
+  SideBar,
+  Copyright,
+  Paths,
+} from "../../../LojaUniversal";
 
 const filterItems = [
   "Casacos",

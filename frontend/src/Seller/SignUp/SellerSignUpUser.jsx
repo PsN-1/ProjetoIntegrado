@@ -1,12 +1,16 @@
 import { Grid } from "@mui/material";
-import React from "react";
+
 import { useState } from "react";
 import { PatternFormat, NumericFormat } from "react-number-format";
 import { useHistory } from "react-router-dom";
-import { EndPoint, Paths } from "../../Routes";
-import Loading from "../../shared/components/Loading";
-import SignUpTextField from "../components/SignUpTextField";
-import SellerSignUp from "./SellerSignUp";
+
+import {
+  EndPoint,
+  Paths,
+  Loading,
+  SignUpTextField,
+  SellerSignUp,
+} from "../../LojaUniversal";
 
 const SellerSignUpUser = () => {
   const [isLoading, setIsloading] = useState(false);
@@ -58,7 +62,7 @@ const SellerSignUpUser = () => {
   };
 
   return (
-    <React.Fragment>
+    <>
       {isLoading && <Loading />}
       {!isLoading && (
         <SellerSignUp title="Cadastrar Novo Cliente" onSubmit={handleSubmit}>
@@ -120,7 +124,7 @@ const SellerSignUpUser = () => {
           </Grid>
         </SellerSignUp>
       )}
-    </React.Fragment>
+    </>
   );
 };
 

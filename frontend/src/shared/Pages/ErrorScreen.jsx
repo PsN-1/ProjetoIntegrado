@@ -1,34 +1,31 @@
-import { useState } from 'react';
-import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
-import Modal from '@mui/material/Modal';
-import { Redirect } from 'react-router-dom';
-import { Paths } from '../../Routes';
-import { Button } from '@mui/material';
+import { useState } from "react";
+import { Redirect } from "react-router-dom";
+import { Typography, Box, Modal, Button } from "@mui/material";
+import { Paths } from "../../LojaUniversal";
 
 const style = {
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
   width: 400,
-  bgcolor: 'background.paper',
-  border: '2px solid #000',
+  bgcolor: "background.paper",
+  border: "2px solid #000",
   boxShadow: 24,
   p: 4,
 };
 
 export default function ErrorScreen(props) {
   const [open, setOpen] = useState(true);
-  const [redirect, setRedirect] = useState(false)
+  const [redirect, setRedirect] = useState(false);
   const handleClose = () => {
     setOpen(false);
-    setRedirect(true)
-  }
+    setRedirect(true);
+  };
 
   return (
     <div>
-        {redirect && <Redirect to={Paths.Login} />}
+      {redirect && <Redirect to={Paths.Login} />}
       <Modal
         open={open}
         onClose={handleClose}

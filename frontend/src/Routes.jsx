@@ -5,31 +5,27 @@ import {
   Switch,
 } from "react-router-dom";
 
-import Login from "./Seller/Login/Login";
-import MainPageStore from "./Store/MainPage/pages/MainPageStore";
-import ProductDetail from "./Store/MainPage/pages/ProductDetail";
-import UserCart from "./Store/MainPage/pages/UserCart";
-import SellerDashboard from "./Seller/Dashboard/SellerDashboard";
-
-import SellerNewProduct from "./Seller/Dashboard/SellerNewProduct";
-import ForgetPassword from "./Seller/Login/ForgetPassword";
-
-import SellerSignUpUser from "./Seller/SignUp/SellerSignUpUser";
-import SellerSignUpStore from "./Seller/SignUp/SellerSignUpStore";
-import SellerProducts from "./Seller/Dashboard/SellerProducts";
-import SellerEditProduct from "./Seller/Dashboard/SellerEditProduct";
-import ErrorScreen from "./shared/Pages/ErrorScreen";
-import { AuthContext } from "./shared/context/auth-context";
-import { useAuth } from "./shared/hooks/auth-hook";
-import { UserCartContext } from "./shared/context/user-cart";
-import { useCart } from "./shared/hooks/cart-hook";
-import UserSettings from "./shared/Pages/Settings/UserSettings";
-import StoreSettings from "./shared/Pages/Settings/StoreSettings";
-
-import Paths from "./Paths";
-import EndPoint from "./EndPoint";
-
-export { Paths, EndPoint };
+import {
+  Login,
+  MainPageStore,
+  ProductDetail,
+  UserCart,
+  SellerDashboard,
+  SellerNewProduct,
+  ForgetPassword,
+  SellerSignUpUser,
+  SellerSignUpStore,
+  SellerProducts,
+  SellerEditProduct,
+  ErrorScreen,
+  AuthContext,
+  UserCartContext,
+  useAuth,
+  useCart,
+  UserSettings,
+  StoreSettings,
+  Paths,
+} from "./LojaUniversal";
 
 export function Routes() {
   const { token, login, logout, storeName } = useAuth();

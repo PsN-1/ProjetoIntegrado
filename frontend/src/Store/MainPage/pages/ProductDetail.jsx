@@ -1,23 +1,25 @@
-import { Box, Button, Grid } from "@mui/material";
-
-import NavBar from "../../../shared/components/NavBar";
-import SideBar from "../../../shared/components/SideBar";
-import Copyright from "../../../shared/components/Copyright";
-import { useEffect } from "react";
-import { useState } from "react";
-import { EndPoint, Paths } from "../../../Routes";
-import { BoxLoading } from "../../../shared/components/Loading";
+import { useEffect, useContext, useState } from "react";
 import { useHistory, useParams } from "react-router-dom";
+import {
+  Box,
+  Button,
+  Grid,
+  Card,
+  CardContent,
+  CardMedia,
+  Typography,
+} from "@mui/material";
 
-import Card from "@mui/material/Card";
-import CardContent from "@mui/material/CardContent";
-import CardMedia from "@mui/material/CardMedia";
-
-import Typography from "@mui/material/Typography";
-import React from "react";
-import { DescriptionTextField } from "../../../Seller/components/SignUpTextField";
-import { useContext } from "react";
-import { UserCartContext } from "../../../shared/context/user-cart";
+import {
+  EndPoint,
+  Paths,
+  NavBar,
+  SideBar,
+  Copyright,
+  BoxLoading,
+  DescriptionTextField,
+  UserCartContext,
+} from "../../../LojaUniversal";
 
 const filterItems = [
   "Casacos",
@@ -78,7 +80,7 @@ export default function ProductDetail() {
   }, [pid, storeName, history]);
 
   return (
-    <React.Fragment>
+    <>
       <Box>
         <NavBar />
         {isLoading && <BoxLoading />}
@@ -194,6 +196,6 @@ export default function ProductDetail() {
         )}
         <Copyright sx={{ mt: 5 }} />
       </Box>
-    </React.Fragment>
+    </>
   );
 }

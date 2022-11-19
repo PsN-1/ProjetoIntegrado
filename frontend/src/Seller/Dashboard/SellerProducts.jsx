@@ -8,17 +8,20 @@ import {
   TableHead,
   TableRow,
 } from "@mui/material";
-import * as React from "react";
+
+import { Link, useHistory } from "react-router-dom";
+import { useEffect, useState, useContext } from "react";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 
-import SellerSkeleton from "./SellerSkeleton";
-import LabelTypography from "../../shared/components/LabelTypography";
-import TitleTypography from "../../shared/components/TitleTypography";
-import { Link, useHistory } from "react-router-dom";
-import { EndPoint, Paths } from "../../Routes";
-import { useEffect, useState, useContext } from "react";
-import { BoxLoading } from "../../shared/components/Loading";
-import { AuthContext } from "../../shared/context/auth-context";
+import {
+  EndPoint,
+  Paths,
+  SellerSkeleton,
+  LabelTypography,
+  TitleTypography,
+  BoxLoading,
+  AuthContext,
+} from "../../LojaUniversal";
 
 export default function SellerProducts() {
   const [loadedProducts, setLoadedProducts] = useState([]);

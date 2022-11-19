@@ -1,3 +1,6 @@
+import { Link, useHistory, useParams } from "react-router-dom";
+import { useContext, useEffect, useState } from "react";
+import { Paths, AuthContext, UserCartContext } from "../../LojaUniversal";
 import {
   AppBar,
   Toolbar,
@@ -6,22 +9,19 @@ import {
   Box,
   Container,
   Badge,
+  InputBase,
+  Menu,
+  MenuItem,
 } from "@mui/material";
-import InputBase from "@mui/material/InputBase";
-import DashboardIcon from "@mui/icons-material/Dashboard";
-import SearchIcon from "@mui/icons-material/Search";
-import StorefrontIcon from "@mui/icons-material/Storefront";
-import Person from "@mui/icons-material/Person";
-import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
-import FavoriteIcon from "@mui/icons-material/Favorite";
-import { Paths } from "../../Routes";
-import { Link, useHistory, useParams } from "react-router-dom";
-import { useContext, useEffect, useState } from "react";
-import { AuthContext } from "../context/auth-context";
 
-import Menu from "@mui/material/Menu";
-import MenuItem from "@mui/material/MenuItem";
-import { UserCartContext } from "../context/user-cart";
+import {
+  Dashboard,
+  Search as SearchIcon,
+  Storefront,
+  Person,
+  ShoppingCart,
+  Favorite,
+} from "@mui/icons-material";
 
 const StyledToolbar = styled(Toolbar)({
   display: "flex",
@@ -109,18 +109,18 @@ const NavBar = () => {
 
   useEffect(() => {
     setProductsCount(cart.products.length);
-  },[cart.products.length]);
+  }, [cart.products.length]);
 
   return (
     <AppBar position="static" sx={{ backgroundColor: "#2C5967" }}>
       <Container>
         <StyledToolbar>
           <Link to={Paths.MainPageStore(storeName)} color="transparent">
-            <StorefrontIcon sx={{ fontSize: 45, color: "white" }} />
+            <Storefront sx={{ fontSize: 45, color: "white" }} />
           </Link>
           {auth.isloggedIn && (
             <Link to={Paths.SellerDashboard(auth.storeName)}>
-              <DashboardIcon sx={{ fontSize: 45, color: "white" }} />
+              <Dashboard sx={{ fontSize: 45, color: "white" }} />
             </Link>
           )}
           <Search>
@@ -141,11 +141,11 @@ const NavBar = () => {
           >
             <Link to={Paths.UserCart(storeName)}>
               <StyledBadge badgeContent={productsCount} color="info">
-                <ShoppingCartIcon sx={{ fontSize: 45, color: "white" }} />
+                <ShoppingCart sx={{ fontSize: 45, color: "white" }} />
               </StyledBadge>
             </Link>
 
-            <FavoriteIcon sx={{ fontSize: 45 }} />
+            <Favorite sx={{ fontSize: 45 }} />
             <Person sx={{ fontSize: 45 }} onClick={handleClick} />
             <Menu
               id="basic-menu"

@@ -1,14 +1,16 @@
 import { Grid } from "@mui/material";
-
-import SellerSkeleton from "./SellerSkeleton";
-import DashBoardSmallItem from "./components/DashBoardSmallItem";
-import DashBoardLargeItem from "./components/DashBoardLargeItem";
-import React, { useContext, useEffect } from "react";
-import { useState } from "react";
-import { EndPoint, Paths } from "../../Routes";
-import { BoxLoading } from "../../shared/components/Loading";
-import { AuthContext } from "../../shared/context/auth-context";
+import React, { useContext, useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
+
+import {
+  SellerSkeleton,
+  DashBoardSmallItem,
+  DashBoardLargeItem,
+  EndPoint,
+  Paths,
+  BoxLoading,
+  AuthContext,
+} from "../../LojaUniversal";
 
 export default function SellerDashboard() {
   const [activesProducts, setActivesProducts] = useState(0);
