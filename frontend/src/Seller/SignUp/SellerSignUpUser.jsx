@@ -10,7 +10,7 @@ import {
   Loading,
   SignUpTextField,
   SellerSignUp,
-} from "../../LojaUniversal";
+} from "LojaUniversal";
 
 const SellerSignUpUser = () => {
   const [isLoading, setIsloading] = useState(false);

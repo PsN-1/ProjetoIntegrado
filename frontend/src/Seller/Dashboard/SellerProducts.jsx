@@ -21,7 +21,7 @@ import {
   TitleTypography,
   BoxLoading,
   AuthContext,
-} from "../../LojaUniversal";
+} from "LojaUniversal";
 
 export default function SellerProducts() {
   const [loadedProducts, setLoadedProducts] = useState([]);

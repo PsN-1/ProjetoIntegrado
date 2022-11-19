@@ -1,5 +1,5 @@
 import { Grid } from "@mui/material";
-import { Product } from "../../../LojaUniversal";
+import { Product } from "LojaUniversal";
 
 const Products = (props) => {
   const { products } = props;

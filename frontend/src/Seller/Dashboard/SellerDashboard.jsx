@@ -10,7 +10,7 @@ import {
   Paths,
   BoxLoading,
   AuthContext,
-} from "../../LojaUniversal";
+} from "LojaUniversal";
 
 export default function SellerDashboard() {
   const [activesProducts, setActivesProducts] = useState(0);

@@ -10,7 +10,7 @@ import {
   AuthContext,
   SignUpTextField,
   SellerSignUp,
-} from "../../LojaUniversal";
+} from "LojaUniversal";
 
 const SellerSignUpStore = (props) => {
   const [isLoading, setIsloading] = useState(false);

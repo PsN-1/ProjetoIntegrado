@@ -11,7 +11,7 @@ import {
   BoxLoading,
   NavBar,
   AuthContext,
-} from "../../../LojaUniversal";
+} from "LojaUniversal";
 
 export default function UserSettings() {
   const [isLoading, setIsLoading] = useState(false);

@@ -1,6 +1,6 @@
 import { styled, TextField } from "@mui/material";
 
-const SignUpTextField = (props) => {
+export const SignUpTextField = (props) => {
   return (
     <CssTextField
       id={props.label}
@@ -69,4 +69,3 @@ const CssDescriptionTextField = styled(TextField)({
   },
 });
 
-export default SignUpTextField;

@@ -1,5 +1,5 @@
 import { Grid, Box } from "@mui/material";
-import { NavBar, SideBar } from "../../LojaUniversal";
+import { NavBar, SideBar } from "LojaUniversal";
 
 const filterItems = [
   "Produtos",

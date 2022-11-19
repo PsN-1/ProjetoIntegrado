@@ -11,7 +11,7 @@ import {
   SignUpTextField,
   DescriptionTextField,
   SellerSkeleton,
-} from "../../LojaUniversal";
+} from "LojaUniversal";
 
 export default function SellerEditProduct(props) {
   const [submitAction, setSubmitAction] = useState(false);

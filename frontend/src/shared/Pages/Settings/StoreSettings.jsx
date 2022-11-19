@@ -11,7 +11,7 @@ import {
   BoxLoading,
   NavBar,
   AuthContext,
-} from "../../../LojaUniversal";
+} from "LojaUniversal";
 
 export default function StoreSettings(props) {
   const [isLoading, setIsLoading] = useState(false);

@@ -10,7 +10,7 @@ import {
   SideBar,
   Copyright,
   Paths,
-} from "../../../LojaUniversal";
+} from "LojaUniversal";
 
 const filterItems = [
   "Casacos",

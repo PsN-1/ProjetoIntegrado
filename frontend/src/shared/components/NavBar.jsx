@@ -1,6 +1,6 @@
 import { Link, useHistory, useParams } from "react-router-dom";
 import { useContext, useEffect, useState } from "react";
-import { Paths, AuthContext, UserCartContext } from "../../LojaUniversal";
+import { Paths, AuthContext, UserCartContext } from "LojaUniversal";
 import {
   AppBar,
   Toolbar,

@@ -25,7 +25,7 @@ import {
   UserSettings,
   StoreSettings,
   Paths,
-} from "./LojaUniversal";
+} from "LojaUniversal";
 
 export function Routes() {
   const { token, login, logout, storeName } = useAuth();

@@ -7,7 +7,7 @@ import {
   Typography,
 } from "@mui/material";
 
-import { SignUpTextField, Copyright } from "../../LojaUniversal";
+import { SignUpTextField, Copyright } from "LojaUniversal";
 
 export default function ForgetPassword() {
   const handleSubmit = (event) => {

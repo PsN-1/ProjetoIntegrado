@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Redirect } from "react-router-dom";
 import { Typography, Box, Modal, Button } from "@mui/material";
-import { Paths } from "../../LojaUniversal";
+import { Paths } from "LojaUniversal";
 
 const style = {
   position: "absolute",

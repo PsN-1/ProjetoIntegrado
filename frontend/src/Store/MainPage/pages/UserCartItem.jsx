@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { IconButton, TextField, TableCell, TableRow } from "@mui/material";
-import { LabelTypography } from "../../../LojaUniversal";
+import { LabelTypography } from "LojaUniversal";
 import {
   AddCircleOutline,
   RemoveCircleOutline,

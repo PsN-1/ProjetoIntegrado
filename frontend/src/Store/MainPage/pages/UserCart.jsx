@@ -23,7 +23,7 @@ import {
   UserCartContext,
   UserCartItem,
   LabelTypography,
-} from "../../../LojaUniversal";
+} from "LojaUniversal";
 
 const filterItems = [
   "Casacos",

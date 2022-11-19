@@ -1,5 +1,5 @@
 import { Container, Grid, Paper, Typography, Box } from "@mui/material";
-import { LabelTypography, TitleTypography } from "../../../LojaUniversal";
+import { LabelTypography, TitleTypography } from "LojaUniversal";
 
 export default function DashBoardLargeItem(props) {
   return (

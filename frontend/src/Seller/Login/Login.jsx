@@ -11,7 +11,7 @@ import {
   Paths,
   Loading,
   AuthContext,
-} from "../../LojaUniversal";
+} from "LojaUniversal";
 
 export default function Login() {
   const [loginAction, setLoginAction] = useState(false);

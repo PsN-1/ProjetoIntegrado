@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-export const useCart = () => {
+export default function useCart() {
   const [products, setProducts] = useState([]);
   const [total, setTotal] = useState(0);
 

@@ -2,7 +2,7 @@ import { Container, Paper } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { useContext } from "react";
 import { Link } from "react-router-dom";
-import { Paths, AuthContext } from "../../LojaUniversal";
+import { Paths, AuthContext } from "LojaUniversal";
 
 
 const Item = styled(Paper)(({ theme }) => ({

@@ -19,7 +19,7 @@ import {
   BoxLoading,
   DescriptionTextField,
   UserCartContext,
-} from "../../../LojaUniversal";
+} from "LojaUniversal";
 
 const filterItems = [
   "Casacos",

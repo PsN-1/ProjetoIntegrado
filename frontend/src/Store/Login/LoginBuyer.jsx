@@ -1,4 +1,4 @@
-import { Copyright } from "../../LojaUniversal";
+import { Copyright } from "LojaUniversal";
 import {
   Button,
   CssBaseline,

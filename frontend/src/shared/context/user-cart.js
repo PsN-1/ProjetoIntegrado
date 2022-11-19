@@ -1,6 +1,6 @@
 import { createContext } from "react";
 
-export const UserCartContext = createContext({
+export default createContext({
   products: [],
   total: 0,
   addProduct: () => {},
