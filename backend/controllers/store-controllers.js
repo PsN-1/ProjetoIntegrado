@@ -118,7 +118,7 @@ const getActiveProduts = async (req, res, next) => {
 
 const createProduct = async (req, res, next) => {
   const storeName = req.params.store;
-  const { name, image, description, amount, value } = req.body;
+  const { name, image, category, description, amount, value } = req.body;
 
   const store = await getStore(storeName);
 
@@ -126,6 +126,7 @@ const createProduct = async (req, res, next) => {
     store,
     name,
     image,
+    category,
     description,
     amount,
     value,
@@ -179,7 +180,7 @@ const getProductById = async (req, res, next) => {
 
 const updateProduct = async (req, res, next) => {
   const storeName = req.params.store;
-  const { name, image, description, amount, value } = req.body;
+  const { name, image, category, description, amount, value } = req.body;
   const productId = req.params.pid;
 
   let product;
@@ -202,6 +203,7 @@ const updateProduct = async (req, res, next) => {
 
   product.name = name;
   product.image = image;
+  product.category = category;
   product.description = description;
   product.amount = amount;
   product.value = value;

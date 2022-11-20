@@ -11,8 +11,9 @@ import {
   Copyright,
   Paths,
 } from "LojaUniversal";
+import { useRef } from "react";
 
-const filterItems = [
+let filterItems = [
   "Casacos",
   "Camisetas",
   "Calcas",
@@ -27,6 +28,7 @@ export default function MainPageStore() {
 
   const { storeName } = useParams();
   const history = useHistory();
+  const allProducts = useRef([]);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -46,9 +48,27 @@ export default function MainPageStore() {
         history.push(Paths.ErrorModal);
       }
       setLoadedProducts(responseData);
+      allProducts.current = responseData;
+
+      filterItems = [...new Set(responseData.map((item) => item.category))];
+      if (filterItems.length > 1) {
+        filterItems.push("Limpar");
+      }
     };
     fetchProducts();
   }, [storeName, history]);
+
+  const onFilterClick = (category) => {
+    if (category === "Limpar") {
+      setLoadedProducts(allProducts.current);
+      return;
+    }
+
+    let filteredProducts = allProducts.current.filter(
+      (item) => item.category === category
+    );
+    setLoadedProducts(filteredProducts);
+  };
 
   return (
     <Box>
@@ -58,7 +78,11 @@ export default function MainPageStore() {
       </Grid>
       <Grid container spacing={3} p={2}>
         <Grid item xs={false} md={3}>
-          <SideBar title="Tipo de produto" items={filterItems} />
+          <SideBar
+            title="Tipo de produto"
+            items={filterItems}
+            onClick={onFilterClick}
+          />
         </Grid>
         <Grid item xs={12} md={8}>
           {isLoading && <BoxLoading />}

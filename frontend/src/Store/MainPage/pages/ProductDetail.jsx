@@ -14,21 +14,11 @@ import {
   EndPoint,
   Paths,
   NavBar,
-  SideBar,
   Copyright,
   BoxLoading,
   DescriptionTextField,
   UserCartContext,
 } from "LojaUniversal";
-
-const filterItems = [
-  "Casacos",
-  "Camisetas",
-  "Calcas",
-  "Bermudas",
-  "Oculos",
-  "Tenis",
-];
 
 export default function ProductDetail() {
   const [isLoading, setIsLoading] = useState(false);
@@ -85,10 +75,7 @@ export default function ProductDetail() {
         <NavBar />
         {isLoading && <BoxLoading />}
         {!isLoading && (
-          <Grid container spacing={3} p={2}>
-            <Grid item xs={false} md={3}>
-              <SideBar title="Tipo de produto" items={filterItems} />
-            </Grid>
+          <Grid container spacing={3} p={2} justifyContent="center">
             <Grid item xs={6}>
               <Card
                 sx={{

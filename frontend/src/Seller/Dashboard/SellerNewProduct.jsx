@@ -27,6 +27,7 @@ export default function SellerNewProduct(props) {
     const newProduct = {
       name: data.get("Nome"),
       image: data.get("Imagem"),
+      category: data.get("Category"),
       description: data.get("Descricao"),
       amount: data.get("Quantidade"),
       value: data.get("Valor"),
@@ -93,6 +94,12 @@ export default function SellerNewProduct(props) {
                     <SignUpTextField
                       name="Imagem"
                       label="Imagem"
+                      margin="normal"
+                    />
+
+                    <SignUpTextField
+                      name="Category"
+                      label="Category"
                       margin="normal"
                     />
 

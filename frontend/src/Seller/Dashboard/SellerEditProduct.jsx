@@ -19,6 +19,7 @@ export default function SellerEditProduct(props) {
 
   const [name, setName] = useState("");
   const [image, setImage] = useState("");
+  const [category, setCategory] = useState("");
   const [description, setDescription] = useState("");
   const [amount, setAmount] = useState("");
   const [value, setValue] = useState("");
@@ -33,6 +34,9 @@ export default function SellerEditProduct(props) {
   const imageChangeHandler = (event) => {
     setImage(event.target.value);
   };
+  const categoryChangeHandler = (event) => {
+    setCategory(event.target.value)
+  }
   const descriptionChangeHandler = (event) => {
     setDescription(event.target.value);
   };
@@ -49,6 +53,7 @@ export default function SellerEditProduct(props) {
     const newProduct = {
       name: name,
       image: image,
+      category,
       description: description,
       amount: amount,
       value: value,
@@ -117,10 +122,11 @@ export default function SellerEditProduct(props) {
       }
 
       const responseData = await response.json();
-      const { name, image, description, amount, value } = responseData.product;
+      const { name, image, description, category, amount, value } = responseData.product;
 
       setName(name);
       setImage(image);
+      setCategory(category);
       setDescription(description);
       setAmount(amount);
       setValue(value);
@@ -178,6 +184,15 @@ export default function SellerEditProduct(props) {
                       value={image}
                       onChange={imageChangeHandler}
                     />
+
+                    <SignUpTextField
+                      name="Categoria"
+                      label="Categoria"
+                      margin="normal"
+                      value={category}
+                      onChange={categoryChangeHandler}
+                    />
+
                     <DescriptionTextField
                       name="Descricao"
                       label="Descricao"
