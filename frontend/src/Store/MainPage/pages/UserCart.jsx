@@ -1,5 +1,4 @@
 import { useContext } from "react";
-import { useParams } from "react-router-dom";
 import {
   Box,
   Button,
@@ -17,7 +16,6 @@ import {
 
 import {
   NavBar,
-  SideBar,
   Copyright,
   TitleTypography,
   UserCartContext,
@@ -25,30 +23,13 @@ import {
   LabelTypography,
 } from "LojaUniversal";
 
-const filterItems = [
-  "Casacos",
-  "Camisetas",
-  "Calças",
-  "Bermudas",
-  "Oculos",
-  "Tenis",
-];
-
 export default function UserCart() {
-  const { storeName } = useParams;
   const cart = useContext(UserCartContext);
 
   return (
     <Box>
       <NavBar />
-      <Grid container spacing={3} p={2}>
-        <Grid item xs={false} md={3}>
-          <SideBar
-            title="Tipo de produto"
-            items={filterItems}
-            storeName={storeName}
-          />
-        </Grid>
+      <Grid container spacing={3} pt={8} justifyContent="center">
         <Grid item xs={12} md={8}>
           <Cart
             items={cart.products}

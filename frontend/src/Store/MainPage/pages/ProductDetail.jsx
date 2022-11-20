@@ -75,7 +75,7 @@ export default function ProductDetail() {
         <NavBar />
         {isLoading && <BoxLoading />}
         {!isLoading && (
-          <Grid container spacing={3} p={2} justifyContent="center">
+          <Grid container spacing={3} p={8} justifyContent="center">
             <Grid item xs={6}>
               <Card
                 sx={{
