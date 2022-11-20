@@ -2,17 +2,12 @@ const baseEndPointURL = "https://loja-universal-mvp.herokuapp.com"; // "http://l
 
 const EndPoint = {
   seller: {
-    storeCount: (storeName) =>
-      `${baseEndPointURL}/api/seller/${storeName}/products/count`,
-    stores: (storeName) =>
-      `${baseEndPointURL}/api/seller/${storeName}/products`,
-    storeWithId: (storeName, productId) =>
-      `${baseEndPointURL}/api/seller/${storeName}/products/${productId}`,
+    storeCount: (storeName) => `${baseEndPointURL}/api/seller/${storeName}/products/count`,
+    stores: (storeName) => `${baseEndPointURL}/api/seller/${storeName}/products`,
+    storeWithId: (storeName, productId) => `${baseEndPointURL}/api/seller/${storeName}/products/${productId}`,
 
-    editStore: (storeName) =>
-      `${baseEndPointURL}/api/seller/${storeName}/store`,
-    editSeller: (storeName) =>
-      `${baseEndPointURL}/api/seller/${storeName}/seller`,
+    editStore: (storeName) => `${baseEndPointURL}/api/seller/${storeName}/store`,
+    editSeller: (storeName) => `${baseEndPointURL}/api/seller/${storeName}/seller`,
 
     createSeller: `${baseEndPointURL}/api/seller/stores/newSeller`,
     createStore: `${baseEndPointURL}/api/seller/stores/newStore`,
@@ -21,10 +16,8 @@ const EndPoint = {
 
   user: {
     stores: (storeName) => `${baseEndPointURL}/api/user/${storeName}/`,
-    storeWithId: (storeName, productId) =>
-      `${baseEndPointURL}/api/user/${storeName}/${productId}`,
-    storeLogoImage: (storeName) =>
-      `${baseEndPointURL}/api/user/${storeName}/logo`,
+    storeWithId: (storeName, productId) => `${baseEndPointURL}/api/user/${storeName}/${productId}`,
+    storeLogoImage: (storeName) => `${baseEndPointURL}/api/user/${storeName}/logo`,
   },
 };
 
