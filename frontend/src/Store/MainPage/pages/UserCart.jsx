@@ -144,7 +144,7 @@ const Cart = (props) => {
                   <TitleTypography>Total:</TitleTypography>
                 </TableCell>
                 <TableCell align="center">
-                  <LabelTypography>R$ {props.total}</LabelTypography>
+                  <LabelTypography>R$ {props.total.toFixed(2)}</LabelTypography>
                 </TableCell>
                 <TableCell></TableCell>
               </TableRow>

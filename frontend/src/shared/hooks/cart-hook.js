@@ -74,7 +74,7 @@ export default function useCart() {
 
   function updateTotal(products) {
     setTotal(
-      products.reduce((total, item) => total + +item.amount * +item.value.split(' ')[1], 0)
+      products.reduce((total, item) => (total + +item.amount * item.value.replace("R$ ", '').replace(/,/g, '')/100), 0)
     );
   }
 

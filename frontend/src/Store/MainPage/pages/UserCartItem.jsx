@@ -55,7 +55,7 @@ export default function UserCartItem(props) {
       </TableCell>
       <TableCell align="center">
         <LabelTypography>
-          R$ {item.value.split(" ")[1] * item.amount}
+          R$ {(item.value.replace("R$ ", '').replace(/,/g, '')/100 * item.amount).toFixed(2)}
         </LabelTypography>
       </TableCell>
       <TableCell>
