@@ -7,6 +7,7 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  CardMedia,
 } from "@mui/material";
 
 import { Link, useHistory } from "react-router-dom";
@@ -69,6 +70,7 @@ const DashBoardProducts = (props) => {
         <Table>
           <TableHead>
             <TableRow>
+            <TableCell></TableCell>
               <TableCell>
                 <TitleTypography>Produto</TitleTypography>
               </TableCell>
@@ -91,6 +93,13 @@ const DashBoardProducts = (props) => {
                   "&:last-child td, &:last-child th": { border: 0 },
                 }}
               >
+                <TableCell>
+                  <CardMedia
+                    component="img"
+                    src={item.image}
+                    sx={{ height: 100, width: 100 }}
+                  />
+                </TableCell>
                 <TableCell component="th" scope="row">
                   <LabelTypography>{item.name}</LabelTypography>
                 </TableCell>
