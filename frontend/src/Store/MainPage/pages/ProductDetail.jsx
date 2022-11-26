@@ -37,6 +37,7 @@ export default function ProductDetail() {
     let product = {
       _id: pid,
       name: name,
+      image: image,
       value: value,
       amount: 1,
       maxAmount: amount,

@@ -112,6 +112,7 @@ const Cart = (props) => {
         <Table>
           <TableHead>
             <TableRow>
+              <TableCell />
               <TableCell>
                 <TitleTypography>Produto</TitleTypography>
               </TableCell>
@@ -140,11 +141,12 @@ const Cart = (props) => {
               <TableRow>
                 <TableCell />
                 <TableCell />
+                <TableCell />
                 <TableCell align="right">
                   <TitleTypography>Total:</TitleTypography>
                 </TableCell>
                 <TableCell align="center">
-                  <LabelTypography>R$ {props.total.toFixed(2)}</LabelTypography>
+                  <LabelTypography>R$ {props.total.toFixed(2).replace(".", ",")}</LabelTypography>
                 </TableCell>
                 <TableCell></TableCell>
               </TableRow>

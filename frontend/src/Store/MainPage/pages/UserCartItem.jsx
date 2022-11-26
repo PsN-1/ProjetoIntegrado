@@ -1,5 +1,11 @@
 import { useState } from "react";
-import { IconButton, TextField, TableCell, TableRow } from "@mui/material";
+import {
+  IconButton,
+  TextField,
+  TableCell,
+  TableRow,
+  CardMedia,
+} from "@mui/material";
 import { LabelTypography } from "LojaUniversal";
 import {
   AddCircleOutline,
@@ -26,6 +32,13 @@ export default function UserCartItem(props) {
         "&:last-child td, &:last-child th": { border: 0 },
       }}
     >
+      <TableCell>
+        <CardMedia
+          component="img"
+          src={item.image}
+          sx={{ height: 100, width: 100 }}
+        />
+      </TableCell>
       <TableCell component="th" scope="row">
         <LabelTypography>{item.name}</LabelTypography>
       </TableCell>
@@ -55,7 +68,11 @@ export default function UserCartItem(props) {
       </TableCell>
       <TableCell align="center">
         <LabelTypography>
-          R$ {(item.value.replace("R$ ", '').replace(/,/g, '')/100 * item.amount).toFixed(2)}
+          R${" "}
+          {(
+            ((item.value.replace("R$ ", "").replace(/,/g, "") / 100) *
+            item.amount)
+          ).toFixed(2).replace(".", ",")}
         </LabelTypography>
       </TableCell>
       <TableCell>
