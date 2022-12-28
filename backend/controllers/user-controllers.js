@@ -1,6 +1,10 @@
 const HttpError = require("../models/http-error");
 const Product = require("../models/products");
 const Store = require("../models/stores");
+const Buyer = require("../models/users/buyer");
+
+const bcrypt = require("bcryptjs");
+const { default: mongoose } = require("mongoose");
 
 const getProductsForStore = async (req, res, next) => {
   const storeName = req.params.store;
@@ -63,6 +67,88 @@ const getLogoImage = async (req, res, next) => {
   res.json(logoImage);
 };
 
+const createBuyer = async (req, res, next) => {
+  const { name, lastname, cpf, email, postalCode, number, password } = req.body;
+  const storeName = req.params.store;
+
+  let existingBuyer;
+  try {
+    existingBuyer = await Buyer.findOne({ email: email });
+  } catch (err) {
+    const error = new HttpError(
+      "Signing up failed, please try again late",
+      500
+    );
+    return next(error);
+  }
+
+  if (existingBuyer) {
+    const error = new HttpError(
+      "User exists already, please login instead.",
+      422
+    );
+    return next(error);
+  }
+
+  let hashedPassword;
+  try {
+    hashedPassword = await bcrypt.hash(password, 12);
+  } catch (err) {
+    const error = new HttpError(
+      "Could not create user, please try again.",
+      500
+    );
+    return next(error);
+  }
+
+  const store = await getStore(storeName);
+
+  const createdBuyer = new Buyer({
+    creationDate: Date.now(),
+    name,
+    lastname,
+    cpf,
+    email,
+    postalCode,
+    number,
+    password: hashedPassword,
+    store,
+  });
+
+  try {
+    const sess = await mongoose.startSession();
+    sess.startTransaction();
+    await createdBuyer.save();
+    store.clients.push(createdBuyer);
+    await store.save({ session: sess });
+    await sess.commitTransaction();
+  } catch (err) {
+    console.log(err);
+    const error = new HttpError("Creating user failed, please try again.", 500);
+    return next(error);
+  }
+
+  res.status(201);
+  res.json({ email: createdBuyer.email });
+};
+
+const getStore = async (storeName) => {
+  let store;
+
+  try {
+    store = await Store.findOne({ name: storeName });
+  } catch (err) {
+    const error = new HttpError(
+      "Fetching client store failed, please try again later",
+      500
+    );
+    return error;
+  }
+
+  return store;
+};
+
 exports.getProductsForStore = getProductsForStore;
 exports.getProductById = getProductById;
 exports.getLogoImage = getLogoImage;
+exports.createBuyer = createBuyer;

@@ -99,6 +99,10 @@ const NavBar = () => {
     history.push(Paths.Login);
   };
 
+  const handleSignUpClick = () => {
+    history.push(Paths.SignupBuyer(storeName));
+  };
+
   const handleUserSettingsClick = () => {
     history.push(Paths.UserSettings(storeName));
   };
@@ -157,7 +161,10 @@ const NavBar = () => {
               }}
             >
               {!auth.isloggedIn && (
-                <MenuItem onClick={handleLoginClick}>Login</MenuItem>
+                <div>
+                  <MenuItem onClick={handleLoginClick}>Login</MenuItem>
+                  <MenuItem onClick={handleSignUpClick}>Cadastre-se</MenuItem>
+                </div>
               )}
 
               {auth.isloggedIn && (

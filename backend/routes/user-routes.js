@@ -7,4 +7,6 @@ router.get("/:store", userControllers.getProductsForStore);
 router.get("/:store/logo", userControllers.getLogoImage);
 router.get("/:store/:pid", userControllers.getProductById);
 
+router.post("/:store/newBuyer", userControllers.createBuyer)
+
 module.exports = router;

@@ -1,4 +1,5 @@
-const baseEndPointURL = "https://loja-universal-mvp.herokuapp.com"; // "http://localhost:3030";
+const baseEndPointURL =  "http://localhost:3030";
+
 
 const EndPoint = {
   seller: {
@@ -18,6 +19,7 @@ const EndPoint = {
     stores: (storeName) => `${baseEndPointURL}/api/user/${storeName}/`,
     storeWithId: (storeName, productId) => `${baseEndPointURL}/api/user/${storeName}/${productId}`,
     storeLogoImage: (storeName) => `${baseEndPointURL}/api/user/${storeName}/logo`,
+    createBuyer: (storeName) => `${baseEndPointURL}/api/user/${storeName}/newBuyer`
   },
 };
 

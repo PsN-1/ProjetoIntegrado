@@ -10,6 +10,7 @@ const Paths = {
   UserCart: (storeName) => `/store/${storeName}/cart`,
   UserSettings: (storeName) => `/store/${storeName}/editUser`,
   StoreSettings: (storeName) => `/store/${storeName}/editStore`,
+  SignupBuyer: (storeName) => `/store/${storeName}/signupBuyer`,
 
   SellerDashboard: (storeName) => `/store/${storeName}/adm/dashboard`,
   SellerProducts: (storeName) => `/store/${storeName}/adm/products`,

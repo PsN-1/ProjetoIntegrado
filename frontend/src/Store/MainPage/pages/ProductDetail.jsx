@@ -77,7 +77,7 @@ export default function ProductDetail() {
         {isLoading && <BoxLoading />}
         {!isLoading && (
           <Grid container spacing={3} pt={8} justifyContent="center">
-            <Grid item xs={6}>
+            <Grid item xs={8}>
               <Card
                 sx={{
                   display: "flex",

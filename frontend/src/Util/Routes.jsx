@@ -25,6 +25,7 @@ import {
   UserSettings,
   StoreSettings,
   Paths,
+  SignUp,
 } from "LojaUniversal";
 
 export default function Routes() {
@@ -102,20 +103,18 @@ export default function Routes() {
         <Route path={Paths.SignupUser} exact component={SellerSignUpUser} />
         <Route path={Paths.SignupStore} exact component={SellerSignUpStore} />
 
+        <Route path={Paths.SignupBuyer(":storeName")} exact component={SignUp} />
         <Route
           path={Paths.MainPageStore(":storeName")}
           exact
           component={MainPageStore}
         />
-
         <Route path={Paths.UserCart(":storeName")} exact component={UserCart} />
-
         <Route
           path={Paths.DetailProductStore(":storeName", ":pid")}
           exact
           component={ProductDetail}
         />
-
         <Redirect to="/" />
       </Switch>
     );

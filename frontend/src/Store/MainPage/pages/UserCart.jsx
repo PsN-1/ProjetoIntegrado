@@ -30,7 +30,7 @@ export default function UserCart() {
     <Box>
       <NavBar />
       <Grid container spacing={3} pt={8} justifyContent="center">
-        <Grid item xs={12} md={8}>
+        <Grid item xs={12} md={10}>
           <Cart
             items={cart.products}
             total={cart.total}
@@ -146,7 +146,9 @@ const Cart = (props) => {
                   <TitleTypography>Total:</TitleTypography>
                 </TableCell>
                 <TableCell align="center">
-                  <LabelTypography>R$ {props.total.toFixed(2).replace(".", ",")}</LabelTypography>
+                  <LabelTypography>
+                    R$ {props.total.toFixed(2).replace(".", ",")}
+                  </LabelTypography>
                 </TableCell>
                 <TableCell></TableCell>
               </TableRow>
