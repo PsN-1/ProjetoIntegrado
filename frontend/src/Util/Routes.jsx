@@ -18,27 +18,14 @@ import {
   SellerProducts,
   SellerEditProduct,
   ErrorScreen,
-  AuthContext,
-  UserCartContext,
-  useAuth,
-  useCart,
   UserSettings,
   StoreSettings,
   Paths,
   SignUp,
 } from "LojaUniversal";
 
-export default function Routes() {
-  const { token, login, logout, storeName } = useAuth();
-  const {
-    products,
-    total,
-    addProduct,
-    removeProduct,
-    increaseAmount,
-    decreaseAmount,
-  } = useCart();
-
+export default function Routes(props) {
+  let { token, storeName } = props;
   let routes;
 
   if (token) {
@@ -103,7 +90,11 @@ export default function Routes() {
         <Route path={Paths.SignupUser} exact component={SellerSignUpUser} />
         <Route path={Paths.SignupStore} exact component={SellerSignUpStore} />
 
-        <Route path={Paths.SignupBuyer(":storeName")} exact component={SignUp} />
+        <Route
+          path={Paths.SignupBuyer(":storeName")}
+          exact
+          component={SignUp}
+        />
         <Route
           path={Paths.MainPageStore(":storeName")}
           exact
@@ -121,29 +112,8 @@ export default function Routes() {
   }
 
   return (
-    <AuthContext.Provider
-      value={{
-        isloggedIn: !!token,
-        token: token,
-        storeName: storeName,
-        login: login,
-        logout: logout,
-      }}
-    >
-      <UserCartContext.Provider
-        value={{
-          products: products,
-          total: total,
-          addProduct: addProduct,
-          removeProduct: removeProduct,
-          increaseAmount: increaseAmount,
-          decreaseAmount: decreaseAmount,
-        }}
-      >
-        <Router>
-          <main>{routes}</main>
-        </Router>
-      </UserCartContext.Provider>
-    </AuthContext.Provider>
+    <Router>
+      <main>{routes}</main>
+    </Router>
   );
 }
