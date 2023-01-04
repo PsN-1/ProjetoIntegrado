@@ -1,5 +1,5 @@
 import { useEffect, useState, useContext } from "react";
-import { Redirect, useHistory } from "react-router-dom";
+import { Redirect } from "react-router-dom";
 import { CssBaseline, Link, Box, Grid, Typography } from "@mui/material";
 
 import {
@@ -11,13 +11,14 @@ import {
   Paths,
   Loading,
   AuthContext,
+  useHttp,
 } from "LojaUniversal";
 
 export default function Login() {
   const [loginAction, setLoginAction] = useState(false);
-  const [isLoading, setIsloading] = useState(false);
+
+  const { isLoading, sendRequest } = useHttp();
   const auth = useContext(AuthContext);
-  const history = useHistory();
   let email = "";
   let password = "";
 
@@ -28,30 +29,19 @@ export default function Login() {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    setIsloading(true);
     if (!(password.length > 6 && email)) {
-      setIsloading(false);
       return;
     }
 
-    const response = await fetch(EndPoint.seller.login, {
-      method: "POST",
-      body: JSON.stringify({
+    const responseData = await sendRequest(
+      EndPoint.seller.login,
+      true,
+      "POST",
+      JSON.stringify({
         email: email,
         password: password,
-      }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-
-    setIsloading(false);
-    if (response.status < 200 || response.status > 299) {
-      history.push(Paths.ErrorModal);
-      return;
-    }
-
-    const responseData = await response.json();
+      })
+    );
 
     auth.login(responseData.storeName, responseData.token);
     setLoginAction(true);

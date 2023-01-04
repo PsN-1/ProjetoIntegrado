@@ -10,8 +10,8 @@ import {
   CardMedia,
 } from "@mui/material";
 
-import { Link, useHistory } from "react-router-dom";
-import { useEffect, useState, useContext } from "react";
+import { Link, useHistory, useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 
 import {
@@ -21,43 +21,34 @@ import {
   LabelTypography,
   TitleTypography,
   BoxLoading,
-  AuthContext,
+  useHttp,
 } from "LojaUniversal";
 
 export default function SellerProducts() {
   const [loadedProducts, setLoadedProducts] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const auth = useContext(AuthContext);
+
+  const { isLoading, sendRequest } = useHttp();
+  const { storeName } = useParams();
   const history = useHistory();
 
   useEffect(() => {
     const fetchProducts = async () => {
-      setIsLoading(true);
-      const response = await fetch(EndPoint.seller.stores(auth.storeName), {
-        method: "GET",
-        headers: {
-          Authorization: "Bearer " + auth.token,
-        },
-      });
+      const responseData = await sendRequest(
+        EndPoint.seller.stores(storeName),
+        false
+      );
 
-      if (response.status < 200 || response.status > 299) {
-        history.push(Paths.ErrorModal);
-        return;
-      }
-
-      const responseData = await response.json();
       setLoadedProducts(responseData);
-      setIsLoading(false);
     };
 
     fetchProducts();
-  }, [auth.storeName, auth.token, history]);
+  }, [sendRequest, storeName, history]);
 
   return (
     <SellerSkeleton>
       {isLoading && <BoxLoading />}
       {!isLoading && (
-        <DashBoardProducts items={loadedProducts} storeName={auth.storeName} />
+        <DashBoardProducts items={loadedProducts} storeName={storeName} />
       )}
     </SellerSkeleton>
   );
@@ -70,7 +61,7 @@ const DashBoardProducts = (props) => {
         <Table>
           <TableHead>
             <TableRow>
-            <TableCell></TableCell>
+              <TableCell></TableCell>
               <TableCell>
                 <TitleTypography>Produto</TitleTypography>
               </TableCell>

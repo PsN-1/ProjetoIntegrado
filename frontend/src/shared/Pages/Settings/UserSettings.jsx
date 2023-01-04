@@ -1,5 +1,5 @@
 import { Button, Grid, Typography, Box, Container } from "@mui/material";
-import React, { useContext, useEffect } from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import { NumericFormat, PatternFormat } from "react-number-format";
 import { useHistory, useParams } from "react-router-dom";
@@ -10,11 +10,11 @@ import {
   SignUpTextField,
   BoxLoading,
   NavBar,
-  AuthContext,
+  useHttp,
 } from "LojaUniversal";
 
 export default function UserSettings() {
-  const [isLoading, setIsLoading] = useState(false);
+  const { isLoading, sendRequest } = useHttp();
 
   const [name, setName] = useState("");
   const [lastname, setLastname] = useState("");
@@ -23,7 +23,6 @@ export default function UserSettings() {
   const [cep, setCep] = useState("");
   const [number, setNumber] = useState("");
 
-  const auth = useContext(AuthContext);
   const history = useHistory();
   const { storeName } = useParams();
 
@@ -42,7 +41,6 @@ export default function UserSettings() {
 
   const handleButtonAction = async (event) => {
     event.preventDefault();
-    setIsLoading(true);
 
     const updatedUser = {
       name: name,
@@ -51,42 +49,23 @@ export default function UserSettings() {
       number: number,
     };
 
-    const response = await fetch(EndPoint.seller.editSeller(storeName), {
-      method: "PATCH",
-      body: JSON.stringify(updatedUser),
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + auth.token,
-      },
-    });
+    const responseData = await sendRequest(
+      EndPoint.seller.editSeller(storeName),
+      false,
+      "PATCH",
+      JSON.stringify(updatedUser)
+    );
 
-    if (response.status < 200 || response.status > 299) {
-      history.push(Paths.ErrorModal);
-      return;
-    }
-
-    const responseData = await response.json();
     console.log(responseData);
-    setIsLoading(false);
-    history.push(Paths.SellerDashboard(auth.storeName));
+    history.push(Paths.SellerDashboard(storeName));
   };
 
   useEffect(() => {
     const fetchSeller = async () => {
-      setIsLoading(true);
-      const response = await fetch(EndPoint.seller.editSeller(storeName), {
-        method: "GET",
-        headers: {
-          Authorization: "Bearer " + auth.token,
-        },
-      });
-
-      if (response.status < 200 || response.status > 299) {
-        history.push(Paths.ErrorModal);
-        return;
-      }
-
-      const responseData = await response.json();
+      const responseData = await sendRequest(
+        EndPoint.seller.editSeller(storeName),
+        false
+      );
       const { name, lastname, email, cpf, postalCode, number } = responseData;
 
       setName(name);
@@ -95,12 +74,10 @@ export default function UserSettings() {
       setCpf(cpf);
       setCep(postalCode);
       setNumber(number);
-
-      setIsLoading(false);
     };
 
     fetchSeller();
-  }, [auth.token, storeName, history]);
+  }, [sendRequest, storeName, history]);
 
   return (
     <>

@@ -1,7 +1,7 @@
 import { Box, Button, Grid, Paper, Typography, Container } from "@mui/material";
 import { useContext, useState } from "react";
 import { NumericFormat } from "react-number-format";
-import { Redirect, useHistory } from "react-router-dom";
+import { Redirect } from "react-router-dom";
 
 import {
   EndPoint,
@@ -11,17 +11,17 @@ import {
   SignUpTextField,
   DescriptionTextField,
   SellerSkeleton,
+  useHttp,
 } from "LojaUniversal";
 
-export default function SellerNewProduct(props) {
+export default function SellerNewProduct() {
   const [submitAction, setSubmitAction] = useState(false);
-  const [isLoading, setIsloading] = useState(false);
+
+  const { isLoading, sendRequest } = useHttp();
   const auth = useContext(AuthContext);
-  const history = useHistory();
 
   const handleButtonAction = async (event) => {
     event.preventDefault();
-    setIsloading(true);
 
     const data = new FormData(event.currentTarget);
     const newProduct = {
@@ -33,24 +33,14 @@ export default function SellerNewProduct(props) {
       value: data.get("Valor"),
     };
 
-    const response = await fetch(EndPoint.seller.stores(auth.storeName), {
-      method: "POST",
-      body: JSON.stringify(newProduct),
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + auth.token,
-      },
-    });
+    const responseData = await sendRequest(
+      EndPoint.seller.stores(auth.storeName),
+      false,
+      "POST",
+      JSON.stringify(newProduct)
+    );
 
-    if (response.status < 200 || response.status > 299) {
-      history.push(Paths.ErrorModal);
-      return;
-    }
-
-    const responseData = await response.json();
     console.log(responseData);
-
-    setIsloading(false);
     setSubmitAction(true);
   };
 

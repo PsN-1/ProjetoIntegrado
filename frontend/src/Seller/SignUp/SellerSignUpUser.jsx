@@ -10,17 +10,17 @@ import {
   Loading,
   SignUpTextField,
   SellerSignUp,
+  useHttp,
 } from "LojaUniversal";
 
 const SellerSignUpUser = () => {
-  const [isLoading, setIsloading] = useState(false);
   const [invalidPassword, setInvalidPassword] = useState(false);
 
+  const { isLoading, sendRequest } = useHttp();
   const history = useHistory();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    setIsloading(true);
 
     const data = new FormData(event.currentTarget);
     const newSeller = {
@@ -35,26 +35,17 @@ const SellerSignUpUser = () => {
     };
 
     if (newSeller.password !== newSeller.password2) {
-      setIsloading(false);
       setInvalidPassword(true);
       return;
     }
 
-    const response = await fetch(EndPoint.seller.createSeller, {
-      method: "POST",
-      body: JSON.stringify(newSeller),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    const responseData = await sendRequest(
+      EndPoint.seller.createSeller,
+      true,
+      "POST",
+      JSON.stringify(newSeller)
+    );
 
-    if (response.status < 200 || response.status > 299) {
-      history.push(Paths.ErrorModal);
-      return;
-    }
-
-    const responseData = await response.json();
-    setIsloading(false);
     history.push({
       pathname: Paths.SignupStore,
       state: { email: responseData.email },

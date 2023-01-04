@@ -1,44 +1,35 @@
 import { Grid } from "@mui/material";
-import React, { useContext, useEffect, useState } from "react";
-import { useHistory } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useHistory, useParams } from "react-router-dom";
 
 import {
   SellerSkeleton,
   DashBoardSmallItem,
   DashBoardLargeItem,
   EndPoint,
-  Paths,
   BoxLoading,
-  AuthContext,
+  useHttp,
 } from "LojaUniversal";
 
 export default function SellerDashboard() {
   const [activesProducts, setActivesProducts] = useState(0);
-  const [isLoading, setIsLoading] = useState(false);
-  const auth = useContext(AuthContext);
+
+  const { isLoading, sendRequest } = useHttp();
+  const { storeName } = useParams();
   const history = useHistory();
 
   useEffect(() => {
     const fetchCount = async () => {
-      setIsLoading(true);
-      const response = await fetch(EndPoint.seller.storeCount(auth.storeName), {
-        method: "GET",
-        headers: {
-          Authorization: "Bearer " + auth.token,
-        },
-      });
+      const responseData = await sendRequest(
+        EndPoint.seller.storeCount(storeName),
+        false
+      );
 
-      if (response.status < 200 || response.status > 299) {
-        history.push(Paths.ErrorModal);
-        return;
-      }
-      const responseData = await response.json();
       setActivesProducts(responseData);
-      setIsLoading(false);
     };
 
     fetchCount();
-  }, [auth.storeName, auth.token, history]);
+  }, [sendRequest, storeName, history]);
 
   return (
     <React.Fragment>

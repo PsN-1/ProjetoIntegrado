@@ -1,4 +1,11 @@
-import { Copyright, EndPoint, Loading, NavBar, Paths } from "LojaUniversal";
+import {
+  Copyright,
+  EndPoint,
+  Loading,
+  NavBar,
+  Paths,
+  useHttp,
+} from "LojaUniversal";
 import {
   Button,
   CssBaseline,
@@ -21,14 +28,13 @@ const theme = createTheme();
 
 export default function SignUp() {
   const [invalidPassword, setInvalidPassword] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
 
+  const { isLoading, sendRequest } = useHttp();
   const history = useHistory();
   const { storeName } = useParams();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    setIsLoading(true);
 
     const data = new FormData(event.currentTarget);
     const newBuyer = {
@@ -46,26 +52,17 @@ export default function SignUp() {
     console.log(JSON.stringify(newBuyer));
 
     if (newBuyer.password !== newBuyer.password2) {
-      setIsLoading(false);
       setInvalidPassword(true);
       return;
     }
 
-    const response = await fetch(EndPoint.user.createBuyer(storeName), {
-      method: "POST",
-      body: JSON.stringify(newBuyer),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    await sendRequest(
+      EndPoint.user.createBuyer(storeName),
+      true,
+      "POST",
+      JSON.stringify(newBuyer),
+    );
 
-    if (response.status < 200 || response.status > 299) {
-      history.push(Paths.ErrorModal);
-      return;
-    }
-
-    await response.json();
-    setIsLoading(false);
     history.push(Paths.MainPageStore);
   };
 

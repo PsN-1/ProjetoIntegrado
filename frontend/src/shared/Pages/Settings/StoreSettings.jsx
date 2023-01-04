@@ -1,6 +1,6 @@
 import { Button, Grid, Typography, Box, Container } from "@mui/material";
 import React, { useEffect } from "react";
-import { useContext, useState } from "react";
+import { useState } from "react";
 import { NumericFormat, PatternFormat } from "react-number-format";
 import { useHistory, useParams } from "react-router-dom";
 
@@ -10,12 +10,10 @@ import {
   SignUpTextField,
   BoxLoading,
   NavBar,
-  AuthContext,
+  useHttp,
 } from "LojaUniversal";
 
-export default function StoreSettings(props) {
-  const [isLoading, setIsLoading] = useState(false);
-
+export default function StoreSettings() {
   const [cnpj, setCnpj] = useState("");
   const [ie, setIe] = useState("");
   const [corporateName, setCorporateName] = useState("");
@@ -23,9 +21,9 @@ export default function StoreSettings(props) {
   const [category, setCategory] = useState("");
   const [logoImage, setLogoImage] = useState("");
 
-  const auth = useContext(AuthContext);
   const history = useHistory();
   const { storeName } = useParams();
+  const { isLoading, sendRequest } = useHttp();
 
   const cnpjChangeHandler = (event) => {
     setCnpj(event.target.value);
@@ -49,7 +47,6 @@ export default function StoreSettings(props) {
 
   const handleButtonAction = async (event) => {
     event.preventDefault();
-    setIsLoading(true);
 
     const updatedStore = {
       cnpj,
@@ -59,42 +56,24 @@ export default function StoreSettings(props) {
       logoImage,
     };
 
-    const response = await fetch(EndPoint.seller.editStore(storeName), {
-      method: "PATCH",
-      body: JSON.stringify(updatedStore),
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + auth.token,
-      },
-    });
+    const responseData = await sendRequest(
+      EndPoint.seller.editStore(storeName),
+      false,
+      "PATCH",
+      JSON.stringify(updatedStore)
+    );
 
-    if (response.status < 200 || response.status > 299) {
-      history.push(Paths.ErrorModal);
-      return;
-    }
-
-    const responseData = await response.json();
     console.log(responseData);
-    setIsLoading(false);
-    history.push(Paths.SellerDashboard(auth.storeName));
+    history.push(Paths.SellerDashboard(storeName));
   };
 
   useEffect(() => {
     const fetchStore = async () => {
-      setIsLoading(true);
-      const response = await fetch(EndPoint.seller.editStore(storeName), {
-        method: "GET",
-        headers: {
-          Authorization: "Bearer " + auth.token,
-        },
-      });
+      const responseData = await sendRequest(
+        EndPoint.seller.editStore(storeName),
+        false
+      );
 
-      if (response.status < 200 || response.status > 299) {
-        history.push(Paths.ErrorModal);
-        return;
-      }
-
-      const responseData = await response.json();
       const { cnpj, ie, corporateName, name, category, logoImage } =
         responseData;
 
@@ -105,12 +84,10 @@ export default function StoreSettings(props) {
       setCategory(category);
 
       setLogoImage(logoImage);
-
-      setIsLoading(false);
     };
 
     fetchStore();
-  }, [auth.token, storeName, history]);
+  }, [sendRequest, storeName, history]);
 
   return (
     <>

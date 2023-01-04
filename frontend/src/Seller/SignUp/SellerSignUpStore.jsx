@@ -1,5 +1,5 @@
 import Grid from "@mui/material/Grid";
-import { useState, useContext } from "react";
+import { useContext } from "react";
 import { NumericFormat, PatternFormat } from "react-number-format";
 import { useHistory } from "react-router-dom";
 
@@ -10,16 +10,16 @@ import {
   AuthContext,
   SignUpTextField,
   SellerSignUp,
+  useHttp,
 } from "LojaUniversal";
 
 const SellerSignUpStore = (props) => {
-  const [isLoading, setIsloading] = useState(false);
+  const { isLoading, sendRequest } = useHttp();
   const auth = useContext(AuthContext);
   const history = useHistory();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    setIsloading(true);
 
     const data = new FormData(event.currentTarget);
     const newStore = {
@@ -33,24 +33,15 @@ const SellerSignUpStore = (props) => {
 
     console.log(newStore);
 
-    const response = await fetch(EndPoint.seller.createStore, {
-      method: "POST",
-      body: JSON.stringify(newStore),
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + auth.token,
-      },
-    });
+    const responseData = await sendRequest(
+      EndPoint.seller.createStore,
+      false,
+      "POST",
+      JSON.stringify(newStore)
+    );
 
-    if (response.status < 200 || response.status > 299) {
-      history.push(Paths.ErrorModal);
-      return;
-    }
-
-    const responseData = await response.json();
     console.log(responseData);
     auth.login(responseData.storeName, responseData.token);
-    setIsloading(false);
 
     history.push(Paths.SellerDashboard(responseData.storeName));
   };

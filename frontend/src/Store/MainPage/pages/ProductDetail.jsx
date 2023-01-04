@@ -18,17 +18,17 @@ import {
   BoxLoading,
   DescriptionTextField,
   UserCartContext,
+  useHttp,
 } from "LojaUniversal";
 
 export default function ProductDetail() {
-  const [isLoading, setIsLoading] = useState(false);
-
   const [name, setName] = useState("");
   const [image, setImage] = useState("");
   const [description, setDescription] = useState("");
   const [value, setValue] = useState("");
   const [amount, setAmount] = useState("");
 
+  const { isLoading, sendRequest } = useHttp();
   const { storeName, pid } = useParams();
   const cart = useContext(UserCartContext);
   const history = useHistory();
@@ -48,15 +48,10 @@ export default function ProductDetail() {
 
   useEffect(() => {
     const fetchProduct = async () => {
-      setIsLoading(true);
-      const response = await fetch(EndPoint.user.storeWithId(storeName, pid));
-
-      if (response.status < 200 || response.status > 299) {
-        history.push(Paths.ErrorModal);
-        return;
-      }
-
-      const responseData = await response.json();
+      const responseData = await sendRequest(
+        EndPoint.user.storeWithId(storeName, pid),
+        true
+      );
       const { name, image, description, value, amount } = responseData.product;
 
       setName(name);
@@ -65,10 +60,9 @@ export default function ProductDetail() {
       setAmount(amount);
 
       setValue(value);
-      setIsLoading(false);
     };
     fetchProduct();
-  }, [pid, storeName, history]);
+  }, [sendRequest, pid, storeName, history]);
 
   return (
     <>

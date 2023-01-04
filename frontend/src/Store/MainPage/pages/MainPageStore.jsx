@@ -9,7 +9,7 @@ import {
   Products,
   SideBar,
   Copyright,
-  Paths,
+  useHttp,
 } from "LojaUniversal";
 import { useRef } from "react";
 
@@ -24,29 +24,17 @@ let filterItems = [
 
 export default function MainPageStore() {
   const [loadedProducts, setLoadedProducts] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
 
+  const { isLoading, sendRequest } = useHttp();
   const { storeName } = useParams();
   const history = useHistory();
   const allProducts = useRef([]);
 
   useEffect(() => {
     const fetchProducts = async () => {
-      setIsLoading(true);
       const storePath = EndPoint.user.stores(storeName);
-      const response = await fetch(storePath);
+      const responseData = await sendRequest(storePath, true);
 
-      if (response.status < 200 || response.status > 299) {
-        history.push(Paths.ErrorModal);
-        return;
-      }
-
-      const responseData = await response.json();
-
-      setIsLoading(false);
-      if (response.status !== 200) {
-        history.push(Paths.ErrorModal);
-      }
       setLoadedProducts(responseData);
       allProducts.current = responseData;
 
@@ -56,7 +44,7 @@ export default function MainPageStore() {
       }
     };
     fetchProducts();
-  }, [storeName, history]);
+  }, [sendRequest, storeName, history]);
 
   const onFilterClick = (category) => {
     if (category === "Limpar") {

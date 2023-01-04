@@ -40,6 +40,7 @@
     // Hooks
     import useAuth from "shared/hooks/auth-hook";
     import useCart from "shared/hooks/cart-hook";
+    import useHttp from "shared/hooks/http-hook";
 
     // Pages
     import ErrorScreen from "shared/Pages/ErrorScreen";
@@ -105,6 +106,7 @@ export {
 
     useAuth,
     useCart,
+    useHttp,
 
     ErrorScreen,
 

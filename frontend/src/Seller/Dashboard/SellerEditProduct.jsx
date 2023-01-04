@@ -1,5 +1,5 @@
 import { Box, Button, Grid, Paper, Typography, Container } from "@mui/material";
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { NumericFormat } from "react-number-format";
 import { Redirect, useHistory, useParams } from "react-router-dom";
 
@@ -7,15 +7,14 @@ import {
   EndPoint,
   Paths,
   BoxLoading,
-  AuthContext,
   SignUpTextField,
   DescriptionTextField,
   SellerSkeleton,
+  useHttp,
 } from "LojaUniversal";
 
-export default function SellerEditProduct(props) {
+export default function SellerEditProduct() {
   const [submitAction, setSubmitAction] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
 
   const [name, setName] = useState("");
   const [image, setImage] = useState("");
@@ -24,9 +23,9 @@ export default function SellerEditProduct(props) {
   const [amount, setAmount] = useState("");
   const [value, setValue] = useState("");
 
-  const auth = useContext(AuthContext);
+  const { isLoading, sendRequest } = useHttp();
   const history = useHistory();
-  const { pid } = useParams();
+  const { pid, storeName } = useParams();
 
   const nameChangeHandler = (event) => {
     setName(event.target.value);
@@ -35,8 +34,8 @@ export default function SellerEditProduct(props) {
     setImage(event.target.value);
   };
   const categoryChangeHandler = (event) => {
-    setCategory(event.target.value)
-  }
+    setCategory(event.target.value);
+  };
   const descriptionChangeHandler = (event) => {
     setDescription(event.target.value);
   };
@@ -49,7 +48,6 @@ export default function SellerEditProduct(props) {
 
   const handleButtonAction = async (event) => {
     event.preventDefault();
-    setIsLoading(true);
     const newProduct = {
       name: name,
       image: image,
@@ -59,70 +57,38 @@ export default function SellerEditProduct(props) {
       value: value,
     };
 
-    const response = await fetch(
-      EndPoint.seller.storeWithId(auth.storeName, pid),
-      {
-        method: "PATCH",
-        body: JSON.stringify(newProduct),
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + auth.token,
-        },
-      }
+    const responseData = await sendRequest(
+      EndPoint.seller.storeWithId(storeName, pid),
+      false,
+      "PATCH",
+      JSON.stringify(newProduct)
     );
 
-    if (response.status < 200 || response.status > 299) {
-      history.push(Paths.ErrorModal);
-      return;
-    }
-
-    const responseData = await response.json();
     console.log(responseData);
-    setIsLoading(false);
     setSubmitAction(true);
   };
 
   const handleDeleteButton = async (event) => {
     event.preventDefault();
 
-    const response = await fetch(
-      EndPoint.seller.storeWithId(auth.storeName, pid),
-      {
-        method: "DELETE",
-        headers: {
-          Authorization: "Bearer " + auth.token,
-        },
-      }
+    await sendRequest(
+      EndPoint.seller.storeWithId(storeName, pid),
+      false,
+      "DELETE"
     );
-
-    if (response.status < 200 || response.status > 299) {
-      history.push(Paths.ErrorModal);
-      return;
-    }
 
     setSubmitAction(true);
   };
 
   useEffect(() => {
     const fetchProduct = async () => {
-      setIsLoading(true);
-      const response = await fetch(
-        EndPoint.seller.storeWithId(auth.storeName, pid),
-        {
-          method: "GET",
-          headers: {
-            Authorization: "Bearer " + auth.token,
-          },
-        }
+      const responseData = await sendRequest(
+        EndPoint.seller.storeWithId(storeName, pid),
+        false
       );
 
-      if (response.status < 200 || response.status > 299) {
-        history.push(Paths.ErrorModal);
-        return;
-      }
-
-      const responseData = await response.json();
-      const { name, image, description, category, amount, value } = responseData.product;
+      const { name, image, description, category, amount, value } =
+        responseData.product;
 
       setName(name);
       setImage(image);
@@ -130,14 +96,13 @@ export default function SellerEditProduct(props) {
       setDescription(description);
       setAmount(amount);
       setValue(value);
-      setIsLoading(false);
     };
     fetchProduct();
-  }, [pid, auth.storeName, auth.token, history]);
+  }, [sendRequest, pid, storeName, history]);
 
   return (
     <>
-      {submitAction && <Redirect to={Paths.SellerProducts(auth.storeName)} />}
+      {submitAction && <Redirect to={Paths.SellerProducts(storeName)} />}
       <SellerSkeleton>
         {isLoading && <BoxLoading />}
         {!isLoading && (
