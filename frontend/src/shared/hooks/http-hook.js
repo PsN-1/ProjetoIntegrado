@@ -9,25 +9,15 @@ export default function useHttp() {
   const [isLoading, setIsloading] = useState(false);
 
   const sendRequest = useCallback(
-    async (url, isPublic = true, method = "GET", body = null) => {
+    async (url, isPublic = true, method = "GET", body = null, headers = {}) => {
       setIsloading(true);
 
-      let headers;
       if (!isPublic) {
-        headers = { Authorization: "Bearer " + auth.token };
+        headers = { ...headers, Authorization: "Bearer " + auth.token };
       }
 
       if (body) {
-        headers = {
-          "Content-Type": "application/json",
-        };
-      }
-
-      if (!isPublic && body) {
-        headers = {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + auth.token,
-        };
+        headers = { ...headers, "Content-Type": "application/json" };
       }
 
       try {
@@ -44,6 +34,7 @@ export default function useHttp() {
         if (response.status < 200 || response.status > 299) {
           throw new Error(responseData.message);
         }
+
         return responseData;
       } catch (err) {
         console.log(err);
